@@ -1,0 +1,111 @@
+@media only screen and (max-width:2400px) {
+   
+}
+@media only screen and (max-width:1400px) {
+    
+}
+@media only screen and (min-width: 1400px) and (max-width: 1499px) {
+    
+}
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+    
+}
+
+@media only screen and (max-width:1200px) {
+    
+}
+@media only screen and (min-width:1201px) {
+   
+}
+
+@media only screen and (max-width:1100px) {
+   
+}
+
+@media only screen and (max-width:991px) {
+
+}
+
+@media only screen and (min-width:993px) and (max-width:1200px) {
+
+}
+
+@media only screen and (min-width:769px) and (max-width:992px) {
+ 
+}
+
+@media only screen and (max-width:768px) {
+  .dopp_desk_chat {
+    display: none !important;
+  }
+  .dopp_mob_chat{
+    display: block !important;
+  }
+  #doppchatarea .navbar-primary-menu li a i {
+    margin-right: 0  !important;
+  }
+  .dopp_sidebar_wrapper {
+    height: auto !important;
+  }
+  .dopp_mob_chat .d_chat_sidebar .navbar-primary-menu {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid #e3e8ef;
+    padding-top: 8px !important;
+    z-index: 99999;
+  }
+  .dopp_mob_chat .d_chat_content .chat_second_tab_chat_heading {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    z-index: 999999;
+    top: 0;
+  }
+  .dopp_mob_chat  .d_chat_content .chat_second_tab_one_chat_content {
+    height: unset!important;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #1972f5 #fff !important;
+    padding:unset !important;
+    margin-top: 45px!important;
+  }
+  #doppchatarea .chat_second_tab_one {
+    min-width: 100%!important;
+    width: 100%!important;
+  }
+
+
+  .d_chat_content_wapper {
+    flex-direction: column;
+  }
+  #doppchatarea .chat_second_tab_one_content .chat_second_tab_one_content_wapper {
+    padding: 5px;
+    margin: 0px 25px;
+  }
+  #doppchatarea .chat_second_tab_one_content {
+    height: auto!important;
+  }
+  .d_chat_content {
+    overflow-x: auto;
+  }
+  #doppchatarea .contact_page_wapper {
+    padding: 5px!important;
+}
+
+.chat_header{
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+}
+
+@media only screen and (min-width:577px) and (max-width:768px) {
+ 
+}
+
+@media only screen and (max-width:576px) {
+  
+}

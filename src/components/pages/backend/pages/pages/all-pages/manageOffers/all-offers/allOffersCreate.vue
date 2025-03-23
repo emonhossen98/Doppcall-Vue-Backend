@@ -1,0 +1,771 @@
+
+<template>
+  <div v-if="getLoader">
+    <Loader></Loader>
+  </div>
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y"> 
+      <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
+      <div class="row mt-4">
+        <div id="save-change-form">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header pt-3 pb-0">
+                  <h5 class="card-title">New Offer Create</h5>
+                </div>
+                <div class="card-body mt-3">
+                  <div class="form-group mb-3">
+                  <label for="offer_name" class="required mb-1">Offer Name</label>
+                  <input type="text" v-model="offersCreate.offer_name" required id="offer_name" class="form-control" placeholder="Enter Offer Name"/>
+                  <div v-if="validationErrors &&  validationErrors.offer_name" class="text-danger">
+                      {{ validationErrors.offer_name[0] }}
+                  </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                  <label for="offer_tag" class="mb-1">Offer Tag</label>
+                  <div class="tag-input">
+                    <div v-for="(tag, index) in tags" :key="tag" class="tag-input__tag font-class">
+                      {{ tag }}
+                      <span @click="removeTag(index)">x</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Enter a Tag"
+                      class="tag-input__text form-control"
+                      @keydown.enter="addTag"
+                      @keydown.188="addTag"
+                      @keydown.delete="removeLastTag"
+                    />
+                  </div>
+                  <!-- <input type="text" v-model="offersCreate.offer_tag" data-role="tagsinput" required id="offer_tag" class="form-control"> -->
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="country" class="mb-1">Country and region</label>
+                       <textarea type="text" v-model="offersCreate.country" required id="country" class="form-control" placeholder="Enter Country and region"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="call_limit" class="mb-1">Call's Limits</label>
+                       <textarea  v-model="offersCreate.call_limit" required id="call_limit" class="form-control" placeholder="Enter Call's Limits"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="tools" class="mb-1">Tools</label>
+                       <textarea  v-model="offersCreate.tools" required id="tools" class="form-control" placeholder="Enter Tools"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="rules" class="mb-1">Rules</label>
+                    <textarea v-model="offersCreate.rules" ref="summernoteRules" required id="rules"></textarea>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label class="switch">
+                      <input type="checkbox" id="togBtn" @click="toggleShowTraffic()">
+                      <div class="slider round">
+                        <span class="on">ON</span>
+                        <span class="off">OFF</span>
+                      </div>
+                    </label>Traffics
+                    <template v-if="showTranffic">
+                      <div id="textareaContainer">
+                        <label for="trafics" class="mb-2">Traffics</label>
+                        <textarea ref="summernoteTrafics" v-model="offersCreate.trafics"  required id="trafics" class="form-control"></textarea>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label class="switch">
+                      <input type="checkbox" id="togBtn" @click="showDescriptionText()">
+                      <div class="slider round">
+                        <span class="on">ON</span>
+                        <span class="off">OFF</span>
+                      </div>
+                    </label> Description
+                    <div v-if="showDescription" id="textareadescription">
+                      <label for="description" class="mb-2">Description</label>
+                    <textarea ref="summernoteDescription"  v-model="offersCreate.description" required id="description" class="form-control"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label class="switch">
+                      <input type="checkbox" id="togBtn" @click="showImportantText()">
+                      <div class="slider round">
+                        <span class="on">ON</span>
+                        <span class="off">OFF</span>
+                      </div>
+                    </label>Important Rules
+                    <div v-if="showImportant" id="textarearules">
+                      <label for="important_rules" class="mb-2">Important Rules</label>
+                      <textarea  ref="summernoteImportant" v-model="offersCreate.important_rules" required id="important_rules" class="form-control"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="row d-flex align-items-end mt-1">
+                    <div class="col-12">
+                      <table class="w-100 question_table">
+                        <thead>
+                          <tr class="head" style="vertical-align: start">
+                            <td style="width: 80%;">
+                                <label class="form-label required" for="">Questions</label>
+                            </td>
+                            <td style="width: 10%;" class="text-center">
+                                <label class="form-label required" for="">Required/Optional</label>
+                            </td>
+                            <td style="width: 10%;" class="text-center">
+                                <label class="form-label required" for="">Attachment</label>
+                            </td>
+                          </tr>
+                          <tr  v-for="(row, index) in rows" :key="index">
+                            <td>
+                              <input v-model="row.selectedQuestion" @focus="showQuestionList(row)" type="text" class="form-control" placeholder="Question?" />
+                              <ul class="quslist" v-show="row.showList">
+                                <li v-for="question in questionList"@click="selectQuestion(row, question)">
+                                  {{ question }}
+                                </li>
+                              </ul>
+                            </td>
+                            <td>
+                              <input type="checkbox" v-model="row.required" class="custom_selectBox" placeholder="Required Col?" />
+                            </td>
+                            <td>
+                              <input type="checkbox" v-model="row.fileRequired" class="custom_selectBox" placeholder="Required Col?" />
+                            </td>
+                            <td>
+                              <button type="button" class="bg-danger border-0 rounded py-1 px-2 text-white" v-if="index != 0" @click="deleteRow(index)"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                          </tr>
+                        </thead>
+                        <tbody class="new_field">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="row mt-5">
+                    <div class="col-12 text-end">
+                      <button @click="addRow" type="button" id="add_field" class="border-1 py-1 px-2  bg-transparent btn-primary">
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-header pt-3 pb-0">
+                  <h5 class="card-title">Assign To Advertiser Field</h5>
+                </div>
+                <div class="card-body mt-3">
+                  <div class="form-group mb-3">
+                  <label for="assign_advertiser" class="mb-1">Advertiser</label>
+                  <select name="assign_advertiser" v-model="offersCreate.assign_advertiser" id="assign_advertiser" class="form-select">
+                    <option value="0">No Assign</option>
+                    <option v-for="advertiser in OfferCreate.advertisers" :value="advertiser.id" :key="advertiser.id">{{ advertiser.fname +' '+ advertiser.lname +' -- '+advertiser.company_name }}</option>
+                  </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                  <label for="" class="mb-1">Hold Peiod</label>
+                  <input type="text" v-model="offersCreate.hold_period" class="form-control" placeholder="Enter Hold Peiod">
+                  </div>
+
+                  <div class="form-group mb-3">
+                  <label for="" class="mb-1">Appeal Period</label>
+                  <input type="text" v-model="offersCreate.appeal_period" class="form-control" placeholder="Enter Appeal Period">
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="" class="mb-1">Owner</label>
+                  <input type="text" v-model="offersCreate.owner" class="form-control" placeholder="Enter Owner">
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-3">
+                <div class="card-body">
+                  <div class="form-group mb-3">
+                  <label for="offer_type" class="mb-1">Offer Type</label><br>
+                  <select name="offer_type" id="offer_type" v-model="offersCreate.offer_type" class="form-select">
+                    <option value="">Select Type</option>
+                    <option v-for="offerType in OfferCreate.offerTypes" :value="offerType.id" :key="offerType.id">{{ offerType.type}}</option>
+                  </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="category" class="mb-1">Category</label><br>
+                  <select name="category" id="category" v-model="offersCreate.category" class="form-select">
+                    <option value="">Select Type</option>
+                    <option v-for="categoryOffer in OfferCreate.categoryOffers" :value="categoryOffer.id" :key="categoryOffer.id">{{ categoryOffer.name}}</option>
+                  </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="category" class="mb-1">Primary Country</label><br>
+                      <select name="primary_country" id="primary_country" v-model="offersCreate.primary_country" class="form-select">
+                      <PrimaryCountry></PrimaryCountry>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="allow_trafic" class="mb-1">Allow Traffic</label><br>
+                    <!-- class="js-select2" ref="select2" -->
+                    <select v-model="offersCreate.allow_trafic" class="js-select2" ref="select2"  multiple>
+                      <option v-for="allow in OfferCreate.allowTratic" :value="allow.id" :key="allow.id">{{ allow.title}}</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-3">
+                  <label for="pay_out" class="mb-1">Pay Out</label>
+                  <input type="text" v-model="offersCreate.pay_out" id="pay_out" class="form-control" placeholder="Enter Pay Out">
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="landing_page" class="mb-1">Landing Page</label>
+                  <input type="text" v-model="offersCreate.landing_page" id="landing_page" class="form-control" placeholder="Enter Landing Page">
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="marchent_allow" class="mb-1">Merchant is allowed to refuse calls</label>
+                  <input type="text" v-model="offersCreate.marchent_allow" id="marchent_allow" class="form-control" placeholder="Enter Merchant is allowed to refuse calls">
+                  </div>
+
+                  <div class="form-group mb-3">
+                    <label for="materials_moderation" class="mb-1">Materials moderation</label>
+                  <input type="text" v-model="offersCreate.materials_moderation" id="materials_moderation" class="form-control" placeholder="Enter Materials moderation">
+                  </div>
+
+                  <div class="form-group mb-3">
+                  <label for="stats" class="mb-1">Status</label>
+                  <select name="status" id="status" v-model="offersCreate.status" class="form-select">
+                  <option value="">Select Status</option>
+                  <option value="1">Pending</option>
+                  <option value="2">Approved</option>
+                  <option value="3">Pause</option>
+                  <option value="4">Resume</option>
+                  </select>
+                  </div>
+
+                  <div class="form-group mb-3 d-flex align-items-center ">
+                    <label for="featured" class=" ">Featured</label>
+                    <input type="checkbox" v-model="offersCreate.featured"  style="width: 20px;" name="featured" checked class="custom_selectBox ms-2" value="1">
+                  </div>
+                  <div class="form-group mb-3 text-right mt-2">
+                    <button type="button" @click="offersSave()" class="btn btn-sm btn-primary save_btn py-2">
+                      <i class="fas fa-check fa-sm me-1"></i>Create
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+</template>
+
+<script>
+import axios from "axios";
+import Loader from '../../../../../include/loader.vue';
+import Breadcrumb from '../../../../../include/breadcrumb.vue';
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";  
+import PrimaryCountry from '../../../../../include/Primary_country.vue'
+import { inject } from "vue";
+import { fetchUserRole } from "@/services/userService";
+
+export default {
+  setup() {
+    const globalVariables = inject("globalVariables");
+    return { globalVariables };
+  },
+  props:['OfferCreate'],
+  components:{
+    Loader,
+    Breadcrumb,
+    PrimaryCountry,
+  },
+  data() {
+    return {
+      showTranffic : false,
+      select2Instance: [],
+      selectedQuestion: '',
+      rows: [{ question: '', required: false, fileRequired: false }], 
+      questionList: [
+        "Are you using any of the following methods to generate calls?",
+        "Are you currently selling this vertical calls to any other networks or buyers?",
+        "Do you buy data from third party or use your O&O generated leads?",
+        "Are your leads TCPA opt-in?",
+        "Data Source URL:",
+        "Do you have Jornaya for each lead?",
+        "Do you have O&O websites to generate leads?",
+        "Do you have TrustedForms for each lead?",
+        "How many calls you can send daily to this specific campaign?",
+        "If you engage in sending fraudulent calls or instruct customers to provide false information simply to exceed the threshold, you will not receive payment. Is this clear to you?",
+        "If you make repeated calls to a customer, there is a risk of receiving legal complaints. Can you please ensure a double verification of the call before proceeding with the transfer?",
+        "Landing Page URL:",
+        "Share Personal LinkedIn Profile URL (Not Company Page):",
+        "Upload A Few Pre-qualify call recordings",
+        "Upload A Few Sample Ads Snapshot",
+        "What is your average call duration for this vertical?",
+        "Where is your call center located?",
+        "Which traffic source do you use to generate calls?"
+      ],
+      showDescription : false,
+      showImportant : false,
+      tags: [],
+      getLoader: false,
+      breadcrumbs: [
+        { label: "Dashboard", url: "/dashboard" },
+        { label: "Offers", url: "/admin-offers" },
+        { label: "Create", url: "" },
+      ],
+      offersCreate: {
+        offer_name: "",
+        offer_tag: "",
+        country: "",
+        call_limit: "",
+        tools: "",
+        rules: "",
+        trafics: "",
+        description: "",
+        important_rules: "",
+        questions: [],
+        file_col: [],
+        required_col: [],
+        assign_advertiser: "",
+        hold_period: "",
+        appeal_period: "",
+        owner: "",
+        offer_type: "",
+        category: "",
+        primary_country : "",
+        allow_trafic: [],
+        pay_out: "",
+        featured: "",
+        landing_page: "",
+        marchent_allow: "",
+        materials_moderation: "",
+        status: "",
+      },
+      validationErrors: null,
+      selectedSocialMedia : [],
+    };
+  },
+  async mounted() { 
+      try {
+        const { role, isAuthorized } = await fetchUserRole();
+        if (role == 'Super' || role == 'Admin') {
+          $(this.$refs.summernoteImportant).summernote({
+          placeholder: 'Type your text here...',
+          height: 100,
+          callbacks: {
+            onChange: contents => {
+            this.offersCreate.important_rules = contents;
+            }
+          }
+        });
+        $(this.$refs.summernoteDescription).summernote({
+          placeholder: 'Type your text here...',
+          height: 100,
+          callbacks: {
+            onChange: contents => {
+            this.offersCreate.description = contents;
+            }
+          }
+        });
+        $(this.$refs.summernoteTrafics).summernote({
+          placeholder: 'Type your text here...',
+          height: 100,
+          callbacks: {
+            onChange: contents => {
+            this.offersCreate.trafics = contents;
+            }
+          }
+        });
+        $(this.$refs.summernoteRules).summernote({
+          placeholder: 'Type your text here...',
+          height: 100,
+          callbacks: {
+            onChange: contents => {
+            this.offersCreate.rules = contents;
+            }
+          }
+        });
+        document.addEventListener('click', this.hideQuestionList);
+        const vm = this;
+        $(this.$refs.select2).select2({
+          closeOnSelect: false,
+          placeholder: "Choose Allow Traffic!",
+          allowClear: true,
+          tags: true
+        }).on('change', function() {
+          vm.selectedSocialMedia = $(this).val() || [];
+        });
+            }
+          } catch (error) {
+            console.error("Error fetching user role:", error);
+          }
+    },
+  watch: {
+  selectedSocialMedia: {
+    handler(newVal) {
+      if (!Array.isArray(newVal)) {
+        newVal = [newVal]; 
+      }
+    },
+    deep: true 
+  }
+},
+  methods: {
+    offersSave() {
+          this.getLoader = true;
+          var allTags                    = this.tags.join(",");
+          this.offersCreate.offer_tag    = allTags;
+          this.offersCreate.questions    = this.rows.map(row => ({ question: row.selectedQuestion }));
+          this.offersCreate.file_col     = this.rows.map(row => ({ required_col: row.fileRequired }));
+          this.offersCreate.required_col = this.rows.map(row => ({ required_col: row.required }));
+          this.offersCreate.allow_trafic = this.selectedSocialMedia;
+      axios
+        .post(this.globalVariables.apiUrl+"admin/offers/store", this.offersCreate, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        })
+        .then((res) => {
+          if(res.data.status == 'success'){
+            toastr.success(res.data.message);
+            this.$router.push("/admin-offers");
+          }else{
+            toastr.error(res.data.message);
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.errors) {
+            this.validationErrors = error.response.data.errors;
+          }
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+    showQuestionList(row) {
+      if (row.selectedQuestion !== '') {
+        row.showList = true;
+      } else {
+        row.showList = false;
+      }
+    },
+    selectQuestion(row, question) {
+      row.selectedQuestion = question; 
+      row.showList = false; 
+    },
+    addRow() {
+      this.rows.push({ question: '', required: false, fileRequired: false }); // Add a new row object
+    },
+    deleteRow(index) {
+      this.rows.splice(index, 1); // Remove the row at the given index
+    },
+    hideQuestionList(event) {
+      if (!event.target.classList.contains('quslist') && !event.target.closest('.quslist') && event.target.type !== 'text') {
+        this.showList = false;
+      }
+    },
+    addTag(event) {
+      event.preventDefault();
+      let val = event.target.value.trim();
+      if (val.length > 0) {
+        if (this.tags.length >= 1) {
+          for (let i = 0; i < this.tags.length; i++) {
+            if (this.tags[i] === val) {
+              return false;
+            }
+          }
+        }
+        this.tags.push(val);
+        event.target.value = "";
+      }
+    },
+    removeTag(index) {
+      this.tags.splice(index, 1);
+    },
+    removeLastTag(event) {
+      if (event.target.value.length === 0) {
+        this.removeTag(this.tags.length - 1);
+      }
+    },
+    toggleShowTraffic() {
+      this.showTranffic = !this.showTranffic;
+      if(this.showTranffic == true){
+        setTimeout(() => {
+          $(this.$refs.summernoteTrafics).summernote({
+            placeholder: 'Type your text here...',
+            height: 100,
+            callbacks: {
+              onChange: contents => {
+              this.offersCreate.trafics = contents;
+              }
+            }
+          });
+        }, 20);
+      }
+    },
+    showDescriptionText(){
+     this.showDescription = !this.showDescription;
+     if(this.showDescription == true){
+        setTimeout(() => {
+          $(this.$refs.summernoteDescription).summernote({
+            placeholder: 'Type your text here...',
+            height: 100,
+            callbacks: {
+              onChange: contents => {
+              this.offersCreate.description = contents;
+              }
+            }
+          });
+        }, 20);
+      }
+    },
+    showImportantText(){
+     this.showImportant = !this.showImportant;
+     if(this.showImportant == true){
+        setTimeout(() => {
+          $(this.$refs.summernoteImportant).summernote({
+          placeholder: 'Type your text here...',
+          height: 100,
+          callbacks: {
+            onChange: contents => {
+            this.offersCreate.important_rules = contents;
+            }
+          }
+        });
+        }, 20);
+      }
+    },
+  },
+};
+</script>
+
+<style>
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+	background: #0162e8 !important;
+	color: white !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+	color: white !important;
+}
+.select2.select2-container.select2-container--default {
+	width: 100% !important;
+}
+.js-select2, .select2-container--below {
+	width: 100% !important;
+	max-width: 413px!important;
+}
+body {
+	overflow-x: hidden;
+}
+
+#save-change-form .switch {
+	position: relative;
+	display: inline-block;
+	width: 60px;
+	height: 40px;
+}
+
+#save-change-form .switch input {
+  display: none;
+}
+
+#save-change-form .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ecf0fa;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+#save-change-form .slider::before {
+	position: absolute;
+	content: "";
+	height: 39px;
+	width: 8px;
+	bottom: 0px;
+	background-color: #fff;
+	-webkit-transition: .4s;
+	transition: .4s;
+	border-top-left-radius: 4px !important;
+	border-bottom-left-radius: 4px !important;
+}
+
+#save-change-form input:checked + .slider {
+  background-color: #0162e8;
+}
+
+#save-change-form input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+#save-change-form input:checked + .slider:before {
+  -webkit-transform: translateX(55px);
+  -ms-transform: translateX(55px);
+  transform: translateX(52px);
+}
+
+/*------ ADDED CSS ---------*/
+#save-change-form .on {
+  display: none;
+}
+
+#save-change-form .on, #save-change-form  .off {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 10px;
+  font-family: Verdana, sans-serif;
+  user-select:none;
+}
+#save-change-form  .off {
+  color: #2f3349;
+}
+#save-change-form .on{
+  color: #fff;
+}
+
+#save-change-form input:checked + .slider .on {
+  display: block;
+}
+
+#save-change-form  input:checked + .slider .off {
+  display: none;
+}
+
+/*--------- END --------*/
+
+/* Rounded sliders */
+#save-change-form  .slider.round {
+  border-radius: 2px;
+}
+
+#save-change-form  .slider.round:before {
+  border-radius: 0%;
+}
+
+</style>
+<style scoped>
+
+.custom_selectBox {
+	display: block;
+	width: 100%;
+	height: 25px;
+	padding: 0.375rem 0.75rem;
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #4d5875;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #e1e5ef;
+	border-radius: 3px;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.btn-light {
+	background-color: #fcfcff !important;
+	border-color: #fff !important;
+}
+a {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #00003a;
+  font-size: 20px;
+}
+
+.tag-input {
+	border: 1px solid #d9dfe7;
+	background: #fff;
+	border-radius: 4px;
+	font-size: 0.9em;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+}
+
+.tag-input__tag {
+  height: 24px;
+  color: white;
+  float: left;
+  font-size: 14px;
+  margin-right: 10px;
+  background-color: #667eea;
+  border-radius: 15px;
+  margin-top: 10px;
+  line-height: 24px;
+  padding: 0 8px;
+  font-family: "Roboto";
+}
+
+.tag-input__tag > span {
+  cursor: pointer;
+  opacity: 0.75;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.tag-input__text {
+  border: none;
+  outline: none;
+  font-size: 1em;
+  background: none;
+}
+.quslist {
+	padding: 0;
+	border: 1px solid lavender;
+	position: absolute;
+	background: white;
+	width: 76%;
+	z-index: 1;
+	max-height: 200px;
+	overflow: scroll;
+	scroll-behavior: smooth;
+	scrollbar-color: #0162e8 white;
+	scrollbar-width: thin;
+}
+.quslist li {
+	padding: 4px 10px;
+	cursor: pointer;
+	line-height: 30px;
+	border-left: 3px solid transparent;
+}
+.quslist li:hover {
+	background: #ededed;
+	transition: 0.3s ease;
+	border-left: 3px solid #0162e8;
+}
+</style>

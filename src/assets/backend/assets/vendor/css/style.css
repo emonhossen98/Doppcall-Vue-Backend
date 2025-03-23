@@ -1,0 +1,197 @@
+.btn-style-edit {
+	background: rgba(55, 125, 255, .15) !important;
+	color: #377dff !important;
+	padding: 1px 8px !important;
+	border-radius: 50% !important;
+	border: none !important;
+	margin-right: 5px;
+}
+
+.btn-style-danger {
+	background: rgba(239, 72, 106, .15);
+	color: #ff5370;
+	padding: 5px 8px;
+	border-radius: 50% !important;
+	border: none !important;
+}
+
+.card.card-primary {
+	border-top: 2px solid #0162e8 !important;
+}
+
+.btn-outline-primary {
+	border: 1px solid !important;
+}
+
+.table> :not(caption)>*>* {
+	padding: 0.55rem 0.35rem !important;
+}
+
+.dataTables_length,
+.dataTables_info {
+	padding-left: 2rem !important;
+}
+
+.dataTables_filter,
+.dataTables_paginate {
+	padding-right: 2rem !important;
+}
+
+.table th {
+	font-size: 0.7rem !important;
+	font-weight: bold !important;
+}
+
+.fw-bloder {
+	font-weight: bold !important;
+}
+
+.padding_top {
+	padding-top: 17rem;
+}
+
+.modal .modal-header .btn-close {
+	right: 0.7rem !important;
+	top: 1.5rem !important;
+}
+
+@media only screen and (max-width:768px) {
+	#advertisher_deposite_modals {
+		padding-top: 35rem !important;
+	}
+}
+
+@media only screen and (max-width:576px) {
+	#cookie_consents {
+		display: none !important;
+	}
+
+	#user_activities {
+		display: none !important;
+	}
+
+	.amount-badge {
+		display: none !important;
+	}
+
+	.t-publisher {
+		font-size: 0.8rem !important;
+	}
+
+	.countDounLabel {
+		font-size: 10px !important;
+	}
+
+	.a-publisher {
+		font-size: 0.8rem !important;
+	}
+
+	.t-advertiser {
+		font-size: 0.8rem !important;
+	}
+
+	.a-advertiser {
+		font-size: 0.8rem !important;
+	}
+
+	.text-dark[data-v-228c1fc4] {
+		color: rgb(136, 126, 126) !important;
+		font-size: 14px !important;
+	}
+
+	.offers_table_header {
+		flex-direction: column !important;
+	}
+
+	.campaign_view_profile {
+		font-size: 10px !important;
+	}
+
+	.view_profile_btn {
+		display: flex;
+	}
+
+	.text-end.type-datatables-action {
+		display: flex;
+	}
+
+	/* #deposit-button {
+		font-size: 10px !important;
+		margin-top: 3rem !important;
+	}
+	#withdraw-button {
+		font-size: 10px !important;
+		margin-top: 3rem !important;
+	} */
+	#advertisher_deposite_modals {
+		padding-top: 35rem !important;
+	}
+
+	.modal-footer {
+		flex-wrap: nowrap !important;
+	}
+
+	.advertisher_depositeModel {
+		margin-top: 20rem !important;
+	}
+
+	.advertisher_deposite_class {
+		font-size: 11px !important;
+	}
+
+	.payment_info_title {
+		font-size: 0.8rem !important;
+	}
+
+	.publisher_payment_hisory_title {
+		font-size: 0.8rem;
+	}
+
+	.publisher_message_title {
+		flex-direction: column !important;
+	}
+
+	#message_btn {
+		display: inline-block !important;
+		margin-top: 1rem !important;
+	}
+
+	#message_btn button {
+		width: 100% !important;
+	}
+
+	#message_btn a {
+		width: 100% !important;
+		margin: 0.5rem 0 !important;
+	}
+}
+
+.page-item.first .page-link, .page-item.last .page-link, .page-item.next .page-link, .page-item.prev .page-link, .page-item.previous .page-link {
+	padding-top: 0.6rem;
+	padding-bottom: 0.645rem;
+	padding: 12px 0 !important;
+}
+
+.layout-content-navbar {
+	overflow: hidden !important;
+}
+.audio_record_area {
+	margin-right: 2px !important;
+	padding: 4px 26px !important;
+}
+.record_state {
+	margin-right: -7px !important;
+	margin-left: 15px !important;
+}
+.audio_record_area {
+	padding: 4px 13px 4px 29px !important;
+}
+
+.table-responsive.table-overflow-hidden {
+	overflow: hidden;
+}
+@media only screen and (max-width:1201px) {
+	.table-responsive.table-overflow-hidden {
+		overflow: auto !important;
+	}
+}

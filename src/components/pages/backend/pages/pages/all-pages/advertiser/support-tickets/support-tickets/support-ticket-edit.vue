@@ -1,0 +1,286 @@
+<template>
+    <div v-if="getLoader">
+    <Loader></Loader>
+  </div>
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+      <!-- Content -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
+            <div class="row mt-4">
+                <div class="col-12">
+                <div class="card">
+                    <div class="card-header py-3">
+                        <h5 class="card-title mb-0 mt-2">New Support Ticket Edit</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row-mb-15">
+                                <div class="row mt-4">
+                                    <div class="col-md-4">
+                                        <label for="subjects" class="mb-1">Custom Subject<span class="text-danger">*</span></label>
+                                        <select v-model="ticketCreate.subject" id="subject" class="form-select">
+                                            <option value="">Select Subject</option>
+                                            <option v-for="(data,index) in subjects"  :key="index" :value="data.id">{{ data.name }}</option>
+                                        </select>
+                                        <div v-if="validationErrors && validationErrors.subject" class="text-danger">
+                                            {{ validationErrors.subject[0] }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="priority" class="required mb-1">Priority</label>
+                                        <select v-model="ticketCreate.priority" id="priority" required class="form-select">
+                                            <option value="Low">Low</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
+                                        <div v-if="validationErrors && validationErrors.priority" class="text-danger">
+                                            {{ validationErrors.priority[0] }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                    <label for="video_link" class="mb-1">Video Link/URL</label>
+                                    <input type="url" class="form-control" v-model="ticketCreate.video_link" id="video_link" placeholder="https://" >
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <label for="description" class="required mb-1">Description</label>
+                                            <textarea v-model="ticketCreate.description" ref="Description" class="form-control"  required="required" rows="4"></textarea>
+                                            <div v-if="validationErrors && validationErrors.description" class="text-danger">
+                                                {{ validationErrors.description[0] }}
+                                            </div>
+                                        </div>
+                                 </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label class="d-block mb-1">Images</label>
+                                        <div class="custom-file">
+                                            <input type="file" @change="handleImageUpload" class="form-control"  id="customFile">
+                                            <label for="customFile"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <label class="d-block mb-3 required ">Status</label>
+                                <div class="radio-btn">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" @change="radioBtnValue('Open')" type="radio" name="exampleRadios"  id="open"   :checked="ticketStatus.status === 'Open'">
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            Open
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio"  @change="radioBtnValue('Process')" name="exampleRadios"  id="process"  :checked="ticketStatus.status === 'Process'">
+                                        <label class="form-check-label" for="exampleRadios2">
+                                            Process
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" @change="radioBtnValue('Close')" name="exampleRadios"  id="close"  :checked="ticketStatus.status === 'Close'">
+                                        <label class="form-check-label" for="exampleRadios3">
+                                            Close
+                                        </label>
+                                    </div>
+                                    <div v-if="validationErrors && validationErrors.status" class="text-danger">
+                                        {{ validationErrors.status[0] }}
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" hidden="hidden" id="username" @change="changeStatus($event)" :checked="ticketCreate.is_active == 1">
+                                            <label class="switch"  for="username"></label>Ticket Active Status
+                                            <div v-if="validationErrors && validationErrors.is_active" class="text-danger">
+                                                {{ validationErrors.is_active[0] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <button type="button" @click="SupportTicketsUpdate()" class="btn btn-primary btn-sm">
+                                       Update
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <!-- / Content -->
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+</template>
+
+
+<script>
+import axios from "axios";
+import toastr from "toastr";
+import Swal from "sweetalert2";
+import "toastr/build/toastr.min.css";
+import Loader from "../../../../../../include/loader.vue";
+  import Breadcrumb from "../../../../../../include/breadcrumb.vue";
+  import { inject } from "vue";
+  import { fetchUserRoleAdvertiser } from "@/services/userServiceAdvertiser";
+
+export default {
+    setup() {
+    const globalVariables = inject("globalVariables");
+    return { globalVariables };
+  },
+  components: {
+    Loader,
+    Breadcrumb,
+  },
+  data() {
+    return {
+      breadcrumbs: [
+        { label: "Dashboard", url: "/advertiser/dashboard" },
+        { label: "Support Tickets", url: "/advertiser-support-tickets" },
+        { label: "Edit", url: "" },
+      ],  
+      getLoader: false,
+      subjects : "",
+      ticketCreate: {
+        subject: "",
+        priority: "",
+        video_link: "",
+        description: "",
+        is_active: null,
+        status : "",  
+        image: [], 
+      },
+      
+      validationErrors: null,
+      ticketStatus: {
+        status: "",
+      },
+    };
+  },
+  async mounted() { 
+    try {
+      const { role, isAuthorized } = await fetchUserRoleAdvertiser();
+      if (role == 'Advertiser') {
+        this.getTicketSubjectEditData();
+        $(this.$refs.Description).summernote({
+            placeholder: 'Type your text here...',
+            height: 200,
+            callbacks: {
+            onChange: contents => {
+            this.ticketCreate.description = contents;
+            }
+            }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+    }
+  },
+  methods: {
+    getTicketSubjectEditData() {
+      this.getLoader = true;
+      axios
+        .get(this.globalVariables.apiUrl+`advertiser/support-tickets/edit/${this.$route.params.id}`, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+            this.subjects = res.data.subjects;
+            this.ticketCreate.subject = res.data.ticket.subject_ticket_id;
+            this.ticketCreate.priority = res.data.ticket.priority;
+            this.ticketCreate.video_link = res.data.ticket.video_link;
+            this.ticketCreate.description = res.data.ticket.description;
+            this.ticketCreate.is_active = res.data.ticket.is_active;
+            this.ticketCreate.status = res.data.ticket.status;
+            this.ticketStatus.status = res.data.ticket.status;
+            $(this.$refs.Description).summernote('code', res.data.ticket.description ?? '');
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+
+    handleImageUpload(event) {
+      this.ticketCreate.image = event.target.files[0];
+    },
+    SupportTicketsUpdate() {
+      this.getLoader = true;
+      axios
+        .post(this.globalVariables.apiUrl+`advertiser/support-tickets/update/${this.$route.params.id}`, this.ticketCreate, {
+          headers: { 
+            Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "multipart/form-data",
+           },
+        })
+        .then((res) => {
+            toastr.success(res.data.message);
+            this.$router.push('/advertiser-support-tickets');
+        })
+        .catch((error) => {
+            if(error && error.response && error.response.data && error.response.data.errors){
+                this.validationErrors = error.response.data.errors;
+            }
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+    changeStatus(event){
+        if(event.target.checked == true){
+            this.ticketCreate.is_active = 'on';
+        }else{
+            this.ticketCreate.is_active = null;
+        }
+    },
+    radioBtnValue(id){
+        this.ticketCreate.status = id;
+    }
+  },
+};
+</script>
+
+<style scoped>
+.switch {
+    display: inline-block;
+    position: relative;
+    width: 50px;
+    height: 25px;
+    border-radius: 20px;
+    background: #b8b8b8;;
+    transition: background 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    vertical-align: middle;
+    cursor: pointer;
+}
+.switch::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: #fafafa;
+    border-radius: 50%;
+    transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1), background 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.switch:active::before {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 0 0 20px rgba(128,128,128,0.1);
+}
+input:checked + .switch {
+    background: #72da67;
+}
+input:checked + .switch::before {
+    left: 27px;
+    background: #fff;
+}
+input:checked + .switch:active::before {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 0 0 20px rgba(0,150,136,0.2);
+}
+</style>

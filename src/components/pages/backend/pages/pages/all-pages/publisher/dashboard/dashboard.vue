@@ -1,0 +1,982 @@
+<template>
+  <!-- <div v-if="getLoader">
+    <Loader></Loader>
+  </div> -->
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="row mt-4">
+        <div>
+          <div id="noaccessuseralert" v-if="User.account_access != 1">
+            <span style="color: white" ><strong>Your account is under review </strong> 
+              <p>We are reviewing your account. You will be notified once the review is complete.
+                Please ensure your profile is completed.</p>
+              </span>
+          </div>
+
+          <div id="completeuseralert" v-if="showParcentage">
+            <span style="color: white" ><strong>Your profile is {{ CompleteProfile }}% complete </strong> 
+              <p>Please complete your profile to proceed with the approval process.</p>
+              <RouterLink :to="'/publisher-account'">Complete Profile</RouterLink>
+              </span>
+          </div>
+          <div id="notverifyuseralert" v-if="!User.is_email_verified" >
+              <span style="color: white">
+                <strong class="fw-bolder">You need to confirm your account</strong>
+                <p>We have sent you an activation code, please check your email.</p>
+                <a @click="sendEmailVerification()" href="javascript:"
+                  >Click Here</a></span
+              >
+            </div>
+        </div>
+
+        <div class="row">
+          <!-- Website Analytics -->
+          <div class="col-lg-6 mb-4" v-if="User.is_email_verified && User.account_access == 1">
+            <Suspense>
+              <template v-if="totalOffers">
+                <div
+                  class="swiper-container swiper-container-horizontal swiper"
+                  id="swiper-with-pagination-cards"
+                >
+                  <div class="swiper-wrapper rounded">
+                    <div class="swiper-slide">
+                      <div class="row">
+                        <div class="col-12">
+                          <h5 class="text-white mb-0 mt-2">Website Analytics</h5>
+                          <small class="text-white">Total Conversion Rate</small>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1">
+                          <h6 class="text-white mt-0 mt-md-3 mb-3 swiper-h5">Sources</h6>
+                          <div class="row">
+                            <div class="col-6">
+                              <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-4 align-items-center">
+                                  <p
+                                    class="mb-0 fw-medium me-2 website-analytics-text-bg swiper-p"
+                                  >
+                                    {{ totalOffers ?? "0" }}
+                                  </p>
+                                  <p class="mb-0 swiper-p">Request Offers</p>
+                                </li>
+                                <li class="d-flex align-items-center mb-2">
+                                  <p
+                                    class="mb-0 fw-medium me-2 website-analytics-text-bg swiper-p"
+                                  >
+                                    {{ alllTickets ?? "0" }}
+                                  </p>
+                                  <p class="mb-0 swiper-p">Total Tickets</p>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="col-6">
+                              <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-4 align-items-center">
+                                  <p
+                                    class="mb-0 fw-medium me-2 website-analytics-text-bg swiper-p"
+                                  >
+                                    {{ allOffers ?? "0" }}
+                                  </p>
+                                  <p class="mb-0 swiper-p">Total Offers</p>
+                                </li>
+                                <li class="d-flex align-items-center mb-2">
+                                  <p
+                                    class="mb-0 fw-medium me-2 website-analytics-text-bg swiper-p"
+                                  >
+                                    {{ totalCampaign ?? "0" }}
+                                  </p>
+                                  <p class="mb-0 swiper-p">Active Campaigns</p>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="swiper-img col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center"
+                        >
+                          <img :src="bannerImage" width="170px" alt="image" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <template v-if="User.is_email_verified">
+                  <one-preLoader></one-preLoader>
+                </template>
+              </template>
+            </Suspense>
+          </div>
+          <!--/ Website Analytics -->
+
+          <!-- Sales Overview -->
+          <template v-if="User.is_email_verified && User.account_access == 1">
+            <div class="col-lg-3 col-sm-6 mb-4">
+              <Suspense>
+                <template v-if="alllTicketsShow">
+                  <div class="card py-3">
+                    <div class="card-header">
+                      <div class="d-flex justify-content-between">
+                        <small class="d-block mb-1 text-muted"
+                          >Tickets & Campaign Overview</small
+                        >
+                        <!-- <p class="card-text text-success sales-p">+18.2%</p> -->
+                      </div>
+                      <h4 class="card-title mb-1">{{ alllTickets + totalCampaign }}</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="d-flex gap-2 align-items-center mb-2">
+                            <span class="badge bg-label-info p-1 rounded"
+                              ><i class="fa-solid fa-ticket fs-5"></i
+                            ></span>
+                            <p class="mb-0 sales-p">Tickets</p>
+                          </div>
+                          <h5 class="mb-0 pt-1 text-nowrap">
+                            {{ calculatePercentage(alllTickets ?? 0) }}%
+                          </h5>
+                          <small class="text-muted">{{ alllTickets ?? 0 }}</small>
+                        </div>
+                        <div class="col-4">
+                          <div class="divider divider-vertical">
+                            <div class="divider-text">
+                              <span class="badge-divider-bg bg-label-secondary">VS</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-4 text-end">
+                          <div
+                            class="d-flex gap-2 justify-content-end align-items-center mb-2"
+                          >
+                            <p class="mb-0 sales-p">Campaigns</p>
+                            <span class="badge bg-label-primary p-1 rounded"
+                              ><i class="fa-brands fa-free-code-camp fs-5"></i
+                            ></span>
+                          </div>
+                          <h5 class="mb-0 pt-1 text-nowrap ms-lg-n3 ms-xl-0">
+                            {{ calculatePercentage(totalCampaign ?? 0) }}%
+                          </h5>
+                          <small class="text-muted">{{ totalCampaign ?? 0 }}</small>
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center mt-4">
+                        <div class="progress w-100" style="height: 8px">
+                          <div
+                            class="progress-bar bg-info"
+                            :style="{
+                              width: calculatePercentage(alllTickets ?? 0) + '%',
+                            }"
+                            :aria-valuenow="calculatePercentage(alllTickets ?? 0)"
+                            role="progressbar"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                          <div
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            :style="{
+                              width: calculatePercentage(totalCampaign ?? 0) + '%',
+                            }"
+                            :aria-valuenow="calculatePercentage(totalCampaign ?? 0)"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <two-preLoader></two-preLoader>
+                </template>
+              </Suspense>
+            </div>
+          </template>
+          <!--/ Sales Overview -->
+
+          <!-- Revenue Generated -->
+          <template v-if="User.is_email_verified && User.account_access == 1">
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-4">
+              <Suspense>
+                <template v-if="totalOffers">
+                  <div class="card h-100">
+                    <div class="card-body pb-0">
+                      <div class="card-icon">
+                        <span class="badge bg-label-success rounded-pill p-2">
+                          <i class="fa-solid fa-ticket fs-5"></i>
+                        </span>
+                      </div>
+                      <small>Tickets Generated</small>
+                    </div>
+                    <div id="ticketsGenerated"></div>
+                  </div>
+                </template>
+                <template v-else>
+                  <three-preLoader></three-preLoader>
+                </template>
+              </Suspense>
+            </div>
+          </template>
+          <!--/ Revenue Generated -->
+
+          <!-- Earning Reports -->
+          <template v-if="User.is_email_verified && User.account_access == 1">
+            <div class="col-lg-6 mb-4">
+              <Suspense>
+                <template v-if="totalOffers">
+                  <div class="card h-100">
+                    <div class="card-header pb-0 d-flex justify-content-between mb-lg-n4">
+                      <div class="card-title mb-0">
+                        <h5 class="mb-0">Campaigns Reports</h5>
+                        <small class="text-muted">Monthly Campaigns Overview</small>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div id="campaignReports"></div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <four-preLoader></four-preLoader>
+                </template>
+              </Suspense>
+            </div>
+          </template>
+          <!--/ Earning Reports -->
+
+          <!-- Support Tracker -->
+          <template v-if="User.is_email_verified && User.account_access == 1">
+            <div class="col-md-6 mb-4">
+              <Suspense>
+                <template v-if="totalOffers">
+                <div class="card h-100">
+                  <iframe
+                    :src="IframUrl"
+                    frameborder="0"
+                    width="100%"
+                    height="392px"
+                  ></iframe>
+                </div>
+              </template>
+              <template v-else>
+                <five-preLoader></five-preLoader>
+              </template>
+            </Suspense>
+            </div>
+          </template>
+          <!--/ Support Tracker -->
+        </div>
+        <!-- row -->
+        <div class="row row-sm mt-4" :class="User.account_access != 1 ||  !User.is_email_verified ? 'hiddenofferTable' : ''">
+          <div class="col-md-12">
+            <div class="card mt-2 p-0">
+              <div class="card-header py-3">
+                <h5 class="card-title mb-0 mt-2">Recent Offers</h5>
+              </div>
+              <div class="card-body px-0">
+                <table
+                  class="table mt-2 align-middle mb-0 table-hover"
+                  id="publishers_offers"
+                >
+                  <thead>
+                    <tr>
+                      <!-- <th></th> -->
+                      <th></th>
+                      <th>ID</th>
+                      <th>Offer Name</th>
+                      <th>Country</th>
+                      <th>Featured</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- row closed -->
+      </div>
+    </div>
+    <!-- / Content -->
+  </div>
+  <!-- Content wrapper -->
+</template>
+
+<script>
+// Import necessary packages for ApexCharts
+import ApexCharts from "apexcharts";
+import axios from "axios";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+import Loader from "../../../../../../frontend/include/loder.vue";
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide } from "vue3-carousel";
+import bannerImage from "../../../../../../../../assets/image/card-website-analytics-3.png";
+import { inject } from "vue";
+import onePreLoader from "../../../../../../../preloader/dashboardOne.vue";
+import twoPreLoader from "../../../../../../../preloader/dashboardTwo.vue";
+import threePreLoader from "../../../../../../../preloader/dashboardThree.vue";
+import fourPreLoader from "../../../../../../../preloader/dashboardFour.vue";
+import fivePreLoader from "../../../../../../../preloader/dashboradFive.vue";
+import { fetchUserRolePublisher } from "@/services/userServicePublisher";
+import { RouterLink } from "vue-router";
+
+export default {
+  setup() {
+    const globalVariables = inject("globalVariables");
+    return { globalVariables };
+  },
+  props: ["Banners"],
+  components: {
+    Loader,
+    Carousel,
+    Slide,
+    onePreLoader,
+    twoPreLoader,
+    threePreLoader,
+    fourPreLoader,
+    fivePreLoader,
+  },
+  data: () => {
+    return {
+      getLoader: false,
+      User: "",
+      CompleteProfile: "",
+      IframUrl: "",
+      showParcentage: false,
+      showEmail: true,
+      autoplayInterval: 1000,
+      itemsToShow: 1,
+      totalOffers: "",
+      totalCampaign: "",
+      allOffers: "",
+      alllTickets: "",
+      totalTC: "",
+      accountManager: "",
+      emailRequest: {
+        email: "",
+        domainName: "",
+      },
+      bannerImage,
+      alllTicketsShow : 0,
+    };
+  },
+  async mounted() { 
+    try {
+      const { role, isAuthorized } = await fetchUserRolePublisher();
+      if (role == 'Publisher') {
+        if (this.$route.params.id === "user") {
+          if (!localStorage.getItem("reloadCount")) {
+            localStorage.setItem("reloadCount", 0);
+          }
+          this.reloadCount = parseInt(localStorage.getItem("reloadCount"));
+
+          if (this.reloadCount === 0) {
+            localStorage.setItem("reloadCount", 1);
+            location.reload(true);
+          } else {
+            this.getUserData();
+            this.getPublisherData();
+            this.getPublisherDashboardData();
+            this.updateItemsToShow();
+            window.addEventListener("resize", this.updateItemsToShow);
+            this.emailRequest.domainName = window.location.origin;
+            localStorage.setItem("reloadCount", 0);
+            this.$nextTick(() => {
+              const dataTableWrapper = document.querySelectorAll(
+                "#publishers_offers_wrapper .row.mx-2"
+              );
+              if (dataTableWrapper.length > 0) {
+                dataTableWrapper[0].style.display = "none";
+                dataTableWrapper[1].style.display = "none";
+              }
+            });
+          }
+        } else {
+          this.getUserData();
+          this.getPublisherData();
+          this.getPublisherDashboardData();
+          this.updateItemsToShow();
+          window.addEventListener("resize", this.updateItemsToShow);
+          this.emailRequest.domainName = window.location.origin;
+          this.$nextTick(() => {
+            const dataTableWrapper = document.querySelectorAll(
+              "#publishers_offers_wrapper .row.mx-2"
+            );
+            if (dataTableWrapper.length > 0) {
+              dataTableWrapper[0].style.display = "none";
+              dataTableWrapper[1].style.display = "none";
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+    }
+  },
+  methods: {
+    getUserData() {
+      this.getLoader = true;
+      axios
+        .get(this.globalVariables.apiUrl + "auth/user/data", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          this.User = res.data.data;
+          this.emailRequest.email = res.data.data.email;
+          this.accountManager = res.data.account_manager;
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+
+    getPublisherData() {
+      this.getLoader = true;
+      axios
+        .get(this.globalVariables.apiUrl + "publisher/dashboard", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          this.CompleteProfile = res.data.completeprofile;
+          this.IframUrl = res.data.ifram_url;
+          this.recentOffer = res.data.recentOffer;
+          this.checkPercentage();
+
+          if ($.fn.DataTable.isDataTable("#publishers_offers")) {
+            $("#publishers_offers").DataTable().destroy();
+          }
+          var table = $("#publishers_offers").DataTable({
+            data: res.data.recentOffer,
+            columns: [
+              // { data: "id" },
+              { data: "id" },
+              { data: "id" },
+              {
+                data: "name",
+                render: function (data, type, row) {
+                  if (row.name != null) {
+                    const displayedName = row.name.length > 30 
+                      ? row.name.slice(0, 30) + '...' 
+                      : row.name;
+                    return `<a href="/publisher-create-view/${row.id}" class="custom-link">${displayedName}</a>`;
+                  }
+                  return '----------';
+                }
+              },
+              {
+                data: "country",
+                render: function (data, type, row) {
+                  if (row.country != null) {
+                    return row.country.length > 30 
+                      ? row.country.slice(0, 30) + '...'  
+                      : row.country; 
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: "updated_at",
+                render: function (data, type, row) {
+                  if (row.featured == 1) {
+                    return "Yes";
+                  } else {
+                    return "No";
+                  }
+                },
+              },
+            ],
+            columnDefs: [
+              {
+                targets: 0,
+                orderable: false,
+                checkboxes: {
+                  selectAllRender: '<input type="checkbox" class="form-check-input">',
+                },
+                render: function () {
+                  return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+                },
+                searchable: false,
+              },
+            ],
+            order: [[4, "desc"]],
+            
+            dom:
+              '<"row mx-2"' +
+              '<"col-md-4"f>' +
+              '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+              '<"col-md-3 d-none"p>>' +
+              "t" +
+              '<"row mx-2"' +
+              '<"col-md-5"i>' +
+              '<"col-md-7"p>>',
+            displayLength: 10,
+            lengthMenu: [10, 20, 50, 100, 200],
+            language: {
+              sLengthMenu: "_MENU_",
+              search: "",
+              searchPlaceholder: "Search Offer",
+              paginate: {
+                previous: '<i class="fa-solid fa-chevron-left"></i>',
+                next: '<i class="fa-solid fa-chevron-right"></i>',
+              },
+            },
+            buttons: [
+            ],
+          });
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+
+    getPublisherDashboardData() {
+      this.getLoader = true;
+      axios
+        .get(this.globalVariables.apiUrl + "publisher/dashboard/data", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          this.totalOffers = res.data.requestOffer;
+          this.totalCampaign = res.data.compaign;
+          this.allOffers = res.data.allOffers;
+          this.alllTickets = res.data.alllTickets;
+          if(res.data.alllTickets > 0){
+            this.alllTicketsShow = res.data.alllTickets;
+          }else{
+            this.alllTicketsShow = 1;
+          }
+          this.totalTC = res.data.alllTickets + res.data.compaign;
+          this.renderChart();
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+
+    checkPercentage() {
+      if (this.CompleteProfile < 100) {
+        this.showParcentage = true;
+      } else {
+        this.showParcentage = false;
+      }
+    },
+
+    calculatePercentage(count) {
+      if (this.totalTC === 0) {
+        return 0;
+      }
+      return ((count / this.totalTC) * 100).toFixed(2);
+    },
+    hiddenalert() {
+      this.showParcentage = false;
+    },
+
+    hiddenEailalert() {
+      this.showEmail = false;
+    },
+
+    updateItemsToShow() {
+      if (window.innerWidth < 380) {
+        this.itemsToShow = 1;
+      } else if (window.innerWidth < 768) {
+        this.itemsToShow = 1;
+      } else if (window.innerWidth < 992) {
+        this.itemsToShow = 1;
+      } else {
+        this.itemsToShow = 1;
+      }
+    },
+
+    renderChart() {
+      axios
+        .get(this.globalVariables.apiUrl + "publisher/dashboard/count-data", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          var options = {
+            chart: {
+              height: 130,
+              type: "area",
+              parentHeightOffset: 0,
+              toolbar: {
+                show: false,
+              },
+              sparkline: {
+                enabled: true,
+              },
+            },
+            markers: {
+              colors: "transparent",
+              strokeColors: "transparent",
+            },
+            grid: {
+              show: false,
+            },
+            colors: ["#28c76f"],
+            fill: {
+              type: "gradient",
+              gradient: {
+                shade: "red",
+                shadeIntensity: 0.8,
+                opacityFrom: 0.6,
+                opacityTo: 0.1,
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              width: 2,
+              curve: "smooth",
+            },
+            series: [
+              {
+                data: [1, 2, 3, 4, 5, 6, 380],
+              },
+            ],
+            xaxis: {
+              show: true,
+              lines: {
+                show: false,
+              },
+              labels: {
+                show: false,
+              },
+              stroke: {
+                width: 100,
+              },
+              axisBorder: {
+                show: false,
+              },
+            },
+            yaxis: {
+              stroke: {
+                width: 100,
+              },
+              show: false,
+            },
+            tooltip: {
+              enabled: false,
+            },
+          };
+          var chart = new ApexCharts(
+            document.querySelector("#ticketsGenerated"),
+            options
+          );
+          var cchartHTML = document.querySelector("#ticketsGenerated");
+          cchartHTML.innerHTML = "";
+          chart.render();
+          chart.updateSeries([
+            {
+              name: "ticketDatas",
+              data: res.data.ticketDatas,
+            },
+          ]);
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+
+      axios
+        .get(this.globalVariables.apiUrl + "publisher/dashboard/count-data", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          var campaignReportsConfig = {
+            chart: {
+              height: 325,
+              parentHeightOffset: 0,
+              type: "bar",
+              toolbar: {
+                show: false,
+              },
+            },
+            plotOptions: {
+              bar: {
+                barHeight: "100%",
+                columnWidth: "38%",
+                startingShape: "rounded",
+                endingShape: "rounded",
+                borderRadius: 4,
+                distributed: true,
+              },
+            },
+            grid: {
+              show: false,
+              padding: {
+                top: -30,
+                bottom: 0,
+                left: -10,
+                right: -10,
+              },
+            },
+            colors: ["#7367f0"],
+            dataLabels: {
+              enabled: false,
+            },
+            series: [
+              {
+                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+              },
+            ],
+            legend: {
+              show: false,
+            },
+            xaxis: {
+              categories: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ],
+              axisBorder: {
+                show: false,
+              },
+              axisTicks: {
+                show: false,
+              },
+              labels: {
+                style: {
+                  colors: "#7367f0",
+                  fontSize: "13px",
+                  fontFamily: "Public Sans",
+                },
+              },
+            },
+            yaxis: {
+              labels: {
+                show: false,
+              },
+            },
+            tooltip: {
+              enabled: false,
+            },
+            responsive: [
+              {
+                breakpoint: 1025,
+                options: {
+                  chart: {
+                    height: 199,
+                  },
+                },
+              },
+            ],
+          };
+
+          var campaignReportsChart = new ApexCharts(
+            document.querySelector("#campaignReports"),
+            campaignReportsConfig
+          );
+          var campaignReportsHTML = document.querySelector("#campaignReports");
+          campaignReportsHTML.innerHTML = "";
+          campaignReportsChart.render();
+          campaignReportsChart.updateSeries([
+            {
+              name: "Campaign",
+              data: res.data.campaign,
+            },
+          ]);
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+    sendEmailVerification() {
+      (this.getLoader = true),
+        axios
+          .post(this.globalVariables.apiUrl + "email/verify/request", this.emailRequest, {
+            headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          })
+          .then((res) => {
+            if (res.data.status == "success") {
+              toastr.success(res.data.message);
+            } else {
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data && error.response.data.errors) {
+              this.validationErrors = error.response.data.errors;
+            }
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+    },
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.updateItemsToShow);
+  },
+};
+</script>
+<style>
+#publishers_offers colgroup:nth-of-type(2) {
+  display: none !important;
+}
+.advertiser-avatar img {
+  width: 60px;
+  height: 68px;
+  border-radius: 50%;
+}
+.apexcharts-menu-icon {
+  display: none;
+}
+</style>
+<style scoped>
+.bg-success-gradient {
+  background-image: linear-gradient(to left, #48d6a8 0, #029666 100%) !important;
+}
+.card {
+  border-radius: 7px;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.bg-warning-gradient {
+  background-image: linear-gradient(to left, #efa65f, #f76a2d) !important;
+}
+
+.advertiser-content-btn a {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 7px 30px;
+  display: inline-block;
+  border: 1px solid #0661e0;
+  border-radius: 30px;
+  margin-top: 20px;
+  transition: all 0.4s ease;
+}
+.bg-success-gradient {
+  background-image: linear-gradient(to left, #48d6a8 0, #029666 100%) !important;
+}
+.card {
+  border-radius: 7px;
+}
+.overflow-hidden {
+  overflow: hidden !important;
+}
+.bg-warning-gradient {
+  background-image: linear-gradient(to left, #efa65f, #f76a2d) !important;
+}
+.iframurl {
+  height: 320px;
+}
+.swiper-wrapper {
+  background: #7367f0;
+}
+.swiper-h5 {
+  font-size: 1.125rem;
+  font-family: var(--bs-body-font-family);
+}
+.swiper-p {
+  font-family: var(--bs-body-font-family);
+  color: white;
+  font-size: 15px;
+}
+.short-des {
+  font-size: 13px;
+}
+.earning h6 {
+  font-size: 0.9375rem;
+  font-family: var(--bs-body-font-family);
+  font-weight: 600;
+}
+.sales-p {
+  font-size: 0.9375rem;
+  font-family: var(--bs-body-font-family);
+}
+#notverifyuseralert {
+	background: #f7f7f7;
+	padding: 20px 20px 30px 20px;
+	border: 1px solid #dddcdc;
+	border-radius: 6px;
+}
+#notverifyuseralert strong{
+	font-size: 30px;
+  color: #EE7E00;
+}
+#notverifyuseralert p{
+	font-size: 18px;
+}
+#notverifyuseralert p{
+	color: #605b5b;
+}
+#notverifyuseralert a{
+	background: #EE7E00;
+	padding: 10px;
+	color: beige;
+	border-radius: 3px;
+	font-weight: 600;
+}
+
+#completeuseralert {
+	background: #DEF7F8;
+	padding: 20px 20px 30px 20px;
+	margin-bottom: 15px;
+	border: 1px solid #dddcdc;
+	border-radius: 6px;
+}
+#completeuseralert strong {
+	font-size: 30px;
+	color: #007865;
+}
+
+#completeuseralert p{
+	color: #007865;
+  font-size: 18px;
+}
+#completeuseralert a{
+	background: #007865;
+	padding: 10px;
+	color: beige;
+	border-radius: 3px;
+	font-weight: 600;
+}
+
+#noaccessuseralert {
+	background: #FFCA00;
+  margin-bottom: 15px;
+  padding: 20px;
+  border: 1px solid #dddcdc;
+  border-radius: 6px;
+}
+#noaccessuseralert strong {
+	font-size: 30px;
+	color: #555;
+}
+#noaccessuseralert p{
+	color: #555;
+  font-size: 18px;
+}
+.hiddenofferTable{
+  visibility: hidden;
+  height: 0;
+}
+</style>

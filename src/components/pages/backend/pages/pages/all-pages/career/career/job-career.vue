@@ -1,0 +1,309 @@
+<template>
+  <div v-if="getLoader">
+    <Loader></Loader>
+  </div>
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- {{ jobcareers }} -->
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
+      <div class="row mt-4">
+        <div class="col-md-12 mb-sm-0 mb-3">
+          <div class="card">
+            <div class="custom-card-header pb-0">
+              <h5 class="card-title d-flex justify-content-between align-items-center mb-0 px-3 pt-3 ms-2">
+                Job Career
+              </h5>
+            </div>
+            <div class="card-body table-responsive pt-0 table-overflow-hidden">
+              <table class="align-middle mb-0 table table-hover" id="job_careers_tables">
+                <thead>
+                  <!-- <th></th> -->
+                  <th></th>
+                  <!-- <th>Sl</th> -->
+                  <th>Company Name</th>
+                  <th>Company Logo</th>
+                  <th>Company Phone</th>
+                  <th>Company Email</th>
+                  <th>Salary</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+  </div>
+  <!-- Content wrapper -->
+</template>
+
+<script>
+import axios from "axios";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
+import Swal from "sweetalert2";
+import Loader from "../../../../../include/loader.vue";
+import Breadcrumb from "../../../../../include/breadcrumb.vue";
+import { inject } from "vue";
+import { fetchUserRole } from "@/services/userService";
+
+export default {
+  setup() {
+    const globalVariables = inject("globalVariables");
+    return { globalVariables };
+  },
+  components: {
+    Loader,
+    Breadcrumb,
+  },
+  data() {
+    return {
+      getLoader: false,
+      breadcrumbs: [
+        { label: "Dashboard", url: "/dashboard" },
+        { label: "Job Career", url: "" },
+      ],
+      statusData: {
+        id: "",
+        status: "",
+      },
+    };
+  },
+  async mounted() { 
+      try {
+        const { role, isAuthorized } = await fetchUserRole();
+        if (role == 'Super' || role == 'Admin') {
+          this.getLoader = true;
+          this.getJobCareers();
+          this.$nextTick(() => {
+            const dataTableWrapper = document.querySelectorAll('#job_careers_tables_wrapper .row.mx-2');
+            if (dataTableWrapper.length > 0) {
+              dataTableWrapper[0].style.display = 'none';
+              dataTableWrapper[1].style.display = 'none';
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user role:", error);
+      }
+    },
+  methods: {
+    getJobCareers() {
+      axios
+        .get(this.globalVariables.apiUrl+"admin/career/jobcareer", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          var doaminName = this.globalVariables.appUrl;
+          
+          if ($.fn.DataTable.isDataTable("#job_careers_tables")) {
+            $('#job_careers_tables').DataTable().destroy();
+          }
+          var table = $('#job_careers_tables').DataTable({
+            data: res.data,
+            columns: [
+              // { data: 'id' },
+              { data: 'id' },
+              { data: 'company_name' },
+              {
+                data: 'company_logo',
+                render: function (data, type, row) {
+                  return (
+                    '<img class="company_image" src="' +doaminName+
+                    data +
+                    '">'
+                  );
+                }
+              },
+              { data: 'company_phone' },
+              { data: 'company_email' },
+              { data: 'salary_range' },
+              { data: 'convart_status' },
+              { data: '' }
+            ],
+
+            initComplete: () => { // Using an arrow function here
+              this.attachEventListeners();
+              this.ListenersOfCheckbox();
+              this.attachEventListenersOfButton();
+            },
+            createdRow: function (row, data, dataIndex) {
+                $('td:eq(0)', row).html(dataIndex + 1);
+            },
+            columnDefs: [
+              {
+                targets: 0,
+                orderable: false,
+                checkboxes: {
+                  selectAllRender: '<input type="checkbox" class="form-check-input">'
+                },
+                render: function () {
+                  return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+                },
+                searchable: false
+              },
+              {
+                targets: -1,
+                title: 'Actions',
+                searchable: false,
+                orderable: false,
+                render: function (data, type, full, meta) {
+                  return '<div class="text-end type-datatables-action"><button data-id=' +
+                    full.id +
+                    ' class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id=' +
+                    full.id +
+                    '></i></button><button type="button"  data-id=' +
+                    full.id +
+                    ' class="type-delete-btn border-0 rounded-circle btn-style-danger"><i  data-id="' +
+                    full.id +
+                    ' " class="far fa-trash-alt fa-sm"></i></button></div>'; 
+                }
+              }
+            ],
+            order: [[2, 'desc']],
+            dom: '<"row mx-2"' +
+              '<"col-md-4"f>' + 
+              '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
+              '<"col-md-3 d-none"p>>' +
+              't' + 
+              '<"row mx-2"' +
+              '<"col-md-5"i>' + 
+              '<"col-md-7"p>>', 
+            displayLength: 10, 
+            lengthMenu: [10, 20, 50, 100, 200], 
+            language: {
+              sLengthMenu: '_MENU_',
+              search: '', 
+              searchPlaceholder: 'Search Career',
+              paginate: { 
+                previous: '<i class="fa-solid fa-chevron-left"></i>',
+                next: '<i class="fa-solid fa-chevron-right"></i>'
+              }
+            },
+            buttons: [
+              {
+                text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Create</span>',
+                className: 'create-new btn btn-primary',
+                attr: { id: 'create' },
+              }
+            ],
+          });
+
+           this.getLoader = false;
+        })
+        .catch((error) => {
+          return error;
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+
+
+    attachEventListeners() {
+      $("#job_careers_tables").on("click", ".type-datatables-action", (event) => {
+        const target = $(event.target);
+        const dataId = target.data("id");
+        const dataClass = target.attr("class");
+
+        if (
+          dataClass === "rounded-circle btn-style-edit" ||
+          dataClass === "far fa-edit fa-sm"
+        ) {
+          this.$router.push("/admin-career-jobcareer-edit/" + dataId);
+        } else if (
+          dataClass === "type-delete-btn border-0 rounded-circle btn-style-danger" ||
+          dataClass === "far fa-trash-alt fa-sm"
+        ) {
+          Swal.fire({
+            text: "Are you sure delete",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+          }).then((result) => {
+            if (result.value) {
+              (this.getLoader = true),
+                axios
+                  .delete(
+                    this.globalVariables.apiUrl+`admin/career/jobcareer/delete/${dataId}`,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    toastr.success(res.data.message);
+                    this.getJobCareers();
+                  })
+                  .catch((e) => {
+                    return e;
+                  })
+                  .finally(() => {
+                    this.getLoader = false;
+                  });
+            }
+          });
+        }
+      });
+    },
+
+    ListenersOfCheckbox() {
+      $("#job_careers_tables").on("click", ".status-change-btn", (event) => {
+        const target = $(event.target);
+        this.statusData.id = target.data("id");
+        this.statusData.status = target.is(":checked") ? "1" : "2";
+        this.getLoader = true;
+        axios
+          .post(this.globalVariables.apiUrl+`admin/career/status`, this.statusData, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((res) => {
+            this.getJobCareers();
+            toastr.success(res.data.message);
+            return;
+          })
+          .catch((e) => {
+            return e;
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+      });
+    },
+
+    attachEventListenersOfButton(){
+      $("#job_careers_tables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if (dataClass === "create") {
+          this.$router.push("/admin-career-jobcareer-create");
+        } 
+      });
+    },
+  },
+};
+</script>
+<style>
+#job_careers_tables colgroup:nth-of-type(2) {
+	display: none !important;
+}
+#job_careers_tables .dt-checkboxes-cell{
+	padding: 0.7rem 0.5rem !important;
+}
+.company_image {
+  width: 40px !important;
+}
+</style>
+
+
+
