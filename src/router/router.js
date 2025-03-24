@@ -776,7 +776,7 @@ const routes = [{
         path: '/admin-manage-publishers-edit/:id',
         component: adminManagePublishersEdit,
         meta: {
-          title: 'Manage Publishers Edit',
+          title: 'Manage User Edit',
           requiresAuth: true,
           requiredRoles: ['Super', 'Admin', ],
         }

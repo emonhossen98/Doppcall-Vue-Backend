@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { Modal } from "bootstrap";
 export default {
   install(Vue) {
     let inactivityTimer;
     const maxInactivityDuration = 60 * 60 * 1000;
-    // const maxInactivityDuration = 60 * 1000;
+    // const maxInactivityDuration = 10 * 1000;
     let lastActivityTime = Date.now();
 
     const resetInactivityTimer = () => {
@@ -22,11 +21,21 @@ export default {
           .then((res) => {
             console.log(res);
           });
-        let myModal = new Modal(document.getElementById("userSessionLogoutModal"), {
-          backdrop: "static", // Prevent closing on outside click
-          keyboard: false, // Optional: Prevent closing with ESC key
-        });
-        myModal.show();
+
+          const modalElement = document.getElementById("userSessionLogoutModal");
+          if (modalElement) {
+            if (window.bootstrap) {
+              const myModal = new window.bootstrap.Modal(modalElement, {
+                backdrop: "static",
+                keyboard: false,
+              });
+              myModal.show();
+            } else {
+              console.error("Bootstrap is not loaded!");
+            }
+          } else {
+            console.error("Modal element not found!");
+          }
       }, maxInactivityDuration);
     };
 
