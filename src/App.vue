@@ -546,7 +546,7 @@
   </template>
 
   <!-- Large Modal -->
-  <div class="modal fade" id="userSessionLogoutModal" tabindex="-1" aria-hidden="true" v-if="showWarningmodal">
+  <!-- <div class="modal fade" id="userSessionLogoutModal" tabindex="-1" aria-hidden="true" v-if="showWarningmodal">
     <div class="modal-dialog modal-md modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-body">
@@ -562,7 +562,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
 import WarningImage from './assets/backend/assets/img/warning-icon.png'

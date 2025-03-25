@@ -44,7 +44,11 @@
                 </div>
                 <div class="form-group mt-3">
                   <label for="body_content"  class="required">Body</label>
-                    <textarea ref="BodyContent" id="body_content" cols="30" rows="5" class="form-control"></textarea>
+                  <!-- <textarea ref="BodyContent" id="body_content" cols="30" rows="5" class="form-control"></textarea>
+                    <div v-if="validationErrors && validationErrors.body_content" class="text-danger">
+                        {{ validationErrors.body_content[0] }}
+                    </div> -->
+                  <Editor api-key="jal9cu31r6q4w7fvp4i1fldbggmn9ai0egqalbhez8afsa86"  :init="editorConfig" v-model="emailTemplateUpdate.body_content"/>
                     <div v-if="validationErrors && validationErrors.body_content" class="text-danger">
                         {{ validationErrors.body_content[0] }}
                     </div>
@@ -74,6 +78,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import Editor from '@tinymce/tinymce-vue';
 
 export default {
   setup() {
@@ -83,9 +88,17 @@ export default {
   components: {
     Loader,
     Breadcrumb,
+    Editor ,
   },
   data: () => {
     return {
+      editorConfig: {
+        referrer_policy: "origin", 
+        height: 500,
+        menubar: true,
+        plugins: 'lists link image table code help wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      },
       breadcrumbs: [
         { label: "Dashboard", url: "/dashboard" },
         { label: "Settings", url: "" },
@@ -105,15 +118,15 @@ export default {
       const { role, isAuthorized } = await fetchUserRole();
       if (role == 'Super' || role == 'Admin') {
         this.getEmailtemplatesData();
-        $(this.$refs.BodyContent).summernote({
-            placeholder: 'Type your text here...',
-            height: 200,
-            callbacks: {
-              onChange: contents => {
-              this.emailTemplateUpdate.body_content = contents;
-              }
-            }
-        });
+        // $(this.$refs.BodyContent).summernote({
+        //     placeholder: 'Type your text here...',
+        //     height: 200,
+        //     callbacks: {
+        //       onChange: contents => {
+        //       this.emailTemplateUpdate.body_content = contents;
+        //       }
+        //     }
+        // });
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
@@ -133,7 +146,7 @@ export default {
             this.emailTemplateUpdate.subject = res.data.template.subject;
             this.emailTemplateUpdate.heading = res.data.template.heading;
             this.emailTemplateUpdate.body_content = res.data.template.content;
-            $(this.$refs.BodyContent).summernote('code', res.data.template.content ?? '');
+            // $(this.$refs.BodyContent).summernote('code', res.data.template.content ?? '');
         })
         .catch((error) => {
           console.log(error);

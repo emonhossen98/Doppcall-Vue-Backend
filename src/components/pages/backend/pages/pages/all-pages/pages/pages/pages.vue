@@ -171,7 +171,13 @@ export default {
                 { data: 'id' },
                 { data: 'id' },
                 { data: 'name' },
-                { data: 'slug' },
+                // { data: 'slug' },
+                {
+                  data: "slug",
+                  render: function (data, type, row) {
+                    return '<a target="_blank" href="https://doppcall.com/' + row.slug + '">' + row.slug + '</a>';
+                  },
+                },
                 {
                   data: "updated_at",
                   render: function (data, type, row) {

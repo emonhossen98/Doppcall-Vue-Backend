@@ -23,7 +23,7 @@
                                 <th>SL</th>
                                 <th>Template Name</th>
                                 <th>Subject</th>
-                                <th>Body</th>
+                                <!-- <th>Body</th> -->
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -173,7 +173,7 @@ export default {
                 { data: 'id' },
                 { data: 'convart_template_name' },
                 { data: 'subject' },
-                { data: 'content' },
+                // { data: 'content' },
                 {
                   data: null, // Specify null for custom rendering
                   title: 'Actions',
@@ -182,7 +182,7 @@ export default {
                   render: function (data, type, full, meta) {
                     return '<div class="email_templates_action d-flex align-items-center">' +
                       '<button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex align-items-center" data-id="' + full.id + '">' +
-                      '<i class="far fa-edit fa-sm" data-id="' + full.id + '"></i></button></div>';
+                      '<i id="edit-btn" class="far fa-edit fa-sm" data-id="' + full.id + '"></i></button></div>';
                   }
                 }
               ],
@@ -298,6 +298,8 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
+        console.log(dataId);
+        console.log(dataClass);
         if(dataClass === 'edit-btn'){
          this.$router.push('/admin-settings-email-template-edit/'+dataId);
         }

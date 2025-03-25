@@ -2,7 +2,7 @@ import axios from 'axios';
 export default {
   install(Vue) {
     let inactivityTimer;
-    const maxInactivityDuration = 60 * 60 * 1000;
+    const maxInactivityDuration = 180 * 180 * 1000;
     // const maxInactivityDuration = 10 * 1000;
     let lastActivityTime = Date.now();
 
@@ -21,21 +21,22 @@ export default {
           .then((res) => {
             console.log(res);
           });
+          window.location.href = 'https://doppcall.com/login?token=logout';
+          // const modalElement = document.getElementById("userSessionLogoutModal");
+          // if (modalElement) {
+          //   if (window.bootstrap) {
+          //     const myModal = new window.bootstrap.Modal(modalElement, {
+          //       backdrop: "static",
+          //       keyboard: false,
+          //     });
+          //     myModal.show();
+          //   } else {
+          //     console.error("Bootstrap is not loaded!");
+          //   }
+          // } else {
+          //   console.error("Modal element not found!");
+          // }
 
-          const modalElement = document.getElementById("userSessionLogoutModal");
-          if (modalElement) {
-            if (window.bootstrap) {
-              const myModal = new window.bootstrap.Modal(modalElement, {
-                backdrop: "static",
-                keyboard: false,
-              });
-              myModal.show();
-            } else {
-              console.error("Bootstrap is not loaded!");
-            }
-          } else {
-            console.error("Modal element not found!");
-          }
       }, maxInactivityDuration);
     };
 
