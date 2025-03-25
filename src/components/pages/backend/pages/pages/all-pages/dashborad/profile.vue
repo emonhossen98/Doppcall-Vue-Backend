@@ -202,6 +202,7 @@
                                       type="email"
                                       v-model="userUpdate.email"
                                       class="form-control"
+                                      readonly
                                     />
                                     <div
                                       v-if="validationErrors && validationErrors.email"

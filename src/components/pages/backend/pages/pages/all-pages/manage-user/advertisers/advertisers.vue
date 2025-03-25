@@ -678,6 +678,9 @@ export default {
   text-overflow: ellipsis; /* Adds "..." for overflow */
   max-width: 100px !important; /* Set max width for cell */
 }
+#advertiser_datatables {
+  min-height: 500px;
+}
 .admin-advertiser-country-flag {
 	width: 20px !important;
 }

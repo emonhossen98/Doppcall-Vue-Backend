@@ -1080,6 +1080,9 @@ ul.filter-input-list {
   padding: 15px !important;
 }
 
+#offer_datatables {
+  min-height: 500px;
+}
 #offer_datatables colgroup:nth-of-type(2) {
   display: none !important;
 }

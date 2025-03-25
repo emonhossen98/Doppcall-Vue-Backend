@@ -346,4 +346,7 @@ export default {
 	display: flex !important;
 	align-items: center !important;
 }
+#admin_campaign_datatables {
+  min-height: 200px;
+}
 </style>

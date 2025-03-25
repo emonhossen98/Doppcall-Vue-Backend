@@ -175,7 +175,7 @@ export default {
                 {
                   data: "slug",
                   render: function (data, type, row) {
-                    return '<a target="_blank" href="https://doppcall.com/' + row.slug + '">' + row.slug + '</a>';
+                    return '<a target="_blank" href="https://doppcall.com/' + row.slug + '">https://doppcall.com/' + row.slug + '</a>';
                   },
                 },
                 {

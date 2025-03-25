@@ -702,4 +702,7 @@ export default {
   text-overflow: ellipsis; 
   max-width: 100px; 
 }
+#publisher_datatables  {
+  min-height: 500px;
+}
 </style>

@@ -23,7 +23,8 @@
                               <th></th> <th>SL</th> 
                               <th>To</th>
                               <th>Subject</th>
-                              <th>Body</th>
+                              <th>Action</th>
+                              <!-- <th>Body</th> -->
                             </tr>
                             </thead>
                             <tbody>
@@ -68,6 +69,28 @@
       </div>
       <!-- / Content -->
       <div class="content-backdrop fade"></div>
+
+      <!-- Large Modal -->
+ <div class="modal fade" id="emailLogsContent" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header" id="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">Email Log Information</h5>
+          <hr>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="EmailContents">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
     </div>
     <!-- Content wrapper -->
 </template>
@@ -103,6 +126,9 @@ export default {
       startPage : 0,
       endPage : 0,
       searchInputValue : "",
+      emailcontenview : {
+        data_id : '',
+      },
     };
   },
   async mounted() { 
@@ -171,10 +197,17 @@ export default {
                  { data: 'id' },
                  { data: 'user' },
                  { data: 'subject' },
-                 { data: 'body' },
+                //  { data: 'body' },
+                {
+                 data : "updated_at",
+                 render: function (data, type, row) {
+                  return '<button data-id="'+row.id+'"  data-bs-toggle="modal" data-bs-target="#emailLogsContent" id="content-view" class="industial_contact_view text-info border-0"><i id="content-view" class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button>'
+                 }
+              }
                 
               ],
               initComplete: () => {
+                this.attachEventListeners();
                 this.attachEventListenersForMenu();
                 this.attachEventListenersForSearch();
 
@@ -278,6 +311,18 @@ export default {
           this.getLoader =  false;
         });
     },
+    
+    attachEventListeners() {
+      $('#emails_tables').on('click', '.industial_contact_view', (event) => {
+        const target = $(event.target);
+        const dataId = target.data('id');
+        const dataClass = target.attr('id');
+        this.emailcontenview.data_id = dataId;
+        if(dataClass === 'content-view'){
+          this.getEmailInformation();
+        }
+      });
+    },
     attachEventListenersForMenu() {
       $("#emails_tables_wrapper [name='emails_tables_length']").on("change", (event) => {
         this.getLoader = true;
@@ -293,6 +338,23 @@ export default {
         this.getEmailLogs(1,10,getSearchValue);
       });
     },
+    getEmailInformation(){
+      this.getLoader = true;
+      axios
+        .post(this.globalVariables.apiUrl+"admin/get-email-info",this.emailcontenview, {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },  
+        })
+        .then((res) => {
+          document.querySelector('#EmailContents').innerHTML = res && res.data && res.data.data && res.data.data.body;
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    }
   },
 };
 </script>
@@ -302,5 +364,12 @@ export default {
 }
 #emails_tables  .dt-checkboxes-cell{
 	padding: 0.7rem 0.5rem !important;
+}
+#modal-header {
+	border-bottom: 1px solid #ededed;
+}
+#content-view{
+	background: transparent;
+	font-size: 17px;
 }
 </style>
