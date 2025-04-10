@@ -239,7 +239,7 @@
                 <thead class="border-top">
                   <tr>
                     <th></th>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Name</th>
                     <th>Featured</th>
                     <th>Country</th>
@@ -410,16 +410,16 @@ export default {
     },
   },
   methods: {
-    getOfferData(page = 1, perPage = 10,searchValue = '') {
+    getOfferData(page = 1, perPage = 10, searchValue = '') {
       this.getLoader = true;
       axios
         .get(this.globalVariables.apiUrl + "admin/offers/get-data", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-          params: { page: page, perPage: perPage,search: searchValue},
+          params: { page: page, perPage: perPage, search: searchValue },
         })
         .then((res) => {
           this.countendData = res.data.data;
-          const { data, current_page, last_page,recordsTotal } = res.data;
+          const { data, current_page, last_page, recordsTotal } = res.data;
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -433,8 +433,12 @@ export default {
           var table = $("#offer_datatables").DataTable({
             data: res.data.getDatas,
             columns: [
-              { data: "id" },
-              { data: "id" },
+              { 
+                data: "id",
+                className: 'dt-center select-checkbox',
+                orderable: false
+              },
+              // { data: "id" },
               { data: "convart_offer_name" },
               { data: "convart_featured" },
               { data: "convart_primary_contry" },
@@ -461,6 +465,8 @@ export default {
               { data: "convart_status" },
               {
                 data: "updated_at",
+                className: 'dt-center',
+                orderable: false,
                 render: function (data, type, row) {
                   return row.convart_action;
                 },
@@ -469,14 +475,13 @@ export default {
             initComplete: () => {
               this.attachEventListeners();
               this.attachEventListenersOfButton();
-
               this.attachEventListenersForMenu();
               this.attachEventListenersForSearch();
 
               const searchInput = $("#offer_datatables_filter input");
               searchInput.val(this.searchInputValue);
-              if(this.searchInputValue != ''){
-                  searchInput.focus();
+              if (this.searchInputValue != '') {
+                searchInput.focus();
               }
 
               searchInput.off().on("keyup", (e) => {
@@ -485,27 +490,39 @@ export default {
                 this.getOfferData(1, perPage, searchTerm);
               });
 
+              $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                  .select-checkbox .sorting_asc,
+                  .select-checkbox .sorting_desc,
+                  .select-checkbox .sorting {
+                    display: none !important;
+                  }
+                `)
+                .appendTo('head');
             },
-            createdRow: function (row, data, dataIndex) {
-              const perPage = 10; 
-              const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
-              $('td:eq(1)', row).html(rowNumber);
-            },
+            // createdRow: function (row, data, dataIndex) {
+            //   const perPage = 10;
+            //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
+            //   $('td:eq(1)', row).html(rowNumber);
+            // },
             columnDefs: [
               {
                 targets: 0,
                 orderable: false,
+                className: 'select-checkbox',
                 checkboxes: {
-                  selectAllRender:
-                    '<input type="checkbox" class="form-check-input ms-1">',
+                  selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                 },
                 render: function () {
                   return '<input type="checkbox" class="dt-checkboxes form-check-input ms-1" >';
                 },
                 searchable: false,
               },
+              { targets: 9, orderable: false, className: 'dt-center' }
             ],
-            order: [[0, "desc"]],
+            orderCellsTop: true,
+            order: [[1, "asc"]], 
             dom:
               '<"row mx-2"' +
               '<"col-md-4"f>' +
@@ -636,8 +653,12 @@ export default {
             var table = $("#offer_datatables").DataTable({
               data: res.data.getDatas,
               columns: [
-                { data: "id" },
-                { data: "id" },
+                  { 
+                    data: "id",
+                    className: 'dt-center select-checkbox',
+                    orderable: false
+                  },
+                // { data: "id" },
                 { data: "convart_offer_name" },
                 { data: "convart_featured" },
                 { data: "convart_primary_contry" },
@@ -687,27 +708,39 @@ export default {
                   this.searchInputValue = searchTerm;
                   this.getOfferData(1, perPage, searchTerm);
                 });
+                $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                  .select-checkbox .sorting_asc,
+                  .select-checkbox .sorting_desc,
+                  .select-checkbox .sorting {
+                    display: none !important;
+                  }
+                `)
+                .appendTo('head');
               },
-              createdRow: function (row, data, dataIndex) {
-                const perPage = 10; 
-                const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
-                $('td:eq(1)', row).html(rowNumber);
-              },
+              // createdRow: function (row, data, dataIndex) {
+              //   const perPage = 10; 
+              //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
+              //   $('td:eq(1)', row).html(rowNumber);
+              // },
               columnDefs: [
-                {
+              {
                   targets: 0,
                   orderable: false,
+                  className: 'select-checkbox',
                   checkboxes: {
-                    selectAllRender:
-                      '<input type="checkbox" class="form-check-input ms-1">',
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                   },
                   render: function () {
                     return '<input type="checkbox" class="dt-checkboxes form-check-input ms-1" >';
                   },
                   searchable: false,
                 },
+                { targets: 9, orderable: false, className: 'dt-center' }
               ],
-              order: [[0, "desc"]],
+              orderCellsTop: true,
+              order: [[1, "asc"]], 
               dom:
                 '<"row mx-2"' +
                 '<"col-md-4"f>' +
