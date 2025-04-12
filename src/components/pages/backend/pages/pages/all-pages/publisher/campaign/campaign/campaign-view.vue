@@ -153,7 +153,7 @@
                                                                 <td>{{ offer.convart_created_at }}</td>
                                                                 <td>
                                                                     <div class="sub-heading d-flex align-items-center">
-                                                                        <img class="realted_country_flag" :src="`https://flagicons.lipis.dev/flags/4x3/${offer.primary_country_code.toLowerCase()}.svg`" alt="image"> {{ offer.primary_country }}
+                                                                        <img v-if="offer.primary_country_code != null" class="realted_country_flag" :src="`https://flagicons.lipis.dev/flags/4x3/${offer.primary_country_code.toLowerCase()}.svg`" alt="image"> {{ offer.primary_country }}
                                                                     </div>
                                                                 </td>
                                                                 <td><RouterLink :to="'/publisher-create-view/'+offer.id" class="d-flex">{{ offer.name }} </RouterLink></td>

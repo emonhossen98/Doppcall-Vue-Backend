@@ -169,19 +169,13 @@
                   <SkeletonShape type="text"  animation="wave"  :width="'100%'" :height="'38px'" :radius="5" />
                 </template>
                 <template v-else> -->
-                  <select
-                    v-model="filtarData.country"
-                    class="select2 form-select"
-                    @change="getFiltarOffers()"
-                  >
+                  <select v-model="filtarData.country" class="select2 form-select"  @change="getFiltarOffers()">
                     <option value="">Select Country</option>
-                    <option
-                      v-for="countryOffer in OfferIndex.countryOffers"
-                      :value="countryOffer.primary_country"
-                      :key="countryOffer.id"
-                    >
-                      {{ countryOffer.primary_country }}
-                    </option>
+                    <template v-for="(countryOffer,index) in OfferIndex.countryOffers" :key="index">
+                      <template v-if="countryOffer.primary_country != null && countryOffer.primary_country != ''">
+                        <option :value="countryOffer.primary_country">{{ countryOffer.primary_country }}</option>
+                      </template>
+                    </template>
                   </select>
                 <!-- </template> -->
               </div>
@@ -327,6 +321,7 @@ export default {
         // { label: "Offers", url: "" },
       ],
       getLoader: false,
+      selectedIds: [],
       getSkeletonLoader: false,
       changeStatus: {
         data: "",
@@ -439,27 +434,35 @@ export default {
                 orderable: false
               },
               // { data: "id" },
-              { data: "convart_offer_name" },
+              { data: "convart_offer_name" ?? '------' },
               { data: "convart_featured" },
-              { data: "convart_primary_contry" },
-              { data: "convart_assign_user" },
+              { data: "convart_primary_contry" ?? '------' },
+              { data: "convart_assign_user" ?? '------' },
               {
                 data: "pay_out",
                 render: function (data, type, row) {
                   if (row.pay_out != null) {
                     return row.pay_out.slice(0, 5);
                   }
-                  return "";
+                  return "------";
                 },
               },
-              { data: "phone_no" },
+              {
+                data: "phone_no",
+                render: function (data, type, row) {
+                  if (row.phone_no != null) {
+                    return row.owner;
+                  }
+                  return "--------";
+                },
+              },
               {
                 data: "owner",
                 render: function (data, type, row) {
                   if (row.owner != null) {
                     return row.owner.slice(0, 5);
                   }
-                  return "";
+                  return "--------";
                 },
               },
               { data: "convart_status" },
@@ -477,6 +480,7 @@ export default {
               this.attachEventListenersOfButton();
               this.attachEventListenersForMenu();
               this.attachEventListenersForSearch();
+              this.attachEventListenersBlulkAction();
 
               const searchInput = $("#offer_datatables_filter input");
               searchInput.val(this.searchInputValue);
@@ -514,8 +518,8 @@ export default {
                 checkboxes: {
                   selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                 },
-                render: function () {
-                  return '<input type="checkbox" class="dt-checkboxes form-check-input ms-1" >';
+                render: function (data, type, row) {
+                  return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                 },
                 searchable: false,
               },
@@ -553,33 +557,33 @@ export default {
                     extend: "print",
                     text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                     className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
                   },
                   {
                     extend: "csv",
                     text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                     className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
                   },
                   {
                     extend: "excel",
                     text:
                       '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                     className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
                   },
                   {
                     extend: "pdf",
                     text:
                       '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                     className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
                   },
                   {
                     extend: "copy",
                     text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                     className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
                   },
                 ],
               },
@@ -595,6 +599,20 @@ export default {
                 className: "create-new btn btn-primary",
                 attr: { id: "create" },
               },
+              {
+                text: `
+                  <div id="bulk-action-wrapper" class="d-none">
+                    <select id="bulk-action-select" class="form-select form-select-sm" style="width: 200px;">
+                      <option value="">Bulk Actions</option>
+                      <option value="delete">🗑 Delete Selected</option>
+                      <option value="approve">✅ Approve Selected</option>
+                      <option value="reject">❌ Reject Selected</option>
+                    </select>
+                  </div>
+                `,
+                className: "ms-2",
+                attr: { id: "bulk-action-container" },
+              }
             ],
           });
           this.getLoader = false;
@@ -672,14 +690,22 @@ export default {
                     return "";
                   },
                 },
-                { data: "phone_no" },
+                {
+                  data: "phone_no",
+                  render: function (data, type, row) {
+                    if (row.phone_no != null) {
+                      return row.owner;
+                    }
+                    return "--------";
+                  },
+                },
                 {
                   data: "owner",
                   render: function (data, type, row) {
                     if (row.owner != null) {
                       return row.owner.slice(0, 5);
                     }
-                    return "";
+                    return "--------";
                   },
                 },
                 { data: "convart_status" },
@@ -829,31 +855,31 @@ export default {
     },
 
     attachEventListeners() {
-      $("#offer_datatables").on("click", ".dropdown-item, .action-btn", (event) => {
+      $("#offer_datatables").on("click", ".offer-action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr("class");
-        if (dataClass === "dropdown-item approved-btn") {
+        const dataClass = target.data("action");
+        if (dataClass === "approved-btn") {
           this.changeStatus.data = dataId;
           this.changeStatus.actionType = "approved";
           const alertTitle = "Offer Want to Approved";
           this.ActionMethod(alertTitle);
-        } else if (dataClass === "dropdown-item pending-btn") {
+        } else if (dataClass === "pending-btn") {
           this.changeStatus.data = dataId;
           this.changeStatus.actionType = "pending";
           const alertTitle = "Offer Want to Pending";
           this.ActionMethod(alertTitle);
-        } else if (dataClass === "dropdown-item resume-btn") {
+        } else if (dataClass === "resume-btn") {
           this.changeStatus.data = dataId;
           this.changeStatus.actionType = "resume";
           const alertTitle = "Offer Want to Resume";
           this.ActionMethod(alertTitle);
-        } else if (dataClass === "dropdown-item pause-btn") {
+        } else if (dataClass === "pause-btn") {
           this.changeStatus.data = dataId;
           this.changeStatus.actionType = "pause";
           const alertTitle = "Offer Want to Pause";
           this.ActionMethod(alertTitle);
-        } else if (dataClass === "dropdown-item delete-btn") {
+        } else if (dataClass === "delete-btn") {
           this.deleteOffer.data = dataId;
           Swal.fire({
             text: "Are you sure delete",
@@ -890,7 +916,7 @@ export default {
                   });
             }
           });
-        } else if (dataClass === "dropdown-item duplicate-item") {
+        } else if (dataClass === "duplicate-item") {
           this.getLoader = true;
           axios
             .get(this.globalVariables.apiUrl + `admin/offers/duplicatedata/${dataId}`, {
@@ -908,16 +934,58 @@ export default {
             .finally(() => {
               this.getLoader = false;
             });
-        } else if (dataClass === "dropdown-item offer-view") {
+        } else if (dataClass === "offer-view") {
           this.$router.push("/admin-offers-view/" + dataId);
-        } else if (dataClass === "dropdown-item offer-edit") {
+        } else if (dataClass === "offer-edit") {
           this.$router.push("/admin-offers-edit/" + dataId);
-        } else if (dataClass === "dropdown-item assign-publisher") {
+        } else if (dataClass === "assign-publisher") {
           this.$router.push("/admin-offers-campaigns-assign/" + dataId);
-        } else if (dataClass === "dropdown-item create-campaign") {
+        } else if (dataClass === "create-campaign") {
           this.$router.push("/admin-offers-campaigns-create/" + dataId);
         }
       });
+    },
+
+    attachEventListenersBlulkAction() {
+      $('#offer_datatables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+
+        if (event.target.checked) {
+          if (!this.selectedIds.includes(id)) {
+            this.selectedIds.push(id);
+          }
+        } else {
+          this.selectedIds = this.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#offer_datatables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#offer_datatables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.selectedIds.includes(id)) {
+              this.selectedIds.push(id);
+            }
+          } else {
+            this.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-wrapper');
+      if (this.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
     },
 
     attachEventListenersOfButton() {

@@ -207,8 +207,6 @@ import Editor from '@tinymce/tinymce-vue';
               const base64 = reader.result.split(',')[1];
               const blobInfo = blobCache.create(id, file, base64);
               blobCache.add(blobInfo);
-
-              /* call the callback and populate the Title field with the file name */
               cb(blobInfo.blobUri(), { title: file.name });
             });
             reader.readAsDataURL(file);
