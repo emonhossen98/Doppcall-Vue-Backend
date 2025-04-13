@@ -150,6 +150,9 @@ export default {
         id: null, // Added `id` to store the current offer type's id
         type_name: "",
       },
+      bulkactionids : {
+        selectedIds: [],
+      },
       validationErrors: null,
     };
   },
@@ -214,22 +217,23 @@ export default {
             initComplete: () => {
               this.attachEventListeners();
               this.attachEventListenersOfButton();
+              this.attachEventListenersBlulkAction();
+              this.attachEventListenersBlulkActionSubmit();
             },
             columnDefs: [
               {
                 targets: 0,
                 orderable: false,
                 checkboxes: {
-                  selectAllRender:
-                    '<input type="checkbox" class="form-check-input ms-1">',
+                  selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                 },
-                render: function () {
-                  return '<input type="checkbox" class="dt-checkboxes form-check-input ms-1" >';
+                render: function (data, type, row) {
+                  return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                 },
                 searchable: false,
               },
             ],
-            order: [[1, "asc"]],
+            order: [[1, "desc"]],
             dom:
               '<"row mx-2"' +
               '<"col-md-4"f>' +
@@ -251,6 +255,18 @@ export default {
               },
             },
             buttons: [
+            {
+                text: `
+                  <div id="bulk-action-wrapper">
+                    <select id="bulk-action-select" class="form-select form-select-sm">
+                      <option value=""> ✓ Bulk Actions</option>
+                      <option value="delete">Bulk Delete</option>
+                    </select>
+                  </div>
+                `,
+                className: "me-2 p-0 btn-primary d-none",
+                attr: { id: "bulk-action-container" },
+              },
               {
                 text:
                   '<span data-bs-toggle="modal" data-bs-target="#TypeInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Type</span>',
@@ -283,7 +299,6 @@ export default {
               headers: { Authorization: "Bearer " + localStorage.getItem("token") },
             })
             .then((res) => {
-              // Set `id` and `type_name` when editing
               this.offerType.id = res.data.offerType.id;
               this.offerType.type_name = res.data.offerType.type;
             })
@@ -330,12 +345,106 @@ export default {
         }
       });
     },
+
     attachEventListenersOfButton() {
       $("#types-tables_wrapper").on("click", "button", (event) => {
         const target = $(event.target);
         const dataClass = target.attr("id");
         if (dataClass === "create") {
           this.$router.push("/admin-offers-types-create");
+        }
+      });
+    },
+
+    attachEventListenersBlulkAction() {
+      $('#types-tables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+
+      $('#types-tables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#types-tables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        if (action === 'delete') {
+          this.bulkDelete();
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/offers/types/bulk/delete",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getOffersTypes();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
         }
       });
     },
@@ -376,6 +485,7 @@ export default {
           this.getLoader = false;
         });
     },
+
     typeUpdate() {
       if (!this.offerType.id) {
         toastr.error("No type selected for update.");

@@ -412,14 +412,14 @@ export default {
                       extend: "csv",
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7,8,9,10,11,12,13,14,15] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
                     },
                     {
                       extend: "excel",
                       text:
                         '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7,8,9,10,11,12,13,14,15] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
                     },
                     // {
                     //   extend: "pdf",
@@ -432,8 +432,14 @@ export default {
                       extend: "copy",
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7,8,9,10,11,12,13,14,15] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
                     },
+                    // {
+                    //   extend: "colvis",
+                    //   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>colvis',
+                    //   className: "dropdown-item",
+                    //   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] },
+                    // },
                   ],
                 },
                 {

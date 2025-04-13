@@ -192,6 +192,10 @@ export default {
         name: "",
         status: "",
       },
+      bulkactionids : {
+        selectedIds: [],
+        status: "",
+      },
       categoryUpdate: {
         name: "",
         status: "",
@@ -241,7 +245,8 @@ export default {
               initComplete: () => {
                 // Using an arrow function here
                 this.attachEventListeners();
-                this.attachEventListenersOfButton();
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
               },
               createdRow: function (row, data, dataIndex) {
                 $("td:eq(0)", row).html(dataIndex + 1);
@@ -251,23 +256,12 @@ export default {
                   targets: 0,
                   orderable: false,
                   checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">',
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                   },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                   },
                   searchable: false,
-                },
-                {
-                  targets: 2,
-                  responsivePriority: 1,
-                },
-                {
-                  targets: 3,
-                  responsivePriority: 5,
-                },
-                {
-                  targets: -2,
                 },
                 {
                   targets: -1,
@@ -311,6 +305,20 @@ export default {
                 },
               },
               buttons: [
+                {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                        <option value="0">Bulk Pending</option>
+                        <option value="1">Bulk Publish</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
                 {
                   text:
                     '<span data-bs-toggle="modal" data-bs-target="#CategoryInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Category</span>',
@@ -391,7 +399,153 @@ export default {
         }
       });
     },
+    attachEventListenersBlulkAction() {
+      $('#carrer_category_tables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
 
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#carrer_category_tables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#carrer_category_tables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        
+        if (action === 'delete') {
+          this.bulkDelete();
+        } else {
+          if (action === "1") {
+            this.bulkactionids.status = '1';
+            const alertTitle = "Offer Want to Approved";
+            this.bulkStatusChange(alertTitle);
+          } else{
+            this.bulkactionids.status = '0';
+            const alertTitle = "Offer Want to Pending";
+            this.bulkStatusChange(alertTitle);
+          }
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      const bulkActionWrapperSecond = $('#bulk-action-container-second');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapperSecond?.removeClass('d-none');
+      } else {
+        bulkActionWrapperSecond?.addClass('d-none');
+      }
+    },
+    bulkDelete() {
+          Swal.fire({
+            text: 'Are Sure Delete',
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
+          }).then((result) => {
+            if (result.value) {
+              (this.getLoader = true),
+                axios
+                  .post(
+                    this.globalVariables.apiUrl + "admin/career/catagory/bulk/delete",
+                    this.bulkactionids,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    if (res.data.status == "success") {
+                      toastr.success(res.data.message);
+                      this.getCareerCategory();
+                    } else {
+                      toastr.error(res.data.message);
+                    }
+                  })
+                  .catch((e) => {
+                    return e;
+                  })
+                  .finally(() => {
+                    this.getLoader = false;
+                  });
+            }
+          });
+        },
+    
+        bulkStatusChange(alertTitle) {
+          Swal.fire({
+            text: alertTitle,
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+          }).then((result) => {
+            if (result.value) {
+              (this.getLoader = true),
+                axios
+                  .post(
+                    this.globalVariables.apiUrl + "admin/career/catagory/bulk/status",
+                    this.bulkactionids,
+                    {
+                      headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    if (res.data.status == "success") {
+                      toastr.success(res.data.message);
+                      this.getCareerCategory();
+                    } else {
+                      toastr.error(res.data.message);
+                    }
+                  })
+                  .catch((e) => {
+                    return e;
+                  })
+                  .finally(() => {
+                    this.getLoader = false;
+                  });
+            }
+          });
+        },
     careerCategorySave() {
       (this.getLoader = true),
         axios

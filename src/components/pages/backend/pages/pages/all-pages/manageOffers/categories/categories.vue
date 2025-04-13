@@ -137,6 +137,9 @@ export default {
         category: "",
       },
       categories: "",
+      bulkactionids : {
+        selectedIds: [],
+      },
       getLoader: false,
       breadcrumbs: [
         { label: "Dashboard", url: "/dashboard" },
@@ -180,11 +183,17 @@ export default {
             { data: 'id' },
             { data: 'name' },
             { data: 'id' },
-            { data: '' }
+            {
+                data: "pay_out",
+                render: function (data, type, full, meta) {
+                  return '<div class="text-end categorie-action-btn"><button data-id='+ full.id + ' data-bs-toggle="modal" data-bs-target="#CategoryInfoEdit" class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id='+ full.id + '></i></button><button type="button"  data-id='+ full.id + ' class="category-delete border-0 rounded-circle btn-style-danger"><i  data-id="' + full.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'; ;
+                }
+              },
           ],
-          initComplete: () => { // Using an arrow function here
+          initComplete: () => { 
             this.attachEventListeners();
-            this.attachEventListenersOfButton();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
           },
           createdRow: function (row, data, dataIndex) {
               $('td:eq(0)', row).html(dataIndex + 1);
@@ -194,35 +203,15 @@ export default {
               targets: 0,
               orderable: false,
               checkboxes: {
-                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
               },
-              render: function () {
-                return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
               },
               searchable: false
             },
-            {
-              targets: 2,
-              responsivePriority: 1,
-            },
-            {
-              targets: 3,
-              responsivePriority: 5,
-            },
-            {
-              targets: -2,
-            },
-            {
-              targets: -1,
-              title: 'Actions',
-              searchable: false,
-              orderable: false,
-              render: function (data, type, full, meta) {
-                return '<div class="text-end categorie-action-btn"><button data-id='+ full.id + ' data-bs-toggle="modal" data-bs-target="#CategoryInfoEdit" class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id='+ full.id + '></i></button><button type="button"  data-id='+ full.id + ' class="category-delete border-0 rounded-circle btn-style-danger"><i  data-id="' + full.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'; ;
-              }
-            }
           ],
-          order: [[1, 'asc']],
+          order: [[3, 'desc']],
           dom: '<"row mx-2"' +
             '<"col-md-4"f>' + 
             '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
@@ -243,6 +232,18 @@ export default {
             }
           },
           buttons: [
+            {
+              text: `
+                <div id="bulk-action-wrapper">
+                  <select id="bulk-action-select" class="form-select form-select-sm">
+                    <option value=""> ✓ Bulk Actions</option>
+                    <option value="delete">Bulk Delete</option>
+                  </select>
+                </div>
+              `,
+              className: "me-2 p-0 btn-primary d-none",
+              attr: { id: "bulk-action-container" },
+            },
             {
               text: '<span data-bs-toggle="modal" data-bs-target="#CategoryInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Category</span>',
               className: 'create-new btn btn-primary',
@@ -309,6 +310,99 @@ export default {
                 });
               } 
           });
+        }
+      });
+    },
+
+    attachEventListenersBlulkAction() {
+      $('#categories-tables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+
+      $('#categories-tables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#categories-tables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        if (action === 'delete') {
+          this.bulkDelete();
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/offers/categories/bulk/delete",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getcategories();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
         }
       });
     },
@@ -382,7 +476,6 @@ export default {
           this.getLoader = false;
         });
     },
-
   },
 };
 </script>

@@ -190,6 +190,11 @@
 .table-responsive.table-overflow-hidden {
 	overflow: hidden;
 }
+#bulk-action-select {
+	background: #7367f0 !important;
+	color: #fff !important;
+	border: none !important;
+}
 @media only screen and (max-width:1201px) {
 	.table-responsive.table-overflow-hidden {
 		overflow: auto !important;
