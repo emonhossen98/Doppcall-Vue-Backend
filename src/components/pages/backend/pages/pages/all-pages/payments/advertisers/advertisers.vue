@@ -426,7 +426,7 @@ methods: {
                   return (
                     '<div class="publisher-payment-action"><button data-bs-toggle="modal" data-bs-target="#addPaymentModal" data-id=' +
                     row.id +
-                    ' class="rounded-circle btn-style-edit"><i class="fas fa-money-bill" data-id=' +
+                    ' class="rounded-circle bg-transparent border-0 text-primary" title="Add Payment"><i class="fas fa-money-bill" data-id=' +
                     row.id +
                     "></i></button></div>"
                   );
@@ -438,7 +438,7 @@ methods: {
                   return (
                     '<div class="publisher-details-action"><button data-id=' +
                     row.id +
-                    ' class="rounded-circle btn-style-edit"><i class="fas fa-shopping-basket action-icon" data-id=' +
+                    ' class="rounded-circle bg-transparent border-0 text-primary" title="Payment History"><i class="fas fa-shopping-basket action-icon" data-id=' +
                     row.id +
                     "></i></button></div>"
                   );

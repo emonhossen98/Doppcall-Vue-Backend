@@ -430,13 +430,13 @@ export default {
                 orderable: false,
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="text-end differentiates-action-btn"><button data-bs-toggle="modal" data-bs-target="#differentInfoEdit" class="rounded-circle btn-style-edit" data-id=' +
+                    '<div class="text-end differentiates-action-btn"><button title="Edit" data-bs-toggle="modal" data-bs-target="#differentInfoEdit" class="rounded-circle bg-transparent border-0 text-primary me-2" data-id=' +
                     full.id +
                     '><i class="far fa-edit fa-sm" data-id=' +
                     full.id +
-                    '></i></button><button type="button"  data-id=' +
+                    '></i></button><button title="Delete" type="button"  data-id=' +
                     full.id +
-                    ' class="differentiates_delete_btn border-0 rounded-circle btn-style-danger"><i  data-id="' +
+                    ' class="differentiates_delete_btn border-0 rounded-circle text-danger   bg-transparent border-0"><i  data-id="' +
                     full.id +
                     ' " class="far fa-trash-alt fa-sm"></i></button></div>'
                   );
@@ -619,11 +619,11 @@ export default {
         } else {
           if (action === "1") {
             this.bulkactionids.status = '1';
-            const alertTitle = "Offer Want to Publish";
+            const alertTitle = "Differentiate Want to Publish";
             this.bulkStatusChange(alertTitle);
           } else{
             this.bulkactionids.status = '0';
-            const alertTitle = "Offer Want to Pending";
+            const alertTitle = "Differentiate Want to Pending";
             this.bulkStatusChange(alertTitle);
           }
         }

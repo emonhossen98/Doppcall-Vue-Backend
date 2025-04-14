@@ -224,13 +224,13 @@ export default {
                   orderable: false,
                   render: function (data, type, full, meta) {
                     return (
-                      '<div class="text-end allow-datatables-action"><button data-id=' +
+                      '<div class="text-end allow-datatables-action"><button title="Edit" data-id=' +
                       full.id +
-                      ' id="edit" data-bs-toggle="modal" data-bs-target="#TrafficInfoEdit" class="rounded-circle btn-style-edit"><i id="edit" class="far fa-edit fa-sm" data-id=' +
+                      ' id="edit" data-bs-toggle="modal" data-bs-target="#TrafficInfoEdit" class="rounded-circle bg-transparent border-0 text-primary me-2"><i id="edit" class="far fa-edit fa-sm" data-id=' +
                       full.id +
-                      '></i></button><button type="button"  id="delete" data-id=' +
+                      '></i></button><button type="button"  title="Delete" id="delete" data-id=' +
                       full.id +
-                      ' class="type-delete-btn border-0 rounded-circle btn-style-danger"><i id="delete"  data-id="' +
+                      ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger"><i id="delete"  data-id="' +
                       full.id +
                       ' " class="far fa-trash-alt fa-sm"></i></button></div>'
                     );

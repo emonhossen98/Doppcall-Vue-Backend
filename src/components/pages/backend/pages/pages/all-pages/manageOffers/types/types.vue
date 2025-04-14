@@ -198,15 +198,15 @@ export default {
                 render: function (data, type, row) {
                   return (
                     '<div class="text-end type-datatables-action">' +
-                    '<button data-id=' +
+                    '<button title="Edit" data-id=' +
                     row.id +
-                    ' class="rounded-circle btn-style-edit" data-bs-toggle="modal" data-bs-target="#TypeInfoEdit">' +
+                    ' class="rounded-circle bg-transparent border-0 text-primary me-2" data-bs-toggle="modal" data-bs-target="#TypeInfoEdit">' +
                     '<i class="far fa-edit fa-sm" data-id=' +
                     row.id +
                     '></i></button>' +
-                    '<button type="button"  data-id=' +
+                    '<button title="Delete" type="button"  data-id=' +
                     row.id +
-                    ' class="type-delete-btn border-0 rounded-circle btn-style-danger">' +
+                    ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger">' +
                     '<i  data-id="' +
                     row.id +
                     '" class="far fa-trash-alt fa-sm"></i></button></div>'

@@ -1,7 +1,7 @@
 <template>
-  <!-- <div v-if="getLoader">
+  <div v-if="getLoader">
     <Loader></Loader>
-  </div> -->
+  </div>
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
@@ -10,14 +10,16 @@
         <div>
           <div id="noaccessuseralert" v-if="User.account_access != 1">
             <span style="color: white" ><strong>Your account is under review </strong> 
-              <p>We are reviewing your account. You will be notified once the review is complete.
+              <p class="mb-0">We are reviewing your account. You will be notified once the review is complete.
                 Please ensure your profile is completed.</p>
               </span>
           </div>
-
           <div id="completeuseralert" v-if="showParcentage">
             <span style="color: white" ><strong>Your profile is {{ CompleteProfile }}% complete </strong> 
-              <p>Please complete your profile to proceed with the approval process.</p>
+              <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <p>Please complete your profile to proceed <span v-if="User.account_access != 1">with the approval process.</span></p>
               <RouterLink :to="'/publisher-account'">Complete Profile</RouterLink>
               </span>
           </div>
@@ -28,7 +30,88 @@
                 <a @click="sendEmailVerification()" href="javascript:"
                   >Click Here</a></span
               >
+          </div>
+          <template v-if="incomplete_fields && incomplete_fields.length > 0">
+              <div class="tash-manager mt-4">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="text-capitalize">Task</th>
+                      <th class="text-center text-capitalize">Notes / Tooltip</th>
+                      <th class="text-end text-capitalize">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template v-for="(data, index) in incomplete_fields" :key="index">
+                      <template v-if="data == 'is_email_verified'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Verify Email Address</td>
+                          <td class="text-center">Verify your email to activate your account fully</td>
+                          <td class="text-end"><button id="common_task_btn" @click="sendEmailVerification()">Verify Now</button></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'avatar'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Upload Avatar</td>
+                          <td class="text-center">Add a profile picture to personalize your account</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Upload Avatar</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'traffic_urls'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Add Traffic URLs</td>
+                          <td class="text-center">List your websites and traffic sources</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Add URLs</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'monthly_visitors'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Report Monthly Visitors</td>
+                          <td class="text-center">Help us understand your audience reach</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn" >Update Stats</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'skype'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Connect Skype</td>
+                          <td class="text-center">For quick communication with our team</td>
+                          <td class="text-end"><RouterLink to="/publisher-account"tton id="common_task_btn">Connect Skype</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'telegram'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Link LinkedIn Profile</td>
+                          <td class="text-center">Verify your professional identity</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Link LinkedIn</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'facebook'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Connect Facebook</td>
+                          <td class="text-center">Simplify login and extend your network</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Connect FB</RouterLink></td>
+                        </tr>
+                      </template>
+                      <template v-else-if="data == 'google2fa_secret'">
+                        <tr>
+                          <td><i id="icons" class="fa-regular fa-circle"></i> Enable Two-Factor Auth (2FA)</td>
+                          <td class="text-center">Secure your account from unauthorized access</td>
+                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Enable 2FA</RouterLink></td>
+                        </tr>
+                      </template>
+                      
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+          </template>
+          <template v-if="incomplete_fields && incomplete_fields.length > 0">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+              <label class="form-check-label" for="flexSwitchCheckChecked">Hide completed tasks</label>
             </div>
+            {{ incomplete_fields }}
+          </template>
         </div>
 
         <div class="row">
@@ -222,6 +305,7 @@
           </template>
           <!--/ Revenue Generated -->
 
+
           <!-- Earning Reports -->
           <template v-if="User.is_email_verified && User.account_access == 1">
             <div class="col-lg-6 mb-4">
@@ -311,7 +395,7 @@ import ApexCharts from "apexcharts";
 import axios from "axios";
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
-import Loader from "../../../../../../frontend/include/loder.vue";
+import Loader from "../../../../../include/loader.vue";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide } from "vue3-carousel";
 import bannerImage from "../../../../../../../../assets/image/card-website-analytics-3.png";
@@ -362,6 +446,7 @@ export default {
       },
       bannerImage,
       alllTicketsShow : 0,
+      incomplete_fields : [],
     };
   },
   async mounted() { 
@@ -447,6 +532,7 @@ export default {
           this.CompleteProfile = res.data.completeprofile;
           this.IframUrl = res.data.ifram_url;
           this.recentOffer = res.data.recentOffer;
+          this.incomplete_fields = res.data.incomplete_fields;
           this.checkPercentage();
 
           if ($.fn.DataTable.isDataTable("#publishers_offers")) {
@@ -850,6 +936,19 @@ export default {
 }
 </style>
 <style scoped>
+.form-check-input:checked, .form-check-input[type="checkbox"]:indeterminate {
+	background-color: #27ae60 !important;
+	border-color: #27ae60 !important;
+}
+.form-switch .form-check-input {
+	width: 2.5em !important;
+}
+.form-check-input:focus {
+	border-color: #dbdade;
+}
+.form-switch .form-check-input:focus {
+	background-image: none !important;
+}
 .bg-success-gradient {
   background-image: linear-gradient(to left, #48d6a8 0, #029666 100%) !important;
 }
@@ -913,7 +1012,7 @@ export default {
   font-family: var(--bs-body-font-family);
 }
 #notverifyuseralert {
-	background: #f7f7f7;
+	background: #fff;
 	padding: 20px 20px 30px 20px;
 	border: 1px solid #dddcdc;
 	border-radius: 6px;
@@ -931,13 +1030,12 @@ export default {
 #notverifyuseralert a{
 	background: #EE7E00;
 	padding: 10px;
-	color: beige;
+	color: #fff;
 	border-radius: 3px;
-	font-weight: 600;
 }
 
 #completeuseralert {
-	background: #DEF7F8;
+	background: #E0F7FA;;
 	padding: 20px 20px 30px 20px;
 	margin-bottom: 15px;
 	border: 1px solid #dddcdc;
@@ -949,23 +1047,23 @@ export default {
 }
 
 #completeuseralert p{
-	color: #007865;
+	color: #6d6d6d;
   font-size: 18px;
 }
 #completeuseralert a{
-	background: #007865;
+	background: #2c8c7c;
 	padding: 10px;
-	color: beige;
+	color: white;
 	border-radius: 3px;
-	font-weight: 600;
 }
 
 #noaccessuseralert {
-	background: #FFCA00;
-  margin-bottom: 15px;
-  padding: 20px;
-  border: 1px solid #dddcdc;
-  border-radius: 6px;
+	background: #FFEAA7;
+	margin-bottom: 15px;
+	padding: 20px;
+	border: 1px solid #dddcdc;
+	border-radius: 6px;
+	border-left: 5px solid #FDCB6E;
 }
 #noaccessuseralert strong {
 	font-size: 30px;
@@ -979,4 +1077,5 @@ export default {
   visibility: hidden;
   height: 0;
 }
+
 </style>

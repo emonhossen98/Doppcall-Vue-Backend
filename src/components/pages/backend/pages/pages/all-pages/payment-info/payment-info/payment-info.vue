@@ -487,11 +487,11 @@ computed: {
         } else {
           if (action === "1") {
             this.bulkactionids.status = '1';
-            const alertTitle = "Offer Want to Approved";
+            const alertTitle = "Payment Want to Approved";
             this.bulkStatusChange(alertTitle);
           }else{
             this.bulkactionids.status = '0';
-            const alertTitle = "Offer Want to Pending";
+            const alertTitle = "Payment Want to Pending";
             this.bulkStatusChange(alertTitle);
           }
         }
@@ -512,7 +512,7 @@ computed: {
           (this.getLoader = true),
             axios
               .post(
-                this.globalVariables.apiUrl + "admin/offers/bulk/delete",
+                this.globalVariables.apiUrl + "admin/payment/system/user/bulk/delete",
                 this.bulkactionids,
                 {
                   headers: {
@@ -523,7 +523,7 @@ computed: {
               .then((res) => {
                 if (res.data.status == "success") {
                   toastr.success(res.data.message);
-                  this.getOfferData();
+                  this.getPublisherPaymentInfo();
                 } else {
                   toastr.error(res.data.message);
                 }
@@ -550,7 +550,7 @@ computed: {
           (this.getLoader = true),
             axios
               .post(
-                this.globalVariables.apiUrl + "admin/offers/status/bulk",
+                this.globalVariables.apiUrl + "admin/payment/system/user/bulk/status",
                 this.bulkactionids,
                 {
                   headers: {
@@ -561,7 +561,7 @@ computed: {
               .then((res) => {
                 if (res.data.status == "success") {
                   toastr.success(res.data.message);
-                  this.getOfferData();
+                  this.getPublisherPaymentInfo();
                 } else {
                   toastr.error(res.data.message);
                 }

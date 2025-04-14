@@ -1103,6 +1103,7 @@ export default {
           this.listenTypingMessages(res.data.data.id);
           this.listenTypingStopMessages(res.data.data.id);
           this.listenForMessagesReact(res.data.data.id);
+          this.listenForUserAccessChange(res.data.data.id);
           localStorage.setItem('authUserFromLocalStorage', JSON.stringify(res.data));
           this.createMessage.chat_id = res && res.data && res.data.userWithChats && res.data.userWithChats.chatstatus && res.data.userWithChats.chatstatus.id;
           this.createMessage.user_id = res && res.data && res.data.userWithChats && res.data.userWithChats.chatstatus && res.data.userWithChats.chatstatus.id;
@@ -1110,7 +1111,6 @@ export default {
           this.getUserChatInLanding();
         })
         .catch((e) => {
-          console.error(e);
         });
     },
     getUserChatInLanding(){
@@ -1500,6 +1500,16 @@ export default {
           }
           localStorage.setItem('adverPublisLocalStorage_'+this.authUser.id, JSON.stringify(getUserChat));
         });
+        }
+    });
+    },
+    listenForUserAccessChange (userId) {
+      window.Echo.private(`useraccesschangeevent.${userId}`).listen("UserAccessChangeEvent", (event) => {
+        var getUserChat = JSON.parse(localStorage.getItem('authUserFromLocalStorage'));
+        if(getUserChat.data != null){
+          getUserChat.data.account_access = event.message.access;
+          localStorage.setItem('authUserFromLocalStorage', JSON.stringify(getUserChat));
+          location.reload();
         }
     });
     },

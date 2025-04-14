@@ -110,7 +110,6 @@ export default {
           this.totalCountUser = res && res.data && res.data .totaluserCount;
         })
         .catch((error) => {
-          console.error("Error fetching messages:", error);
         });
     },
   }

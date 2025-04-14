@@ -552,7 +552,7 @@ export default {
               },
             },
             buttons: [
-            {
+              {
                 text: `
                   <div id="bulk-action-wrapper">
                     <select id="bulk-action-select" class="form-select form-select-sm">

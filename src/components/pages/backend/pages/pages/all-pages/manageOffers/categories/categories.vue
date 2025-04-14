@@ -186,7 +186,7 @@ export default {
             {
                 data: "pay_out",
                 render: function (data, type, full, meta) {
-                  return '<div class="text-end categorie-action-btn"><button data-id='+ full.id + ' data-bs-toggle="modal" data-bs-target="#CategoryInfoEdit" class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id='+ full.id + '></i></button><button type="button"  data-id='+ full.id + ' class="category-delete border-0 rounded-circle btn-style-danger"><i  data-id="' + full.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'; ;
+                  return '<div class="text-end categorie-action-btn"><button title="Edit" data-id='+ full.id + ' data-bs-toggle="modal" data-bs-target="#CategoryInfoEdit" class="rounded-circle bg-transparent border-0 me-2 text-primary"><i class="far fa-edit fa-sm" data-id='+ full.id + '></i></button><button title="Delete" type="button"  data-id='+ full.id + ' class="category-delete border-0 rounded-circle text-danger bg-transparent"><i  data-id="' + full.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'; ;
                 }
               },
           ],

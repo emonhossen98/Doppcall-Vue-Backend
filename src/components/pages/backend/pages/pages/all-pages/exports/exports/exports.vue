@@ -271,6 +271,9 @@ export default {
       startPage : 0,
       endPage : 0,
       searchInputValue : "",
+      bulkactionids : {
+        selectedIds: [],
+      },
     };
   },
   async mounted() { 
@@ -349,6 +352,8 @@ export default {
           initComplete: () => { 
             this.attachEventListenersForSearch();
             this.attachEventListenersForMenu();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
 
             const searchInput = $("#data_tables_report_filter input");
             searchInput.val(this.searchInputValue);
@@ -361,18 +366,18 @@ export default {
               this.getAdminUserExport(1, perPage, searchTerm);
             });
           },
-          createdRow: function (row, data, dataIndex) {
-                $('td:eq(0)', row).html(dataIndex + 1);
-          },
+          // createdRow: function (row, data, dataIndex) {
+          //       $('td:eq(0)', row).html(dataIndex + 1);
+          // },
           columnDefs: [
             {
               targets: 0,
               orderable: false,
               checkboxes: {
-                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
               },
-              render: function () {
-                return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row['17']}">`;
               },
               searchable: false
             },
@@ -398,6 +403,18 @@ export default {
             }
           },
           buttons: [
+            {
+                text: `
+                  <div id="bulk-action-wrapper">
+                    <select id="bulk-action-select" class="form-select form-select-sm">
+                      <option value=""> ✓ Bulk Actions</option>
+                      <option value="delete">Bulk Delete</option>
+                    </select>
+                  </div>
+                `,
+                className: "me-2 p-0 btn-primary d-none",
+                attr: { id: "bulk-action-container" },
+              },
             {
               extend: 'collection',
               className: 'btn btn-label-primary dropdown-toggle me-3',
@@ -450,6 +467,100 @@ export default {
     SearchValue(){
       this.getAdminUserExport();
     },
+
+    attachEventListenersBlulkAction() {
+      $('#data_tables_report').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#data_tables_report thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#data_tables_report tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        if (action === 'delete') {
+          this.bulkDelete();
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/export/users/bulk/delete",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getAdminUserExport();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
+        }
+      });
+    },
+
     attachEventListenersForMenu() {
       $("#data_tables_report_wrapper [name='data_tables_report_length']").on("change", (event) => {
         this.getLoader = true;

@@ -422,13 +422,13 @@ export default {
                 orderable: false,
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="text-end call-marketing-action"><button data-bs-toggle="modal" data-bs-target="#callInfoEdit" data-id="' +
+                    '<div class="text-end call-marketing-action"><button title="Edit" data-bs-toggle="modal" data-bs-target="#callInfoEdit" data-id="' +
                     full.id +
-                    '" class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id="' +
+                    '" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm" data-id="' +
                     full.id +
-                    '"></i></button><button type="button"  data-id=' +
+                    '"></i></button><button type="button" title="Delete" data-id=' +
                     full.id +
-                    ' class="call_marketing_delete_btn border-0 rounded-circle btn-style-danger"><i  data-id="' +
+                    ' class="call_marketing_delete_btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
                     full.id +
                     ' " class="far fa-trash-alt fa-sm"></i></button></div>'
                   );
@@ -604,11 +604,11 @@ export default {
         } else {
           if (action === "1") {
             this.bulkactionids.status = '1';
-            const alertTitle = "Offer Want to Approved";
+            const alertTitle = "Call Marketing Want to Approved";
             this.bulkStatusChange(alertTitle);
           } else{
             this.bulkactionids.status = '0';
-            const alertTitle = "Offer Want to Pending";
+            const alertTitle = "Call Marketing Want to Pending";
             this.bulkStatusChange(alertTitle);
           }
         }

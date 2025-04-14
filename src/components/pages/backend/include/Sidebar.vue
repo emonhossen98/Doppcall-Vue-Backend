@@ -1175,15 +1175,27 @@ export default {
 
     showErrorMessage() {
       this.$router.push("/publisher/dashboard");
-      toastr.error(
-        "Your account is under review; you'll be notified upon approval. For any queries, contact us at info@doppcall.com."
-      );
+      if(this.userData.account_access != 1){
+        toastr.error(
+          "Your account is under review; you'll be notified upon approval. For any queries, contact us at info@doppcall.com."
+        );
+      }else{
+        toastr.error(
+          "You need to verify your email address."
+        );
+      }
     },
     showAdvertisherErrorMessage() {
       this.$router.push("/advertiser/dashboard");
-      toastr.error(
-        "Your account is under review; you'll be notified upon approval. For any queries, contact us at info@doppcall.com."
-      );
+      if(this.userData.account_access != 1){
+        toastr.error(
+          "Your account is under review; you'll be notified upon approval. For any queries, contact us at info@doppcall.com."
+        );
+      }else{
+        toastr.error(
+          "You need to verify your email address."
+        );
+      }
     },
 
     toggleAccordion(menu) {

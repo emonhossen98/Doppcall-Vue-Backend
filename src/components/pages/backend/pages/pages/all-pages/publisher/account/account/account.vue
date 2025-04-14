@@ -223,7 +223,7 @@
 
                   <div class="row form-group form-group-m1 mb-24px">
                     <div class="col-sm-3">
-                      <label for="email">Email</label>
+                      <label for="email" class="required">Email</label>
                     </div>
                     <div class="col-sm-9">
                       <input
@@ -231,12 +231,15 @@
                         v-model="userUpdate.email"
                         class="form-control"
                       />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.email" class="text-danger">
+                       {{ accountvalidationErrors.email[0] }}
+                    </div>
                     </div>
                   </div>
 
                   <div class="row form-group form-group-m1 mb-24px mt-3">
                     <div class="col-sm-3">
-                      <label for="phone">Phone</label>
+                      <label for="phone" class="required">Phone</label>
                     </div>
                     <div class="col-sm-9">
                       <input
@@ -245,12 +248,15 @@
                         class="form-control"
                         readonly
                       />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.phone" class="text-danger">
+                       {{ accountvalidationErrors.phone[0] }}
+                    </div>
                     </div>
                   </div>
 
                   <div class="row form-group form-group-m1 mb-24px mt-3">
                     <div class="col-sm-3">
-                      <label for="first_name">First Name</label>
+                      <label for="first_name" class="required">First Name</label>
                     </div>
                     <div class="col-sm-9">
                       <input
@@ -258,12 +264,15 @@
                         v-model="userUpdate.first_name"
                         class="form-control"
                       />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.first_name" class="text-danger">
+                       {{ accountvalidationErrors.first_name[0] }}
+                    </div>
                     </div>
                   </div>
 
                   <div class="row form-group form-group-m1 mb-24px mt-3">
                     <div class="col-sm-3">
-                      <label for="last_name">Last Name</label>
+                      <label for="last_name" class="required">Last Name</label>
                     </div>
                     <div class="col-sm-9">
                       <input
@@ -271,11 +280,71 @@
                         v-model="userUpdate.last_name"
                         class="form-control"
                       />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.last_name" class="text-danger">
+                       {{ accountvalidationErrors.last_name[0] }}
+                    </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row form-group form-group-m1 mb-24px mt-3">
+                    <div class="col-sm-3">
+                      <label for="company_name" class="required">Company Name</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        v-model="userUpdate.company_name"
+                        class="form-control"
+                      />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.company_name" class="text-danger">
+                       {{ accountvalidationErrors.company_name[0] }}
+                    </div>
+                    </div>
+                  </div>
+                  <div class="row form-group form-group-m1 mb-24px mt-3">
+                    <div class="col-sm-3">
+                      <label for="company_website" class="required">Company Website</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        v-model="userUpdate.company_website"
+                        class="form-control"
+                      />
+                      <div v-if="accountvalidationErrors && accountvalidationErrors.company_website" class="text-danger">
+                       {{ accountvalidationErrors.company_website[0] }}
+                    </div>
+                    </div>
+                  </div>
+                  <div class="row form-group form-group-m1 mb-24px mt-3">
+                    <div class="col-sm-3">
+                      <label for="traffic_urls">Traffic Urls</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input
+                        placeholder="Enter Your Traffic Urls"
+                        type="text"
+                        v-model="userUpdate.traffic_urls"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="row form-group form-group-m1 mb-24px mt-3">
+                    <div class="col-sm-3">
+                      <label for="traffic_urls">Monthly Visitors</label>
+                    </div>
+                    <div class="col-sm-9">
+                      <input
+                      placeholder="Enter Your Monthly Visitors"
+                        type="number"
+                        v-model="userUpdate.monthly_visitors"
+                        class="form-control" 
+                      />
                     </div>
                   </div>
 
                   <div class="form-group row form-group-m2 mb-32px mt-3">
-                    <label class="col-lg-3 col-form-label fullhd-width inline-padding"
+                    <label class="col-lg-3 col-form-label fullhd-width inline-padding required"
                       >Type</label
                     >
                     <div class="col-lg-9">
@@ -1080,6 +1149,10 @@ export default {
         communication_type: "",
         communication: "",
         avatar: "",
+        company_name : "",
+        company_website : "",
+        traffic_urls : "",
+        monthly_visitors : "",
       },
       userAddress: "",
       userShowImage: {
@@ -1098,6 +1171,7 @@ export default {
       },
       validationErrors: null,
       pvalidationErrors: null,
+      accountvalidationErrors: null,
       paymentInfoCreate: {
         payment_type: "",
         bank_location: "",
@@ -1186,6 +1260,10 @@ export default {
           this.userUpdate.phone = res.data.user.phone_no;
           this.userUpdate.first_name = res.data.user.fname;
           this.userUpdate.last_name = res.data.user.lname;
+          this.userUpdate.company_name = res.data.user.company_name;
+          this.userUpdate.company_website = res.data.user.company_website;
+          this.userUpdate.traffic_urls = res.data.user.traffic_urls;
+          this.userUpdate.monthly_visitors = res.data.user.monthly_visitors;
           this.userUpdate.type = res.data.user.type;
           this.userUpdate.userAddress = res.data.user.user_address;
           if (res.data.user.user_address.linkedin_id != null) {
@@ -1335,7 +1413,9 @@ export default {
           this.getPublisherAccountData();
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response && error.response.data && error.response.data.errors) {
+            this.accountvalidationErrors = error.response.data.errors;
+          }
         })
         .finally(() => {
           this.getLoader = false;
