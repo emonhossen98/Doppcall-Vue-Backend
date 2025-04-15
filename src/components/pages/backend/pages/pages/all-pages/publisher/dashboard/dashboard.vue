@@ -17,7 +17,7 @@
           <div id="completeuseralert" v-if="showParcentage">
             <span style="color: white" ><strong>Your profile is {{ CompleteProfile }}% complete </strong> 
               <div class="progress">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-custome-success" role="progressbar" :style="{ width: CompleteProfile + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
               <p>Please complete your profile to proceed <span v-if="User.account_access != 1">with the approval process.</span></p>
               <RouterLink :to="'/publisher-account'">Complete Profile</RouterLink>
@@ -25,14 +25,14 @@
           </div>
           <div id="notverifyuseralert" v-if="!User.is_email_verified" >
               <span style="color: white">
-                <strong class="fw-bolder">You need to confirm your account</strong>
-                <p>We have sent you an activation code, please check your email.</p>
-                <a @click="sendEmailVerification()" href="javascript:"
-                  >Click Here</a></span
+                <strong class="fw-bolder">Email Confirmation Required</strong>
+                <p>We’ve sent a verification link to your email: 📧 {{ User.email ?? '' }}</p>
+                <p>Didn’t receive it?  <a title="Check your Spam or Promotions folder if you don’t see the email." @click="sendEmailVerification()" href="javascript:"
+                  >Resend Activation Email</a></p></span
               >
           </div>
           <template v-if="incomplete_fields && incomplete_fields.length > 0">
-              <div class="tash-manager mt-4">
+              <div class="tash-manager mt-4" v-if="showTashManager">
                 <table class="table">
                   <thead>
                     <tr>
@@ -47,56 +47,56 @@
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Verify Email Address</td>
                           <td class="text-center">Verify your email to activate your account fully</td>
-                          <td class="text-end"><button id="common_task_btn" @click="sendEmailVerification()">Verify Now</button></td>
+                          <td class="text-end"><button title="Verify your email to activate your account" id="common_task_btn" @click="sendEmailVerification()">Verify Now</button></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'avatar'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Upload Avatar</td>
                           <td class="text-center">Add a profile picture to personalize your account</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Upload Avatar</RouterLink></td>
+                          <td class="text-end"><RouterLink title="Add a profile picture to personalize your account" to="/publisher-account" id="common_task_btn">Upload Avatar</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'traffic_urls'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Add Traffic URLs</td>
                           <td class="text-center">List your websites and traffic sources</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Add URLs</RouterLink></td>
+                          <td class="text-end"><RouterLink title="List your websites and traffic sources" to="/publisher-account" id="common_task_btn">Add URLs</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'monthly_visitors'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Report Monthly Visitors</td>
                           <td class="text-center">Help us understand your audience reach</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn" >Update Stats</RouterLink></td>
+                          <td class="text-end"><RouterLink title="Help us understand your audience reach" to="/publisher-account" id="common_task_btn" >Update Stats</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'skype'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Connect Skype</td>
                           <td class="text-center">For quick communication with our team</td>
-                          <td class="text-end"><RouterLink to="/publisher-account"tton id="common_task_btn">Connect Skype</RouterLink></td>
+                          <td class="text-end"><RouterLink title="For quick communication with our team" to="/publisher-account"tton id="common_task_btn">Connect Skype</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'telegram'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Link LinkedIn Profile</td>
                           <td class="text-center">Verify your professional identity</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Link LinkedIn</RouterLink></td>
+                          <td class="text-end"><RouterLink title="Verify your professional identity" to="/publisher-account" id="common_task_btn">Link LinkedIn</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'facebook'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Connect Facebook</td>
                           <td class="text-center">Simplify login and extend your network</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Connect FB</RouterLink></td>
+                          <td class="text-end"><RouterLink title="Simplify login and extend your network" to="/publisher-account" id="common_task_btn">Connect FB</RouterLink></td>
                         </tr>
                       </template>
                       <template v-else-if="data == 'google2fa_secret'">
                         <tr>
                           <td><i id="icons" class="fa-regular fa-circle"></i> Enable Two-Factor Auth (2FA)</td>
                           <td class="text-center">Secure your account from unauthorized access</td>
-                          <td class="text-end"><RouterLink to="/publisher-account" id="common_task_btn">Enable 2FA</RouterLink></td>
+                          <td class="text-end"><RouterLink title="Secure your account from unauthorized access" to="/publisher-account" id="common_task_btn">Enable 2FA</RouterLink></td>
                         </tr>
                       </template>
                       
@@ -106,11 +106,10 @@
               </div>
           </template>
           <template v-if="incomplete_fields && incomplete_fields.length > 0">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-              <label class="form-check-label" for="flexSwitchCheckChecked">Hide completed tasks</label>
+            <div class="form-check form-switch mt-3">
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" title="Hide completed tasks" checked @click="toggleTaskManager()">
+              <label class="form-check-label ms-2" title="Hide completed tasks" for="flexSwitchCheckChecked">Hide completed tasks</label>
             </div>
-            {{ incomplete_fields }}
           </template>
         </div>
 
@@ -447,6 +446,7 @@ export default {
       bannerImage,
       alllTicketsShow : 0,
       incomplete_fields : [],
+      showTashManager : true,
     };
   },
   async mounted() { 
@@ -521,7 +521,9 @@ export default {
           this.getLoader = false;
         });
     },
-
+    toggleTaskManager (){
+      this.showTashManager = !this.showTashManager;
+    },
     getPublisherData() {
       this.getLoader = true;
       axios
@@ -946,9 +948,9 @@ export default {
 .form-check-input:focus {
 	border-color: #dbdade;
 }
-.form-switch .form-check-input:focus {
+/* .form-switch .form-check-input:focus {
 	background-image: none !important;
-}
+} */
 .bg-success-gradient {
   background-image: linear-gradient(to left, #48d6a8 0, #029666 100%) !important;
 }
@@ -1045,7 +1047,9 @@ export default {
 	font-size: 30px;
 	color: #007865;
 }
-
+.bg-custome-success{
+  background: #2c8c7c;
+}
 #completeuseralert p{
 	color: #6d6d6d;
   font-size: 18px;

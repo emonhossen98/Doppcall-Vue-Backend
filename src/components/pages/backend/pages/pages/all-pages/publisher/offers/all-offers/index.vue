@@ -16,9 +16,11 @@
                   <div class="col-md-4">
                     <select v-model="filtarData.country" class="select2 form-select" @change="getFiltarOffers()">
                       <option value="">Select Country</option>
-                        <option v-for="countryOffer in fillterDatas.countryOffers" :value="countryOffer.primary_country" :key="countryOffer.id">
-                          {{ countryOffer.primary_country }}
-                        </option>
+                      <template v-for="(countryOffer,index) in fillterDatas.countryOffers" :key="index">
+                        <template v-if="countryOffer.primary_country != null">
+                          <option :value="countryOffer.primary_country" > {{ countryOffer.primary_country }}</option>
+                        </template>
+                      </template>
                     </select>
                   </div>
                   <div class="col-md-4">
@@ -46,7 +48,7 @@
               <table class="align-middle mb-0 table table-hover" id="publisher_offers_datatables">
                 <thead>
                   <tr>
-                    <th style="padding: 1rem 0.5rem !important"  ></th>
+                    <!-- <th style="padding: 1rem 0.5rem !important"></th> -->
                     <th>ID</th>
                     <th>Primary Country</th>
                     <th>Offer</th>
@@ -155,7 +157,7 @@ export default {
             var table = $('#publisher_offers_datatables').DataTable({
               data: res.data.getDatas,
               columns: [
-                { data: 'id' },
+                // { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_flag_image' },
                 { data: 'name' },
@@ -166,7 +168,7 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded me-2" id="apply" data-id=' +
+                      '<div  class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded-1 me-2" id="apply" data-id=' +
                       row.id +
                       ">Apply</button></div>"
                     );
@@ -176,7 +178,7 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded me-2 py-1 px-2" id="details" data-id=' +
+                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2" id="details" data-id=' +
                       row.id +
                       ">View Details</button></div>"
                     );
@@ -187,19 +189,6 @@ export default {
                 this.attachEventListeners();
                 this.attachEventListenersDetails();
               },
-              columnDefs: [
-                {
-                  targets: 0,
-                  orderable: false,
-                  checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
-                  },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-                  },
-                  searchable: false
-                },
-              ],
               order: [[6, 'asc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4"f>' + 
@@ -250,7 +239,7 @@ export default {
               var table = $('#publisher_offers_datatables').DataTable({
               data: res.data.getDatas,
               columns: [
-                { data: 'id' },
+                // { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_flag_image' },
                 {
@@ -271,7 +260,7 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded me-2" id="apply" data-id=' +
+                      '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded-1 me-2" id="apply" data-id=' +
                       row.id +
                       ">Apply</button></div>"
                     );
@@ -281,7 +270,7 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded me-2 py-1 px-2" id="details" data-id=' +
+                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2" id="details" data-id=' +
                       row.id +
                       ">View Details</button></div>"
                     );
@@ -295,19 +284,6 @@ export default {
               createdRow: function (row, data, dataIndex) {
                 $("td:eq(0)", row).html(dataIndex + 1);
               },
-              columnDefs: [
-                {
-                  targets: 0,
-                  orderable: false,
-                  checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
-                  },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-                  },
-                  searchable: false
-                },
-              ],
               order: [[2, 'desc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4"f>' + 
@@ -378,10 +354,7 @@ export default {
     },
 
     attachEventListeners() {
-      $("#publisher_offers_datatables").on(
-        "click",
-        ".publisher_apply_action",
-        (event) => {
+      $("#publisher_offers_datatables").on("click",".publisher_apply_action",(event) => {
           const target = $(event.target);
           const dataId = target.data("id");
           const dataClass = target.attr("id");

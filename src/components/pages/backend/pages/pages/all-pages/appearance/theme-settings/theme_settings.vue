@@ -191,6 +191,17 @@
                 </div>
                 </div>
 
+                <div class="row mb3 ">
+                    <div class="row mb-2">
+                    <div class="col-sm-2">
+                        <label for="publisher_campaign_create_rules">Publisher Campaign Create Rules</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <textarea placeholder="Enter Your Publisher Campaign Create Rules" v-model="themeSettings.publisher_campaign_create_rules" id="publisher_campaign_create_rules" class="form-control"></textarea>
+                    </div>
+                </div>
+                </div>
+
                 <div class="form-group mt-3 text-end">
                   <button type="button" @click="themeSave" class="btn btn-primary btn-sm">
                     Save Changes
@@ -972,6 +983,7 @@ export default {
         copy_right : "",
         time_zone : "",
         professional_agency : "",
+        publisher_campaign_create_rules : "",
        },
        themeShowImage : {
         theme_logo : "", 
@@ -1394,6 +1406,7 @@ export default {
           this.themeSettings.copy_right  = res.data.copyright  ,
           this.themeSettings.time_zone  = res.data.timezone,
           this.themeSettings.professional_agency = res.data.professional_agency;
+          this.themeSettings.publisher_campaign_create_rules = res.data.publisher_campaign_create_rules;
           $(this.$refs.themAddress).summernote('code', res.data.address ?? '');
 
           //   Home Section 

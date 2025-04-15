@@ -52,13 +52,14 @@
                 </template>
               </span>
               <h6 class="questions mb-0">
-             <template v-if="superAdminData && superAdminData.role && superAdminData.role.name == 'Super'">
+                DOPPCALL Customer Support
+             <!-- <template v-if="superAdminData && superAdminData.role && superAdminData.role.name == 'Super'">
               Super Admin 
              </template>
              <template v-else>
               {{ superAdminData && superAdminData.role.name   }}
              </template>
-             from DOPPCALL
+             from DOPPCALL -->
              </h6>
             </div>
           </div>
@@ -66,10 +67,11 @@
             <div v-if="frontentChatLoader" id="frontend_chat_loader" class="spinner-border text-secondary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-            <p class="font-class my-2 hand_emoji">👋 How can we help with DOPPCALL ? </p>
+            <!-- <p class="font-class my-2 hand_emoji">👋 How can we help with DOPPCALL ? </p> -->
+            <p class="font-class my-2 hand_emoji">👋 Hi there! How can we assist you today ? </p>
             <template v-if="getMessages">
               <template v-for="(mess, index) in getMessages" :key="index">
-                <template v-if="mess.sender.id == authUser.id">
+                <template v-if="mess && mess.sender && mess.sender.id == authUser.id">
                   <li class="d-flex align-items-end justify-content-end widget-chat-msg position-relative" id="chat_message_send_right">
                   <template v-if="mess.message_sender == 0">
                     <template v-if="mess.type == 'audio'">
@@ -81,7 +83,7 @@
                             <ul class="dropdown-menu">
                               <li><a class="dropdown-item" @click="downloadAudio(mess)"><i class="fa-solid fa-cloud-arrow-down text-info me-1"></i>Download</a></li>
                               <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                              <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                              <!-- <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li> -->
                             </ul>
                           </div>
                           <div class="btn-group dropend">
@@ -145,7 +147,7 @@
                             <ul class="dropdown-menu">
                               <li><a class="dropdown-item" target="_blank" :href="'https://api.doppcall.com/' + mess.message"><i class="fa-solid fa-cloud-arrow-down text-info me-1"></i>Download</a></li>
                               <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                              <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                             <!-- <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>-->
                             </ul>
                           </div>
                           <div class="btn-group dropend">
@@ -205,7 +207,7 @@
                             </button>
                             <ul class="dropdown-menu">
                               <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                              <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                             <!-- <li><a class="dropdown-item" @click="messageDeleteForYourSelf(mess.id)"  data-bs-toggle="modal" :data-bs-target="'#deleteMessageModal_'+mess.id" ><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>-->
                             </ul>
                           </div>
                           <div class="btn-group dropend">
@@ -299,7 +301,7 @@
                   </li>
                 </template>
                 <template v-else>
-                  <template v-if="mess.message_reciver == 0">
+                  <template v-if="mess && mess.message_reciver == 0">
                     <li class="d-flex align-items-end widget-chat-msg position-relative" id="chat_message_send_left">
                       <template v-if="showUserAvatarIndex(index,mess.sender.id)">
                         <template v-if="superAdminData.avatar != null">
@@ -340,7 +342,7 @@
                                 <ul class="dropdown-menu">
                                   <li><a class="dropdown-item" @click="downloadAudio(mess)"><i class="fa-solid fa-cloud-arrow-down text-info me-1"></i>Download</a></li>
                                   <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                                  <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                                 <!-- <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li> -->
                                   <li><a class="dropdown-item" @click="messageUnread(mess)"><i class="fa-solid fa-eye-slash me-1 text-warning"></i>Unread</a></li>
                                 </ul>
                               </div>
@@ -372,7 +374,7 @@
                                 <ul class="dropdown-menu">
                                   <li><a class="dropdown-item" target="_blank" :href="'https://api.doppcall.com/' + mess.message"><i class="fa-solid fa-cloud-arrow-down text-info me-1"></i>Download</a></li>
                                   <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                                  <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                                 <!-- <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li> -->
                                   <li><a class="dropdown-item" @click="messageUnread(mess)"><i class="fa-solid fa-eye-slash me-1 text-warning"></i>Unread</a></li>
                                 </ul>
                               </div>
@@ -407,7 +409,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                   <li><a class="dropdown-item" @click="messageReply(mess)"><i class="fa-solid fa-reply me-1 text-primary"></i>Reply</a></li>
-                                  <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li>
+                                 <!-- <li><a class="dropdown-item" @click="messageDelete(mess)"><i class="fa-solid fa-trash me-1 text-danger"></i>Delete</a></li> -->
                                   <li><a class="dropdown-item" @click="messageUnread(mess)"><i class="fa-solid fa-eye-slash me-1 text-warning"></i>Unread</a></li>
                                 </ul>
                               </div>
@@ -961,6 +963,7 @@ export default {
         created_at : this.getLaravelFormattedTime(),
       };
       if(this.createMessage.message != '' && this.createMessage.message != null){
+        console.log(this.getMessages);
         this.getMessages.push(chatMessage);
         this.showEmojiPicker = false;
         this.getMessageText.message = '';
@@ -1439,13 +1442,11 @@ export default {
     sendTypingStatus() {
         if (!this.isTyping) {
             this.isTyping = true;
-            console.log('typing');
             this.broadcastTypingStatus();
         }
         clearTimeout(this.typingTimeout);
         this.typingTimeout = setTimeout(() => {
             this.isTyping = false;
-            console.log('stope');
             this.broadcastTypingStopped();
         }, 2000); 
     },
@@ -1738,7 +1739,7 @@ export default {
   padding: 0;
   border:none;
   font-size: 14px;
-  margin-right: 7px;
+  margin-right: 14px;
 }
 .chatPreviewImage {
   width: 56px;

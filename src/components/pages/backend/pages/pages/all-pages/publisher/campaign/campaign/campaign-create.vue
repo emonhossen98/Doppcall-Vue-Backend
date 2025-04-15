@@ -113,6 +113,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mt-4">
+                                <div class="col-sm-2">
+                                </div>
+                                <div class="col-sm-10">
+                                    <label class="ckbox"><input v-model="camapignCreated.create_rules" type="checkbox" class="me-2"><span v-html="publisher_campaign_create_rules ?? ''">
+                                    </span></label>
+                                    <div v-if="validationErrors && validationErrors.create_rules" class="text-danger">
+                                        {{ validationErrors.create_rules[0] }}
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-12 text-end">
@@ -170,8 +181,10 @@
             answer : [],
             rules : "",
             accept : false,
+            create_rules : false,
         },
         validationErrors : null,
+        publisher_campaign_create_rules : null,
       };
     },
     async mounted() { 
@@ -200,6 +213,7 @@
                 this.camapignCreated.traffic_sources = res && res.data && res.data.data.offer.traffic_source;
                 this.camapignCreated.note            = res && res.data && res.data.data.offer.note;
                 this.camapignCreated.rules           = res && res.data && res.data.data.offer.rules;
+                this.publisher_campaign_create_rules = res && res.data && res.data.data.publisher_campaign_create_rules;
             }
           })
           .catch((error) => {

@@ -11,7 +11,7 @@
         <div class="container-xxl flex-grow-1 container-p-y">
           <div id="noaccessuseralert" v-if="User.account_access != 1">
             <span style="color: white" ><strong>Your account is under review </strong> 
-              <p>We are reviewing your account. You will be notified once the review is complete.
+              <p class="mb-0">We are reviewing your account. You will be notified once the review is complete.
                 Please ensure your profile is completed.</p>
               </span>
           </div>
@@ -865,11 +865,12 @@ export default {
   font-family: var(--bs-body-font-family);
 }
 #noaccessuseralert {
-  background: #FFCA00;
-  margin-bottom: 15px;
-  padding: 20px;
-  border: 1px solid #dddcdc;
-  border-radius: 6px;
+	background: #FFEAA7;
+	margin-bottom: 15px;
+	padding: 20px;
+	border: 1px solid #dddcdc;
+	border-radius: 6px;
+	border-left: 5px solid #FDCB6E;
 }
 #noaccessuseralert strong {
   font-size: 30px;

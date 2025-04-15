@@ -46,7 +46,8 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <label for="description" class="required mb-1">Description</label>
+                                        <label for="description" class="required mb-1">Description </label> <span class="word_limit">(Word Count: {{ wordCount }} / 200) 
+                                          <span v-if="wordLimitReached" style="color: red;">(Word limit reached)</span></span>
                                             <textarea v-model="ticketCreate.description" ref="Description" class="form-control"  required="required" rows="4"></textarea>
                                             <div v-if="validationErrors && validationErrors.priority" class="text-danger">
                                                 {{ validationErrors.priority[0] }}
@@ -57,11 +58,13 @@
                                     <div class="col-md-6">
                                         <label class="d-block mb-1">Images</label>
                                         <div class="custom-file">
-                                            <input type="file" @change="handleImageUpload" class="form-control" id="customFile">
+                                            <input type="file" ref="myFile" @change="handleImageUpload($event)" class="form-control" id="customFile" accept=".jpg, .png, .pdf, .docx">
                                             <label for="customFile"></label>
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-sm-6">
+                                        <img style="width: 200px;" v-if="themeShowImage.theme_logo" :src="themeShowImage.theme_logo" class="imgpreview">
+                                      </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
@@ -130,6 +133,11 @@ export default {
         is_active: null,
         image: [], 
       },
+      themeShowImage: {
+        theme_logo: "",
+      },
+      wordCount: 0,
+      wordLimitReached: false,
       validationErrors: null,
     };
   },
@@ -139,14 +147,29 @@ export default {
       if (role == 'Publisher') {
         this.getTicketSubject();
         $(this.$refs.Description).summernote({
-            placeholder: 'Type your text here...',
+            placeholder: 'Please explain your issue in detail. Include any error messages, dates, or campaign names.',
             height: 200,
             callbacks: {
               onChange: contents => {
-              this.ticketCreate.description = contents;
+                const text = $('<div>').html(contents).text(); // Strip HTML
+                const words = text.trim().split(/\s+/); // Split by spaces
+                const wordCount = words.filter(w => w.length > 0).length;
+
+                if (wordCount > 10) {
+                  // Prevent adding more words
+                  const limitedText = words.slice(0, 10).join(' ');
+                  $(this.$refs.Description).summernote('code', limitedText);
+                  this.ticketCreate.description = limitedText;
+                  this.wordLimitReached = true;
+                } else {
+                  this.ticketCreate.description = contents;
+                  this.wordLimitReached = false;
+                }
+
+                this.wordCount = wordCount; // Store for display
               }
             }
-        });
+          });
       }
     } catch (error) {
       console.error("Error fetching user role:", error);
@@ -169,10 +192,33 @@ export default {
           this.getLoader = false;
         });
     },
+
     handleImageUpload(event) {
-      this.ticketCreate.image = event.target.files[0];
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        toastr.info('info',`Your file type: ${file.type}.`);
+      }
+      this.ticketCreate.image = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (!file.type.startsWith('image/')) {
+          this.themeShowImage.theme_logo = '';
+        }else{
+          this.themeShowImage.theme_logo = reader.result;
+        }
+      };
+      reader.readAsDataURL(file);
+      // const file = event.target.files[0];
+      // this.ticketCreate.image = file;
+      // if (!file || file.type.indexOf('image/') === -1) return;
+      // const reader = new FileReader();
+      // reader.onload = () => {
+      //   this.themeShowImage.theme_logo = reader.result; // Update imgsrc with filename
+      // };
+      // reader.readAsDataURL(file);
     },
-    
+
     SupportTicketsSave() {
       this.getLoader = true;
       axios
@@ -242,4 +288,5 @@ input:checked + .switch::before {
 input:checked + .switch:active::before {
     box-shadow: 0 2px 8px rgba(0,0,0,0.28), 0 0 0 20px rgba(0,150,136,0.2);
 }
+
 </style>

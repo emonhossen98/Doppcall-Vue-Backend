@@ -19,7 +19,7 @@
                     </div>
                     <div class="content mt-2">
                       <h5 class="mb-2"> {{ viewTicket && viewTicket.user && viewTicket.user.fname }}</h5>
-                      <span class="badge bg-primary text-white mb-2">{{ viewTicket && viewTicket.convart_role &&viewTicket.convart_role.name}}</span><br />
+                      <span class="badge bg-primary text-white mb-2">{{ viewTicket && viewTicket.convart_role && viewTicket.convart_role.name}}</span><br />
                       <p class="viewspan" v-html="viewTicket.convart_status_class"></p>
                     </div>
                   </div>

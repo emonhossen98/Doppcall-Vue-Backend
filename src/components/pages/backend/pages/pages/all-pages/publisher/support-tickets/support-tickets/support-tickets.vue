@@ -111,11 +111,12 @@ export default {
             { data: "subject.name" },
             { data: "convart_open_date" },
             { data: "convart_status" },
+            // <button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+row.id+'><i id="edit-btn" class="far fa-edit fa-sm" data-id='+row.id+'></i></button>
             {
               data: "updated_at",
               render: function (data, type, row) {
                   return (
-                  '<div class="support_action d-flex align-items-center"><button type="button" id="view-btn"  data-id='+row.ticket_no +' class="rounded-circle btn-style-info me-2"><i class="fas fa-eye fa-sm" id="view-btn" data-id='+row.ticket_no +'></i></button><button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+row.id+'><i id="edit-btn" class="far fa-edit fa-sm" data-id='+row.id+'></i></button></div>'
+                  '<div class="support_action d-flex align-items-center"><button type="button" id="view-btn"  data-id='+row.ticket_no +' class="rounded-circle btn-style-info me-2"><i class="fas fa-eye fa-sm" id="view-btn" data-id='+row.ticket_no +'></i></button></div>'
                 );
               }
             },

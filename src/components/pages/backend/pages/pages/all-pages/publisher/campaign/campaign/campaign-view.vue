@@ -95,7 +95,7 @@
                                                     </template>
 
                                                     <template v-if="offer.allow_trafic">
-                                                        <li><a href="#allow_trafic" :class="changeClass == 'allow_trafic' ? 'active' : ''" data-toggle="tab" @click="changeActiveClass('allow_trafic')"><i class="fa fa-tasks"></i> Allow Traffic</a></li>
+                                                        <li><a href="#allow_trafic" :class="changeClass == 'allow_trafic' ? 'active' : ''" data-toggle="tab" @click="changeActiveClass('allow_trafic')"><i class="fa fa-tasks"></i> Allowed / Non-Allowed Traffic Sources</a></li>
                                                     </template>
                                                     
                                                     <template v-if="relatedOffers.length > 0">

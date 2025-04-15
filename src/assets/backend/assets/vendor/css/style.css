@@ -234,6 +234,10 @@
 	font-size: 13px;
 	transition: background-color 0.2s;
 }
+.word_limit{
+	font-size: 12px;
+	color: #03b2ff;
+}
 @media only screen and (max-width:1201px) {
 	.table-responsive.table-overflow-hidden {
 		overflow: auto !important;

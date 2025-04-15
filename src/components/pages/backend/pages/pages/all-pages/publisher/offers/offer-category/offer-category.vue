@@ -17,8 +17,8 @@
                 <table class="align-middle mb-0 table table-hover"  id="publisher_offers_datatables">
                   <thead>
                     <tr>
-                      <th>SL</th>
-                      <th>id</th>
+                      <!-- <th>SL</th> -->
+                      <th>Id</th>
                       <th>Primary Country</th>
                       <th>Offer</th>
                       <th>Offer's Type</th>
@@ -108,7 +108,7 @@
             var table = $('#publisher_offers_datatables').DataTable({
               data: res.data.getDatas,
               columns: [
-                { data: 'id' },
+                // { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_flag_image' },
                 { data: 'name' },
@@ -119,7 +119,7 @@
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded me-2" id="apply" data-id=' +
+                      '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded-1 me-2" id="apply" data-id=' +
                       row.id +
                       ">Apply</button></div>"
                     );
@@ -129,7 +129,7 @@
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded me-2 py-1 px-2" id="details" data-id=' +
+                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2" id="details" data-id=' +
                       row.id +
                       ">View Details</button></div>"
                     );
@@ -140,19 +140,6 @@
                 this.attachEventListeners();
                 this.attachEventListenersDetails();
               },
-              columnDefs: [
-                {
-                  targets: 0,
-                  orderable: false,
-                  checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
-                  },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-                  },
-                  searchable: false
-                },
-              ],
               order: [[6, 'asc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4 ps-0"f>' + 
