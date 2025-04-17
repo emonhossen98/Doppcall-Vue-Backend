@@ -16,7 +16,8 @@
                     <div class="card-body">
                         <div class="row g-0">
                             <div class="col-md-6 col-12 mt-2">
-                                <div class="notice" v-html="notice"></div>
+                                <div v-if="notice != '<p><br></p>'" class="notice" v-html="notice"></div>
+                                <div v-else class="notice text-danger" >No notice found at the moment</div>
                             </div>
                         </div>
                     </div>

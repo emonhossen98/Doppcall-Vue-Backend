@@ -78,7 +78,6 @@
                                     <div class="form-group">
                                     <label for="status" class="mb-1">Status</label><br>
                                     <select v-model="PostCreated.status" id="status" class="form-select">
-                                        <option value="1">Select Status</option>
                                         <option value="1">Publish</option>
                                         <option value="0">Pending</option>
                                     </select>
@@ -231,7 +230,7 @@ import Editor from '@tinymce/tinymce-vue';
         content : "",
         meta_title : "",
         meta_description : "",
-        status : "",
+        status : "1",
         categories : [],
         image : "",
       },

@@ -83,7 +83,7 @@
                     <th>Phone Number</th>
                     <th>Role Name</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th width="190px">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,7 +141,7 @@
                   <div class="form-group">
                     <label for="email" class="required">Email</label>
                     <input type="email" placeholder="Email" class="form-control" v-model="invaiteMember.email" />
-                    <div   v-if="validationErrors && validationErrors.message" class="text-danger">
+                    <div  v-if="validationErrors && validationErrors.message" class="text-danger">
                       {{ validationErrors.message }}
                     </div>
                   </div>
@@ -592,6 +592,7 @@ export default {
       }
     },
 
+
     bulkDelete() {
       Swal.fire({
         text: 'Are Sure Delete',
@@ -702,8 +703,8 @@ export default {
         })
         .then((res) => {
           if ($.fn.DataTable.isDataTable("#super_admin_datatables")) {
-          $('#super_admin_datatables').DataTable().destroy();
-        }
+            $('#super_admin_datatables').DataTable().destroy();
+          }
         var table = $('#super_admin_datatables').DataTable({
           data: res.data,
           columns: [
@@ -711,7 +712,15 @@ export default {
             { data: null},
             { data: "full_name" },
             { data: "email" },
-            { data: "phone_no" },
+            {
+                data: "phone_no",
+                render: function (data, type, row) {
+                  if (row.phone_no != null) {
+                    return row.phone_no;
+                  }
+                  return "--------";
+                },
+            },
             {
               data: "secondary_name",
               render: function (data, type, row) {
@@ -723,6 +732,8 @@ export default {
           ],
           initComplete: () => { 
             this.attachEventDoppCallTeam();
+            this.attachEventListenersDoppCallTeamBlulkAction();
+            this.attachEventListenersDoppCallTeamBlulkActionSubmit();
           },
           createdRow: function (row, data, dataIndex) {
               $("td:eq(0)", row).html(dataIndex + 1);
@@ -732,10 +743,10 @@ export default {
               targets: 0,
               orderable: false,
               checkboxes: {
-                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
               },
-              render: function () {
-                return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
               },
               searchable: false
             },
@@ -761,6 +772,24 @@ export default {
             }
           },
           buttons: [
+              {
+                text: `
+                  <div id="bulk-action-wrapper">
+                    <select id="bulk-action-select-second" class="form-select form-select-sm">
+                      <option value=""> ✓ Bulk Actions</option>
+                      <option value="delete">Bulk Delete</option>
+                      <option value="0">Bulk Pending</option>
+                      <option value="1">Bulk Approved</option>
+                      <option value="2">Bulk Suspend</option>
+                      <option value="3">Bulk Unsuspend</option>
+                      <option value="4">Bulk Pause</option>
+                      <option value="5">Bulk Resume</option>
+                    </select>
+                  </div>
+                `,
+                className: "me-2 p-0 btn-primary d-none",
+                attr: { id: "bulk-action-container-second" },
+              },
               {
                 extend: "collection",
                 className: "btn btn-label-primary dropdown-toggle me-3",
@@ -812,15 +841,172 @@ export default {
         });
     },
 
+    attachEventListenersDoppCallTeamBlulkAction() {
+      $('#super_admin_datatables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+        if (event.target.checked) {
+          if (!this.bulkactionadminids.selectedIds.includes(id)) {
+            this.bulkactionadminids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionadminids.selectedIds = this.bulkactionadminids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionAdminVisibility();
+      });
+      $('#super_admin_datatables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#super_admin_datatables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionadminids.selectedIds.includes(id)) {
+              this.bulkactionadminids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionadminids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionAdminVisibility();
+      });
+    },
+
+    attachEventListenersDoppCallTeamBlulkActionSubmit() {
+      $('#bulk-action-select-second').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionadminids.selectedIds.length === 0) {
+          return;
+        }
+        
+        if (action === 'delete') {
+          this.bulkAdminDelete();
+        } else {
+          if (action === "1") {
+            this.bulkactionadminids.status = '1';
+            const alertTitle = "Offer Want to Approved";
+            this.bulkAdminStatusChange(alertTitle);
+          } else if (action === "0") {
+            this.bulkactionadminids.status = '0';
+            const alertTitle = "Offer Want to Pending";
+            this.bulkAdminStatusChange(alertTitle);
+          } else if (action === "3") {
+            this.bulkactionadminids.status = '3';
+            const alertTitle = "Offer Want to Resume";
+            this.bulkAdminStatusChange(alertTitle);
+          } else if (action === "2") {
+            this.bulkactionadminids.status = '2';
+            const alertTitle = "Offer Want to Pause";
+            this.bulkAdminStatusChange(alertTitle);
+          }else{
+            this.bulkactionadminids.status = '4';
+            const alertTitle = "Offer Want to Reject";
+            this.bulkAdminStatusChange(alertTitle);
+          }
+        }
+        $('#bulk-action-select-second').val('');
+      });
+    },
+
+    toggleBulkActionAdminVisibility() {
+      const bulkActionWrapperSecond = $('#bulk-action-container-second');
+      if (this.bulkactionadminids.selectedIds.length > 0) {
+        bulkActionWrapperSecond?.removeClass('d-none');
+      } else {
+        bulkActionWrapperSecond?.addClass('d-none');
+      }
+    },
+
+    bulkAdminDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/offers/bulk/delete",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getDoppcallTeams();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
+        }
+      });
+    },
+
+    bulkAdminStatusChange(alertTitle) {
+      Swal.fire({
+        text: alertTitle,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/offers/status/bulk",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getDoppcallTeams();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
+        }
+      });
+    },
+
+    // actions (){
+    //   <template></template>
+    // },
+
     attachEventDoppCallTeam() {
-      $("#super_admin_datatables").on("click", ".dropdown-item", (event) => {
+      $("#super_admin_datatables").on("click", ".super-admin-action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr('class');
+        const dataClass = target.data('action');
         this.deleteUser.data = dataId;
-        if(dataClass === 'dropdown-item edit-btn'){
+        if(dataClass === 'edit-btn'){
           this.$router.push('/admin-manage-publishers-edit/'+dataId);
-        }else if(dataClass === 'dropdown-item delete-btn'){
+        }else if(dataClass === 'delete-btn'){
           Swal.fire({
             text: "Are you sure delete",
             icon: "info",
@@ -854,45 +1040,45 @@ export default {
                   });
             }
           });
-        }else if(dataClass === 'dropdown-item pause-btn'){
+        }else if(dataClass === 'pause-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'pause';
           const alertTitle = 'Want to Push';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item resume-btn'){
+        }else if(dataClass === 'resume-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'resume';
           const alertTitle = 'Want to Resume';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item approved-btn'){
+        }else if(dataClass === 'approved-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'approved';
           const alertTitle = 'Want to Approved';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item pending-btn'){
+        }else if(dataClass === 'pending-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'pending';
           const alertTitle = 'Want to Pending';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item suspend-btn'){
+        }else if(dataClass === 'suspend-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'suspend';
           const alertTitle = 'Want to Suspend';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item unsuspend-btn'){
+        }else if(dataClass === 'unsuspend-btn'){
           this.changeStatus.data = dataId;
           this.changeStatus.action_type = 'unsuspend';
           const alertTitle = 'Want to Unsuspend';
           this.ActionMethod(alertTitle);
 
-        }else if(dataClass === 'dropdown-item permission-create-model'){
+        }else if(dataClass === 'permission-create-model'){
           this.createUserPermission.user_id = dataId;
-        }else if(dataClass === 'dropdown-item permission-edit-model'){
+        }else if(dataClass === 'permission-edit-model'){
           this.createUserPermission.user_id = dataId;
           this.modalTitle = 'Permission Edit';
           axios

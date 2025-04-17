@@ -100,6 +100,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getCampain() {
@@ -322,10 +330,6 @@ export default {
                 });
               } 
           });
-        }else if(dataClass === 'campaign-view'){
-          this.$router.push("/admin-campaigns-view/"+dataId);
-        }else if(dataClass === 'campaign-edit'){
-          this.$router.push("/admin-campaigns-edit/"+dataId);
         }
       });
     },

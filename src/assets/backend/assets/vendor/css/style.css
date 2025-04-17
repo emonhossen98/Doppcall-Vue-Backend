@@ -190,7 +190,7 @@
 .table-responsive.table-overflow-hidden {
 	overflow: hidden;
 }
-#bulk-action-select {
+#bulk-action-select , #bulk-action-select-second{
 	background: #7367f0 !important;
 	color: #fff !important;
 	border: none !important;

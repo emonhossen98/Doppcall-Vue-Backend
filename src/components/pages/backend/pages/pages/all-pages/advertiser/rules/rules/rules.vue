@@ -16,8 +16,8 @@
                     <div class="card-body">
                         <div class="row g-0">
                             <div class="col-md-6 col-12 mt-2">
-                                <div class="rules" v-html="rules">
-                                </div>
+                                <div v-if="rules != '<p><br></p>'" class="rules" v-html="rules"></div>
+                                <div v-else class="rules text-danger" >No rules found at the moment</div>
                             </div>
                         </div>
                     </div>

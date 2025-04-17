@@ -310,8 +310,6 @@
                 >
                   <thead>
                     <tr>
-                      <!-- <th></th> -->
-                      <th></th>
                       <th>SL</th>
                       <th>Offer Name</th>
                       <th>Country</th>
@@ -469,8 +467,6 @@ export default {
           var table = $("#advertisher_offers").DataTable({
             data: res.data.recentOffer,
             columns: [
-              // { data: "id" },
-              { data: "id" },
               { data: "id" },
               {
                 data: "name",
@@ -506,20 +502,7 @@ export default {
                 },
               },
             ],
-            columnDefs: [
-              {
-                targets: 0,
-                orderable: false,
-                checkboxes: {
-                  selectAllRender: '<input type="checkbox" class="form-check-input">',
-                },
-                render: function () {
-                  return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
-                },
-                searchable: false,
-              },
-            ],
-            order: [[4, "desc"]],
+            order: [[3, "desc"]],
             dom:
               '<"row mx-2"' +
               '<"col-md-4"f>' +

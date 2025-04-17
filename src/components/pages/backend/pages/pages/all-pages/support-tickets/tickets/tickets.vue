@@ -285,11 +285,11 @@ export default {
                     }
                   ]
                 },
-                {
-                  text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Ticket</span>',
-                  className: 'create-new btn btn-primary',
-                  attr: { id: 'create' },
-                }
+                // {
+                //   text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Ticket</span>',
+                //   className: 'create-new btn btn-primary',
+                //   attr: { id: 'create' },
+                // }
               ],
             });
             this.getLoader = false;

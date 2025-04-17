@@ -16,9 +16,11 @@
                   <div class="col-md-4">
                     <select v-model="filtarData.country" class="select2 form-select" @change="getFiltarOffers()">
                       <option value="">Select Country</option>
-                        <option v-for="countryOffer in fillterDatas.countryOffers" :value="countryOffer.primary_country" :key="countryOffer.id">
-                          {{ countryOffer.primary_country }}
-                        </option>
+                      <template v-for="(countryOffer,index) in fillterDatas.countryOffers" :key="index">
+                        <template v-if="countryOffer.primary_country != null">
+                          <option  :value="countryOffer.primary_country"> {{ countryOffer.primary_country }}</option>
+                        </template>
+                      </template>
                     </select>
                   </div>
                   <div class="col-md-4">
@@ -46,7 +48,6 @@
                 <table class="align-middle mb-0 table table-hover"  id="advertiser_offers_datatables">
                   <thead>
                     <tr>
-                      <th></th>
                       <th>SL</th>
                       <th>Id</th>
                       <th>Primary Country</th>
@@ -157,7 +158,6 @@
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'id' },
                 { data: "convert_primary_country" },
                 {
                   data: "name",
@@ -181,20 +181,7 @@
               createdRow: function (row, data, dataIndex) {
                   $('td:eq(0)', row).html(dataIndex + 1);
               },
-              columnDefs: [
-                {
-                  targets: 0,
-                  orderable: false,
-                  checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
-                  },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-                  },
-                  searchable: false
-                },
-              ],
-              order: [[2, 'desc']],
+              order: [[3, 'desc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4"f>' + 
                 '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 

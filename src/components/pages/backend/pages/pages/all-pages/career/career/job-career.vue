@@ -96,6 +96,14 @@ export default {
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
+      document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
     },
   methods: {
     getJobCareers() {
@@ -160,11 +168,7 @@ export default {
                 searchable: false,
                 orderable: false,
                 render: function (data, type, full, meta) {
-                  return '<div class="text-end type-datatables-action"><button title="Edit" data-id=' +
-                    full.id +
-                    ' class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm" data-id=' +
-                    full.id +
-                    '></i></button><button type="button" title="Delete"  data-id=' +
+                  return '<div class="text-end type-datatables-action"><a title="Edit"  data-vue-route href="/admin-career-jobcareer-edit/'+full.id+'" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm me-2"></i></a><button type="button" title="Delete"  data-id=' +
                     full.id +
                     ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
                     full.id +
@@ -382,11 +386,6 @@ export default {
         const dataClass = target.attr("class");
 
         if (
-          dataClass === "rounded-circle btn-style-edit" ||
-          dataClass === "far fa-edit fa-sm"
-        ) {
-          this.$router.push("/admin-career-jobcareer-edit/" + dataId);
-        } else if (
           dataClass === "type-delete-btn border-0 rounded-circle btn-style-danger" ||
           dataClass === "far fa-trash-alt fa-sm"
         ) {

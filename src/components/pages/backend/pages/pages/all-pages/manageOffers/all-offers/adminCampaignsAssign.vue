@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <RouterLink :to="'/admin-offers-view/'+getOffers.id" class="sub-heading d-flex align-items-center">
-                                    <img class="country-flag" :src="getAllData.primary_country_code" alt=""> {{ getOffers.name }}
+                                    <img class="country-flag-campaigen" :src="getAllData.primary_country_code" alt=""> {{ getOffers.name }}
                                 </RouterLink>
                                 <template v-if="getOffers.offer_tag">
                                     {{ tagConvart(getOffers.offer_tag) }}
@@ -284,5 +284,8 @@
   
 
 <style scoped>
-
-  </style>
+.country-flag-campaigen{
+  width: 30px;
+  margin-right: 5px;
+}
+</style>

@@ -367,6 +367,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   computed: {
     paginationPages() {
@@ -961,14 +969,6 @@ export default {
             .finally(() => {
               this.getLoader = false;
             });
-        } else if (dataClass === "offer-view") {
-          this.$router.push("/admin-offers-view/" + dataId);
-        } else if (dataClass === "offer-edit") {
-          this.$router.push("/admin-offers-edit/" + dataId);
-        } else if (dataClass === "assign-publisher") {
-          this.$router.push("/admin-offers-campaigns-assign/" + dataId);
-        } else if (dataClass === "create-campaign") {
-          this.$router.push("/admin-offers-campaigns-create/" + dataId);
         }
       });
     },
@@ -1132,6 +1132,7 @@ export default {
                 if (res.data.status == "success") {
                   toastr.success(res.data.message);
                   this.getOfferData();
+                  this.bulkactionids.selectedIds = [];
                 } else {
                   toastr.error(res.data.message);
                 }
