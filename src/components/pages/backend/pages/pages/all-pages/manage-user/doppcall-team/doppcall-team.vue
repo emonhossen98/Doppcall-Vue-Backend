@@ -326,6 +326,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getUserData() {
@@ -1004,9 +1012,7 @@ export default {
         const dataId = target.data("id");
         const dataClass = target.data('action');
         this.deleteUser.data = dataId;
-        if(dataClass === 'edit-btn'){
-          this.$router.push('/admin-manage-publishers-edit/'+dataId);
-        }else if(dataClass === 'delete-btn'){
+        if(dataClass === 'delete-btn'){
           Swal.fire({
             text: "Are you sure delete",
             icon: "info",

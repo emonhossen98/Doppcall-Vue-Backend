@@ -261,13 +261,13 @@ export default {
                 orderable: false,
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="contact_action rounded-circle  d-flex"><button  data-bs-toggle="modal" data-bs-target="#contactInfoShow" type="button" id="view-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id=' +
+                    '<div class="contact_action rounded-circle  d-flex"><button title="View" data-bs-toggle="modal" data-bs-target="#contactInfoShow" type="button" id="view-btn" class="bg-transparent border-0 text-info me-2" data-id=' +
                     full.id +
                     '><i id="view-btn" class="fas fa-eye fa-sm" data-id=' +
                     full.id +
-                    '></i></button><button type="button" id="delete-btn"  data-id=' +
+                    '></i></button><button title="Delete" type="button" id="delete-btn"  data-id=' +
                     full.id +
-                    ' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
+                    ' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
                     full.id +
                     "></i></button></div>"
                   );

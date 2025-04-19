@@ -87,6 +87,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getManageBanners() {
@@ -112,7 +120,7 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="banner_action d-flex align-items-center"><button type="button" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+row.id+'><i class="far fa-edit fa-sm" data-id='+row.id+'></i></button><button type="button"  data-id='+row.id +' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" data-id='+row.id +'></i></button></div>'
+                      '<div class="banner_action d-flex align-items-center"><a title="Edit" data-vue-route href="/admin-banners-edit/'+row.id+'" class="me-2 d-flex  align-items-center" data-action="delete-banner" data-id='+row.id+'><i class="far fa-edit fa-sm" data-id='+row.id+'></i></a><button type="button" title="Delete"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i data-action="delete-banner" class="far fa-trash-alt fa-sm" data-id='+row.id +'></i></button></div>'
                     );
                   }
                 },
@@ -217,10 +225,8 @@ export default {
       $("#bannars_tables").on("click", ".banner_action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr("class");
-        if(dataClass === 'btn-style-edit me-2 d-flex  align-items-center' || dataClass === 'far fa-edit fa-sm'){
-         this.$router.push('/admin-banners-edit/'+dataId);
-        }else if(dataClass === 'btn-style-danger' || dataClass === 'far fa-trash-alt fa-sm'){
+        const dataClass = target.data("action");
+        if(dataClass === 'delete-banner'){
           this.delteBanner(dataId);
         }
       });

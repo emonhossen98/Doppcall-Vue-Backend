@@ -330,11 +330,11 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="trans_action d-flex"><button type="button" id="view-btn" data-bs-toggle="modal" data-bs-target="#contactInfoShow"  data-id=' +
+                      '<div class="trans_action d-flex"><button title="View" type="button" id="view-btn" data-bs-toggle="modal" data-bs-target="#contactInfoShow"  data-id=' +
                       row.id +
                       ' class="btn text-info  p-0"><i id="view-btn"  data-id=' +
                       row.id +
-                      ' class="fa-regular fa-eye text-info me-2"></i></button><button type="button" id="delete-btn"  data-id=' +
+                      ' class="fa-regular fa-eye text-info me-2"></i></button><button title="Delete" type="button" id="delete-btn"  data-id=' +
                       row.id +
                       ' class="btn text-danger delete-btn p-0"><i  id="delete-btn"  data-id=' +
                       row.id +

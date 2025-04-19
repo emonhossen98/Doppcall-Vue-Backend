@@ -129,9 +129,9 @@ export default {
                 data:"action",
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="chat_logs_action d-flex align-items-center"><button type="button" id="delete-btn"  data-id=' +
+                    '<div class="chat_logs_action d-flex align-items-center"><button title="Delete" type="button" id="delete-btn"  data-id=' +
                     full.id +
-                    ' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
+                    ' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
                     full.id +
                     "></i></button></div>"
                   );

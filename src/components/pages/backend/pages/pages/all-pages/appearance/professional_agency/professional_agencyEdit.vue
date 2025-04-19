@@ -39,7 +39,7 @@
                                             jpg,png,svg,jpeg</span>
                                       </div>
                                         <div class="col-sm-6">
-                                            <img v-if="ProfessionalShow.image" :src="ProfessionalShow.image" class="largeImage">
+                                            <img v-if="ProfessionalShow.image" :src="ProfessionalShow.image" class="largeImage bg-dark">
                                         </div>
                                         <div v-if="validationErrors && validationErrors.image" class="text-danger">
                                           {{ validationErrors.image[0] }}

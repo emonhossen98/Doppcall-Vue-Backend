@@ -251,15 +251,15 @@ export default {
                 data: "updated_at",
                 render: function (data, type, row) {
                   return (
-                    '<div class="subject_action d-flex align-items-center"><button type="button" data-bs-toggle="modal" data-bs-target="#SubjectInfoEdit" class="rounded-circle btn-style-edit " data-id=' +
+                    '<div class="subject_action d-flex align-items-center"><button type="button" data-bs-toggle="modal" data-bs-target="#SubjectInfoEdit" title="Edit" class="rounded-circle bg-transparent border-0 text-primary me-2" data-action="subject-edit" data-id=' +
                     row.id +
-                    '><i class="far fa-edit fa-sm" data-id=' +
+                    '><i class="far fa-edit fa-sm" data-action="subject-edit" data-id=' +
                     row.id +
-                    '></i></button><button type="button"  data-id=' +
+                    '></i></button><button type="button" title="Delete" class="bg-transparent border-0 text-danger" data-action="subject-delete" data-id=' +
                     row.id +
-                    ' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" data-id=' +
+                    '><i class="far fa-trash-alt fa-sm" data-action="subject-delete" data-id=' +
                     row.id +
-                    "></i></button></div>"
+                    '></i></button></div>'
                   );
                 },
               },

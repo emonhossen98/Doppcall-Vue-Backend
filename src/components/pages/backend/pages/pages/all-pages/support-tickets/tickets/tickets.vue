@@ -125,6 +125,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   computed: {
     paginationPages() {
@@ -223,7 +231,7 @@ export default {
                   searchable: false,
                   orderable: false,
                   render: function (data, type, full, meta) {
-                    return '<div class="ticket_action d-flex align-items-center"><button data-id="'+full.ticket_no+'" class=" btn-style-info rounded-circle view-btn me-2" id="view-btn"><i id="view-btn" class="fas fa-eye fa-sm" data-id="'+full.ticket_no+'"></i></button><button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+full.id+'><i id="edit-btn" class="far fa-edit fa-sm" data-id='+full.id+'></i></button><button id="delete-btn" type="button"  data-id='+full.id +' class="btn-style-danger"><i id="delete-btn" class="far fa-trash-alt fa-sm" data-id='+full.id +'></i></button></div>';
+                    return '<div class="ticket_action d-flex align-items-center"><a data-vue-route title="View" href="/admin-tickets-view/'+full.ticket_no+'" class="bg-transparent border-0 text-success me-2"><i class="fas fa-eye fa-sm"></i></a><a data-vue-route title="Edit" href="/admin-tickets-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button id="delete-btn" type="button" title="Delete" data-id='+full.id +' class="bg-transparent border-0 text-danger"><i id="delete-btn" class="far fa-trash-alt fa-sm" data-id='+full.id +'></i></button></div>';
                   }
                 }
               ],
@@ -307,11 +315,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
-        if(dataClass === 'view-btn'){
-          this.$router.push('/admin-tickets-view/'+dataId);
-        }else if(dataClass === 'edit-btn'){
-          this.$router.push('/admin-tickets-edit/'+dataId);
-        }else if(dataClass === 'delete-btn'){
+        if(dataClass === 'delete-btn'){
           this.ticketDelete.data = dataId;
           this.deleteTicket();
         }

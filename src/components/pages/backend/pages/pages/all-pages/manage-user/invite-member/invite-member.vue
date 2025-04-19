@@ -156,9 +156,9 @@ export default {
             { data: 'updated_at',
                 render: function (data, type, row) {
                    return (
-                    '<button type="button"  data-id=' +
+                    '<button title="Delete" type="button"  data-id=' +
                     row.id +
-                    ' class="invaite-delete-btn border-0 rounded-circle btn-style-danger"><i  data-id="' +
+                    ' class="invaite-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
                     row.id +
                     ' " class="far fa-trash-alt fa-sm"></i></button>'
                   );

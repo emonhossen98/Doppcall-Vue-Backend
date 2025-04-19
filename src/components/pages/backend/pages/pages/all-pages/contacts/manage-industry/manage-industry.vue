@@ -263,13 +263,13 @@ export default {
                 orderable: false,
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="industrys_action d-flex align-items-center"><button type="button" data-bs-toggle="modal" data-bs-target="#industryInfoEdit" id="edit-btn" class="btn-style-edit" data-id=' +
+                    '<div class="industrys_action d-flex align-items-center"><button title="Edit" type="button" data-bs-toggle="modal" data-bs-target="#industryInfoEdit" id="edit-btn" class="bg-transparent border-0 text-primary me-2" data-id=' +
                     full.id +
                     '><i id="edit-btn" class="far fa-edit fa-sm" data-id=' +
                     full.id +
-                    '></i></button><button type="button" id="delete-btn"  data-id=' +
+                    '></i></button><button type="button" title="Delete" id="delete-btn"  data-id=' +
                     full.id +
-                    ' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
+                    ' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
                     full.id +
                     "></i></button></div>"
                   );

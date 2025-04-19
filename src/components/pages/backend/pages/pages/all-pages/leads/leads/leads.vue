@@ -161,11 +161,19 @@ export default {
               dataTableWrapper[0].style.display = 'none';
               dataTableWrapper[1].style.display = 'none';
             }
-    });
+          });
         }
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
+      document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
     },
   computed: {
     paginationPages() {
@@ -225,7 +233,7 @@ export default {
                   searchable: false,
                   orderable: false,
                   render: function (data, type, full, meta) {
-                    return '<div class="lead_action d-flex align-items-center"><button type="button" id="view-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+full.id+'><i id="view-btn" class="far fa-eye fa-sm" data-id='+full.id+'></i></button><button type="button" id="delete-btn"  data-id='+full.id +' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
+                    return '<div class="lead_action d-flex align-items-center"><a href="/admin-lead-view/'+full.id+'" title="View" data-vue-route class="bg-transparent border-0 text-primary me-2" ><i class="far fa-eye fa-sm"></i></a><button type="button" title="Delete"  id="delete-btn"  data-id='+full.id +' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
                   }
                 }
               ],
@@ -406,7 +414,7 @@ export default {
                   searchable: false,
                   orderable: false,
                   render: function (data, type, full, meta) {
-                    return '<div class="lead_action d-flex align-items-center"><button type="button" id="view-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+full.id+'><i id="view-btn" class="far fa-eye fa-sm" data-id='+full.id+'></i></button><button type="button" id="delete-btn"  data-id='+full.id +' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
+                    return '<div class="lead_action d-flex align-items-center"><a href="/admin-lead-view/'+full.id+'" title="View" data-vue-route class="bg-transparent border-0 text-primary me-2" ><i class="far fa-eye fa-sm"></i></a><button type="button" title="Delete"  id="delete-btn"  data-id='+full.id +' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
                   }
                 }
               ],
@@ -522,9 +530,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
-        if(dataClass === 'view-btn'){
-         this.$router.push('/admin-lead-view/'+dataId);
-        }else if(dataClass === 'delete-btn'){
+       if(dataClass === 'delete-btn'){
             this.deleteLead.data = dataId;
             this.delteLead();
         }

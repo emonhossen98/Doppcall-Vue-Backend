@@ -122,6 +122,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   computed: {
     paginationPages() {
@@ -234,7 +242,7 @@ export default {
                 searchable: false,
                 orderable: false,
                 render: function (data, type, full, meta) {
-                  return '<div class="d-flex align-items-center"><div class="dropdown mr-1"><button aria-expanded="false" aria-haspopup="true" title="Action" class="border-0 action-btn text-dark"  data-bs-toggle="dropdown" id="dropdownMenuButton" type="button"><i class="fa-solid fa-ellipsis-vertical"></i></button><div class="dropdown-menu tx-13"><button class="dropdown-item view-btn" data-id="'+full.slug+'"><i class="fas fa-eye me-1 text-info" data-id="'+full.slug+'"></i></i>View</button><button class="dropdown-item edit-btn" data-id="'+full.id+'"><i data-id="'+full.id+'" class="far fa-edit fa-sm me-1 text-primary"></i>Edit</button><button class="dropdown-item delete-btn" data-id="'+full.id+'"> <i data-id="'+full.id+'" class="far fa-trash-alt fa-sm me-1 text-danger"></i>Delete</button></div></div></div>';
+                  return '<div class="page-action tx-13"><a title="View" target="_blank" href="https://doppcall.com/'+full.slug+'" class="bg-transparent border-0 text-info me-2"><i class="fas fa-eye me-1 text-info"></i></i></a><a data-vue-route title="Edit"  href="/admin-pages-edit/'+full.id+'" class="bg-transparent border-0 text-info me-1"><i class="far fa-edit fa-sm me-2 text-primary"></i></a><button title="Delete" class="bg-transparent border-0 text-danger" data-action="delete" data-id="'+full.id+'"> <i data-action="delete" data-id="'+full.id+'" class="far fa-trash-alt fa-sm me-1 text-danger"></i></button></div>';
                 }
               }
               ],
@@ -313,17 +321,13 @@ export default {
     },
 
     attachEventListeners() {
-      $("#pages_tables").on("click", ".dropdown-item, .action-btn", (event) => {
+      $("#pages_tables").on("click", ".page-action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr("class");
-        if (dataClass === "dropdown-item view-btn" || dataClass === "fas fa-eye me-1 text-info") {
-          window.open(`https://doppcall.com/${dataId}`, '_blank');
-        } else if (dataClass === "dropdown-item delete-btn" || dataClass === "far fa-trash-alt fa-sm me-1 text-danger") {
+        const dataClass = target.data("action");
+       if (dataClass === "delete") {
           this.deltePage(dataId);
-        } else if (dataClass === "dropdown-item edit-btn" || dataClass === "far fa-edit fa-sm me-1 text-primary") {
-          this.$router.push('/admin-pages-edit/'+dataId)
-        } 
+        }
       });
     },
 

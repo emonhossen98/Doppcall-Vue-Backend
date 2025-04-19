@@ -64,7 +64,7 @@
                     <th>Balance</th>
                     <th>Manager</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th class="text-center" style="width: 35%;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -297,6 +297,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   computed: {
     paginationPages() {
@@ -464,63 +472,59 @@ export default {
     },
 
     attachEventListeners() {
-      $("#publisher_datatables").on("click", ".dropdown-item", (event) => {
+      $("#publisher_datatables").on("click", ".publisher-action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr("class");
+        const dataClass = target.data("action");
         const dataEmail = target.data("email");
-        if(dataClass === 'dropdown-item edit-btn'){
-          this.$router.push('/admin-manage-publishers-edit/'+dataId);
-        }else if(dataClass === 'dropdown-item payment-btn'){
+        if(dataClass === 'payment-btn'){
           this.paymentsDtails(dataId);
-        }else if(dataClass === 'dropdown-item delete-btn'){
+        }else if(dataClass === 'delete-btn'){
           this.deltePublisher(dataId);
-        }else if(dataClass === 'dropdown-item approved-btn'){
+        }else if(dataClass === 'approved-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "approved",
           this.modalTitle = "Want to Approved";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item pending-btn'){
+        }else if(dataClass === 'pending-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "pending",
           this.modalTitle = "Want to Pending";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item unsuspend-btn'){
+        }else if(dataClass === 'unsuspend-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "unsuspend",
           this.modalTitle = "Want to Unsuspend";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item suspend-btn'){
+        }else if(dataClass === 'suspend-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "suspend",
           this.modalTitle = "Want to Suspend";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item resume-btn'){
+        }else if(dataClass === 'resume-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "resume",
           this.modalTitle = "Want to Resume";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item pause-btn'){
+        }else if(dataClass === 'pause-btn'){
           this.modalData.data = dataId;
           this.modalData.email = dataEmail;
           this.modalData.action_type = "pause",
           this.modalTitle = "Want to Push";
           this.modalDisplay = "block";
 
-        }else if(dataClass === 'dropdown-item log-in-publisher'){
+        }else if(dataClass === 'log-in-publisher'){
           this.loginAsPublisher(dataId);
-        }else if(dataClass === 'dropdown-item user-view'){
-          this.$router.push('/admin-manage-publishers-view/'+dataId);
         }
       });
     },

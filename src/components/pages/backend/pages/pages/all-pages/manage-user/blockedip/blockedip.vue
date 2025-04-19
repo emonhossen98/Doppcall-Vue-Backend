@@ -106,7 +106,7 @@
                   data: "updated_at",
                   render: function (data, type, row) {
                      return (
-                      '<div class="blocked_action text-end"><button type="button" id="delete_btn"  data-id='+row.id +' class="btn btn-danger delete-btn"><i class="fa-solid fa-trash" id="delete_btn" data-id='+row.id +'></i></button></div>'
+                      '<div class="blocked_action text-end"><button title="Delete" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-trash" id="delete_btn" data-id='+row.id +'></i></button></div>'
                     );
                   }
                 },

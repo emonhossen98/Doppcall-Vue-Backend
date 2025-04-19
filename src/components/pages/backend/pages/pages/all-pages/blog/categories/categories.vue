@@ -86,6 +86,14 @@ export default {
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
+      document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
     },
   methods: {
     categoriesData() {
@@ -126,7 +134,7 @@ export default {
                 data: "created_at",
                 render: function (data, type, row) {
                   return (
-                    '<div class="type-datatables-action"><button data-id='+ row.id + ' class="rounded-circle btn-style-edit"><i class="far fa-edit fa-sm" data-id='+ row.id + '></i></button><button type="button"  data-id='+ row.id + ' class="type-delete-btn border-0 rounded-circle btn-style-danger"><i  data-id="' + row.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'
+                    '<div class="type-datatables-action"><a data-vue-route title="Edit" href="/admin-blog-categories-edit/'+row.id+'" class="bg-transparent border-0 text-primary me-2" ><i class="far fa-edit fa-sm"></i></a><button title="Delete" type="button" data-action="delete"  data-id=""'+ row.id + '" class="bg-transparent border-0 text-danger"><i data-action="delete"  data-id=""'+ row.id + '" class="far fa-trash-alt fa-sm"></i></button></div>'
                   );
                 },
               },
@@ -194,11 +202,8 @@ export default {
       $('#blog_categiories_datatables').on('click', '.type-datatables-action', (event) => {
         const target = $(event.target);
         const dataId = target.data('id');
-        const dataClass = target.attr('class');
-        
-        if(dataClass === 'rounded-circle btn-style-edit' || dataClass === 'far fa-edit fa-sm'){
-          this.$router.push('/admin-blog-categories-edit/'+dataId);
-        }else if(dataClass === 'type-delete-btn border-0 rounded-circle btn-style-danger' || dataClass === 'far fa-trash-alt fa-sm'){
+        const dataClass = target.data('action');
+        if(dataClass === 'delete'){
           this.deleteCategory(dataId);
         }
       });

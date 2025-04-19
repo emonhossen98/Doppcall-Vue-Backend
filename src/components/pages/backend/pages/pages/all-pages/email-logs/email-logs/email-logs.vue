@@ -201,7 +201,7 @@ export default {
                 {
                  data : "updated_at",
                  render: function (data, type, row) {
-                  return '<button data-id="'+row.id+'"  data-bs-toggle="modal" data-bs-target="#emailLogsContent" id="content-view" class="industial_contact_view text-info border-0"><i id="content-view" class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button>'
+                  return '<button data-id="'+row.id+'" title="View"  data-bs-toggle="modal" data-bs-target="#emailLogsContent" id="content-view" class="industial_contact_view text-info border-0"><i id="content-view" class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button>'
                  }
               }
                 

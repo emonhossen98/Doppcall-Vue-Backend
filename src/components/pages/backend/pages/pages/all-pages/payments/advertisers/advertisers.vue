@@ -81,10 +81,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="d-flex align-items-center w-100 payment-type">
-            <button type="button" id="deposit-button" :class="{ active: depositButtonActive }" @click="changePaymentType('deposit')" class="btn btn-outline deposit w-50 rounded-0 btn-md py-2" data-name="deposit">
+            <button type="button" id="deposit-button" :class="{ depositactive: depositButtonActive }" @click="changePaymentType('deposit')" class="btn btn-outline deposit w-50 rounded-0 btn-md py-2" data-name="deposit">
                 Due Amount
             </button>
-            <button type="button" id="withdraw-button" :class="{ active: withdrawButtonActive }" @click="changePaymentType('withdraw')"  class="btn btn-outline withdraw w-50 rounded-0 py-2" data-name="withdraw">
+            <button type="button" id="withdraw-button" :class="{ withdrawactive: withdrawButtonActive }" @click="changePaymentType('withdraw')"  class="btn btn-outline withdraw w-50 rounded-0 py-2" data-name="withdraw">
                 Paid Payment
             </button>
           </div>
@@ -770,6 +770,10 @@ methods: {
 }
 .country-flag {
 	width: 15%;
+}
+#addPaymentModal .depositactive, #addPaymentModal .withdrawactive{
+	background: #685dd8;
+	color: white;
 }
 </style>
 

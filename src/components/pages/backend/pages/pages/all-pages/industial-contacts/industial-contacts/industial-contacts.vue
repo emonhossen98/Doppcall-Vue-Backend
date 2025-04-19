@@ -239,7 +239,7 @@ export default {
                    {
                  data : "updated_at",
                  render: function (data, type, row) {
-                  return '<button data-id="'+row.id+'"  data-bs-toggle="modal" data-bs-target="#industrialContactModal" class="industial_contact_view btn-style-info rounded-circle view-btn"><i class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button>'
+                  return '<button data-id="'+row.id+'" title="View" id="industial_contact_view" data-action="industial_contact_view" data-bs-toggle="modal" data-bs-target="#industrialContactModal" class="bg-transparent border-0 text-success"><i class="fas fa-eye fa-sm" data-action="industial_contact_view" data-id="'+row.id+'"></i></button>'
                  }
               }
           ],
@@ -350,12 +350,12 @@ export default {
     },
 
     attachEventListeners() {
-      $('#industrial_datatables').on('click', '.industial_contact_view', (event) => {
+      $('#industrial_datatables').on('click', '#industial_contact_view', (event) => {
         const target = $(event.target);
         const dataId = target.data('id');
-        const dataClass = target.attr('class');
+        const dataClass = target.data('action');
         this.industialView.data_id = dataId;
-        if(dataClass === 'industial_contact_view btn-style-info rounded-circle view-btn' || dataClass === 'fas fa-eye fa-sm'){
+        if(dataClass === 'industial_contact_view'){
           this.getContactInformation();
         }
       });

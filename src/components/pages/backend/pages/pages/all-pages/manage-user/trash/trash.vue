@@ -119,7 +119,7 @@ export default {
                 data: "updated_at",
                 render: function (data, type, row) {
                    return (
-                    '<div class="trans_action"><button type="button"  data-id='+row.id +' class="btn btn-primary me-2 restor-btn">Restore</button><button type="button"  data-id='+row.id +' class="btn btn-warning delete-btn">Delete</button></div>'
+                    '<div class="trans_action"><button title="Restore" type="button" data-action="restore" data-id='+row.id +' class="btn bg-transparent border-0 text-primary"><i data-action="restore" data-id='+row.id +' class="fa-solid fa-arrow-rotate-right"></i></button><button type="button" title="Delete"  data-action="delete" data-id='+row.id +' class="bg-transparent border-0 text-danger"><i data-action="delete" data-id='+row.id +' class="fa-regular fa-trash-can"></i></button></div>'
                   );
                 }
               },
@@ -221,10 +221,10 @@ export default {
       $("#trashs_datatables").on("click", ".trans_action", (event) => {
         const target = $(event.target);
         const dataId = target.data("id");
-        const dataClass = target.attr("class");
-        if(dataClass === 'btn btn-primary me-2 restor-btn'){
+        const dataClass = target.data("action");
+        if(dataClass === 'restore'){
          this.restoreUser(dataId);
-        }else if(dataClass === 'btn btn-warning delete-btn'){
+        }else if(dataClass === 'delete'){
           this.delteTranUser(dataId);
         }
       });

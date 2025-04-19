@@ -238,6 +238,14 @@ export default {
   } catch (error) {
     console.error("Error fetching user role:", error);
   }
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('a[data-vue-route]');
+    if (target) {
+      e.preventDefault();
+      const route = target.getAttribute('href');
+      this.$router.push(route);
+    }
+  }, true);
 },
 computed: {
   paginationPages() {
@@ -650,8 +658,6 @@ computed: {
             .finally(()=> {
               this.getLoader = false;
             });
-        } else if(dataClass === 'add-info'){
-          this.$router.push('/admin-payment-system-single/'+dataId)
         }
       });
     },

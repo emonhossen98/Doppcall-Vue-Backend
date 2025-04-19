@@ -86,6 +86,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getCommentsData() {
@@ -238,9 +246,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
-        if (dataClass === "edit-btn") {
-           this.$router.push('/admin-comments-edit/'+dataId);
-        } else if (dataClass === "unpublished") {
+        if (dataClass === "unpublished") {
           this.getLoader = true;
           axios
             .get(this.globalVariables.apiUrl+`admin/comments/unpublished/${dataId}`, {

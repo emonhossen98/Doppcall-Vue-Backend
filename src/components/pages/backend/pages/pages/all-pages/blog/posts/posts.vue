@@ -179,6 +179,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   computed: {
     paginationPages() {
@@ -263,13 +271,9 @@ export default {
                 orderable: false,
                 render: function (data, type, full, meta) {
                   return (
-                    '<div class="posts_action d-flex align-items-center"><button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id=' +
+                    '<div class="posts_action d-flex align-items-center"><a data-vue-route title="Edit" href="/admin-blog-posts-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button type="button" id="delete-btn"  data-id=' +
                     full.id +
-                    '><i id="edit-btn" class="far fa-edit fa-sm" data-id=' +
-                    full.id +
-                    '></i></button><button type="button" id="delete-btn"  data-id=' +
-                    full.id +
-                    ' class="btn-style-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
+                    ' class="bg-transparent border-0 text-danger" title="Delete"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id=' +
                     full.id +
                     "></i></button></div>"
                   );
@@ -396,9 +400,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
-        if (dataClass === "edit-btn") {
-          this.$router.push("/admin-blog-posts-edit/" + dataId);
-        } else if (dataClass === "delete-btn") {
+        if (dataClass === "delete-btn") {
           this.deleteQuestions(dataId);
         }
       });
