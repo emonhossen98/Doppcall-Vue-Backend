@@ -60,7 +60,7 @@
                     <th>Company</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th >Phone</th>
+                    <th>Phone</th>
                     <th>Balance</th>
                     <th>Manager</th>
                     <th>Status</th>

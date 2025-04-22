@@ -93,6 +93,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getPusbliserCampaignData() {
@@ -337,11 +345,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.attr("id");
-        if (dataClass === "campaign-edit") {
-          this.$router.push("/publisher-edit-campaign/" + dataId);
-        } else if (dataClass === "campaign-view") {
-          this.$router.push("/publisher-offer-campaigns-view/" + dataId);
-        } else if(dataClass === "campaign-delete"){
+        if(dataClass === "campaign-delete"){
           this.campaignDelete.data = dataId;
           this.deleteCampaign();
         }

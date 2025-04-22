@@ -125,6 +125,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a[data-vue-route]');
+        if (target) {
+          e.preventDefault();
+          const route = target.getAttribute('href');
+          this.$router.push(route);
+        }
+      }, true);
   },
   methods: {
     getPusbliserFillterData() {
@@ -178,16 +186,13 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2" id="details" data-id=' +
-                      row.id +
-                      ">View Details</button></div>"
+                      '<div class="publisher_details_action d-flex align-items-center"><a data-vue-route href="/publisher-create-view/'+row.id+'" title="View Details" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2">View Details</a></div>'
                     );
                   },
                 },
               ],
               initComplete: () => {
                 this.attachEventListeners();
-                this.attachEventListenersDetails();
               },
               order: [[6, 'asc']],
               dom: '<"row mx-2"' +
@@ -270,16 +275,13 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     return (
-                      '<div class="publisher_details_action d-flex align-items-center"><button type="button" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2" id="details" data-id=' +
-                      row.id +
-                      ">View Details</button></div>"
+                      '<div class="publisher_details_action d-flex align-items-center"><a data-vue-route href="/publisher-create-view/'+row.id+'" title="View Details" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2">View Details</a></div>'
                     );
                   },
                 },
               ],
               initComplete: () => {
                 this.attachEventListeners();
-                this.attachEventListenersDetails();
               },
               createdRow: function (row, data, dataIndex) {
                 $("td:eq(0)", row).html(dataIndex + 1);
@@ -377,18 +379,6 @@ export default {
               .finally(() => {
                 this.getLoader = false;
               });
-          }
-        }
-      );
-    },
-
-    attachEventListenersDetails() {
-      $("#publisher_offers_datatables").on("click",".publisher_details_action",(event) => {
-          const target = $(event.target);
-          const dataId = target.data("id");
-          const dataClass = target.attr("id");
-          if (dataClass === "details") {
-            this.$router.push("/publisher-create-view/" + dataId);
           }
         }
       );

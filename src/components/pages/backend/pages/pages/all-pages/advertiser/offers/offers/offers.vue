@@ -123,6 +123,14 @@
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
+      document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
     },
     methods: {
       getAdvertiserFillterData() {
@@ -175,9 +183,6 @@
                 { data: "convart_status" },
                 { data: "convert_action" },
               ],
-              initComplete: () => { 
-                this.attachEventListeners();
-              },
               createdRow: function (row, data, dataIndex) {
                   $('td:eq(0)', row).html(dataIndex + 1);
               },
@@ -271,7 +276,6 @@
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'id' },
                 { data: "convert_primary_country" },
                 { data: "name" },
                 { data: "offer_type_name" },
@@ -279,9 +283,6 @@
                 { data: "convart_status" },
                 { data: "convert_action" },
               ],
-              initComplete: () => { 
-                this.attachEventListeners();
-              },
               createdRow: function (row, data, dataIndex) {
                   $('td:eq(0)', row).html(dataIndex + 1);
               },
@@ -368,18 +369,6 @@
           });
       }
     },
-
-      attachEventListeners() {
-        $("#advertiser_offers_datatables").on("click",".dropdown-item",(event) => {
-            const target = $(event.target);
-            const dataId = target.data("id");
-            const dataClass = target.attr("id");
-            if(dataClass === 'view-offer'){
-                this.$router.push('/advertiser-offers-view/'+dataId);
-            }
-          }
-        );
-      },
     },
   };
   </script>

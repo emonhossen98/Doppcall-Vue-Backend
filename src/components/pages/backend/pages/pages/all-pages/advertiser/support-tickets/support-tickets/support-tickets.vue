@@ -71,6 +71,10 @@ export default {
         { label: "Support Tickets", url: "" },
       ],  
       getLoader: false,
+      bulkactionids : {
+        selectedIds: [],
+        status: "",
+      },
     };
   },
   async mounted() { 
@@ -89,6 +93,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getSupportTicketsData() {
@@ -119,12 +131,13 @@ export default {
                   orderable: false,
                   render: function (data, type, full, meta) {
                     return '<div class="subject_action d-flex align-items-center">' +
-                      '<div class="support_action d-flex align-items-center"><button type="button" id="view-btn"  data-id='+full.ticket_no +' class="rounded-circle btn-style-info me-2"><i class="fas fa-eye fa-sm" id="view-btn" data-id='+full.ticket_no +'></i></button><button type="button" id="edit-btn" class="btn-style-edit me-2 d-flex  align-items-center" data-id='+full.id+'><i id="edit-btn" class="far fa-edit fa-sm" data-id='+full.id+'></i></button></div>';
+                      '<div class="support_action d-flex align-items-center"><a data-vue-route title="View" href="/advertiser-support-ticket-view/'+full.ticket_no +'" class="rounded-circle btn-style-info me-2"><i class="fas fa-eye fa-sm" ></i></a></div>';
                   }
                 }
               ],
-              initComplete: () => { // Using an arrow function here
-                this.attachEventListeners();
+              initComplete: () => { 
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
                 this.attachEventListenersOfButton();
               },
               columnDefs: [
@@ -132,10 +145,10 @@ export default {
                   targets: 0,
                   orderable: false,
                   checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                   },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                   },
                   searchable: false
                 },
@@ -162,6 +175,21 @@ export default {
                 }
               },
               buttons: [
+              {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="Open">Bulk Open</option>
+                        <option value="Process">Bulk Process</option>
+                        <option value="Close">Bulk Close</option>
+                        <option value="Re-Open">Bulk Re-Open</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
                 {
                   extend: 'collection',
                   className: 'btn btn-label-primary dropdown-toggle me-3',
@@ -217,18 +245,113 @@ export default {
         });
     },
 
-    attachEventListeners() {
-      $("#support_tickets_tables").on("click", ".support_action", (event) => {
-        const target = $(event.target);
-        const dataId = target.data("id");
-        const dataClass = target.attr("id");
-        if(dataClass === 'edit-btn'){
-         this.$router.push('/advertiser-support-ticket-edit/'+dataId);
-        }else if(dataClass === 'view-btn'){
-          this.$router.push('/advertiser-support-ticket-view/'+dataId);
+    attachEventListenersBlulkAction() {
+      $('#support_tickets_tables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#support_tickets_tables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#support_tickets_tables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+
+          if (action === "Close") {
+            this.bulkactionids.status = 'Close';
+            const alertTitle = "Ticket Want to Close";
+            this.bulkStatusChange(alertTitle);
+          }else if(action === "Open"){
+            this.bulkactionids.status = 'Open';
+            const alertTitle = "Ticket Want to Open";
+            this.bulkStatusChange(alertTitle);
+          }else if(action === "Process"){
+            this.bulkactionids.status = 'Process';
+            const alertTitle = "Ticket Want to Process";
+            this.bulkStatusChange(alertTitle);
+          }else{
+            this.bulkactionids.status = 'Re-Open';
+            const alertTitle = "Ticket Want to Re-Open";
+            this.bulkStatusChange(alertTitle);
+          }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkStatusChange(alertTitle) {
+      Swal.fire({
+        text: alertTitle,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "advertiser/support-tickets/bulk/status",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getSupportTicketsData();
+                  this.bulkactionids.selectedIds = [];
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
         }
       });
     },
+
     attachEventListenersOfButton(){
       $("#support_tickets_tables_wrapper").on("click", "button", (event) => {
         const target = $(event.target);

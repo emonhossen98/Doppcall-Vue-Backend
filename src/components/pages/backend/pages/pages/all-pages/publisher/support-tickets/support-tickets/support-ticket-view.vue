@@ -9,89 +9,145 @@
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
             <div class="row mt-4">
                 <div class="col-12 col-lg-9">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row-mb-3">
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <div class="support-avatar">
-                                            <img :src="ticket.convart_image" alt="DOPPCALL">
-                                        </div>
-                                        <div class="content mt-2">
-                                            <h4 class="mb-2">{{ ticket && ticket.user && ticket.user.fname }}</h4>
-                                            <span class="badge bg-primary text-white mb-2">{{ role.name }}</span><br>
-                                            <span v-html="ticket.convart_status_color"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="support-message" v-html="ticket.description">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="support-asset">
-                                            <ul>
-                                                <li><i class="far fa-clock fa-sm"></i> <span>{{ ticket.convart_open_date}}</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                  <div class="card">
+                    <div class="card-body">
+                      <!-- Ticket Header -->
+                      <div class="mb-3">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="d-flex align-items-start">
+                              <!-- Avatar -->
+                              <div class="me-3 support-avatar">
+                                <img :src="ticket.convart_image" alt="DOPPCALL" style="width: 50px; height: 50px;" class="rounded-circle">
+                              </div>
+                              <!-- User Info -->
+                              <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                  <div>
+                                    <h5 class="mb-0">
+                                      {{ ticket?.user?.fname }} {{ ticket?.user?.lname }}
+                                    </h5>
+                                    <small class="text-muted">{{ ticket.convart_open_date }}</small>
+                                    <div class="support-message" v-html="ticket.description"></div>
+                                  </div>
                                 </div>
-                                    <template v-if="ticketMessages.length > 0">
-                                        <div class="row mt-3" v-for="(value,index) in ticketMessages" :key="index">
-                                            <div class="col-12">
-                                                <div class="bg-color">
-                                                    <div class="row">
-                                                        <div class="col-lg-2">
-                                                            <div class="support-avatar">
-                                                                <img :src="value.convart_image" alt="DOPPCALL">
-                                                            </div>
-                                                            <div class="content mt-2">
-                                                                <h5 class="mb-1">{{ value.user.fname }}</h5>
-                                                                <span class="badge bg-primary text-white">{{role.name }}</span>
-                                                                <template v-if="ticket.user_id == value.user.id">
-                                                                    <div class="support-action mt-2">
-                                                                        <button type="button" @click="CommentEdit(value.id)" data-bs-toggle="modal" data-bs-target="#commentEditModal" class="support-btn edit edit-btn border-0 me-2" data-id="{{ $value->id }}"><i class="far fa-edit"></i></button>
-                                                                        <button type="button" @click="CommentDelete(value.id)" class="support-btn delete border-0"><i class="far fa-trash-alt"></i></button>
-                                                                    </div>
-                                                                </template>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-8">
-                                                            <div class="support-message" v-html="value.message">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-2">
-                                                            <div class="support-asset">
-                                                                <ul>
-                                                                    <li><i class="far fa-clock fa-sm"></i> <span>{{ value.convart_updated_at }}</span></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                   </template>
+                              </div>
                             </div>
+                          </div>
                         </div>
+                      </div>
+
+                      <!-- Ticket Messages -->
+                      <template v-if="ticketMessages.length > 0">
+                        <div v-for="(value, index) in ticketMessages" :key="index" :class="ticket.user_id == value.user.id ? 'user-background' : 'admin-background '" class="p-3 rounded shadow-sm mb-3">
+                          <div class="d-flex align-items-start">
+                            <!-- Message Avatar -->
+                            <div class="me-3">
+                              <img :src="value.convart_image" alt="DOPPCALL" class="rounded-circle" style="width: 50px; height: 50px;">
+                            </div>
+
+                            <!-- Message Content -->
+                            <div class="flex-grow-1">
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                  <h6 class="mb-0">
+                                    {{ value?.user?.fname }} {{ value?.user?.lname }}
+                                  </h6>
+                                  <small class="text-muted">{{ value.convart_updated_at }}</small>
+                                </div>
+                              </div>
+
+                              <div class="mt-2 support-message" v-html="value.message"></div>
+
+                              <template v-if="value.files != null">
+                                <div v-if="isImage(value.files)">
+                                  <div class="modal fade" :id="'viewImage'+value.id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel1">Image View Modal</h5>
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                        <div class="modal-body py-0">
+                                          <img style="width: 300px;" :src="globalVariables.appUrl+value.files" alt="image" class="h-auto rounded" />
+                                          
+                                        </div>
+                                        <div class="modal-footer">
+                                          <a :href="globalVariables.appUrl+value.files" download target="_blank" title="Click To Download Image" class="btn btn-primary">
+                                            <i class="fa-solid fa-download me-2"></i> Download
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <a href="#" data-bs-toggle="modal" :data-bs-target="'#viewImage'+value.id" title="Click To View Image" class="text-blue-600">
+                                  <img style="width: 80px;" :src="globalVariables.appUrl+value.files" alt="image" class="w-32 h-auto rounded" />
+                                </a>
+                                </div>
+                                <div v-else-if="isPDF(value.files)">
+                                  <a target="_blank" title="Click To Download PDF" :href="globalVariables.appUrl+value.files" download class="text-blue-600 underline">Download PDF</a>
+                                </div>
+                                <div v-else-if="isDoc(value.files)">
+                                  <a target="_blank" title="Click To Download DOC" :href="globalVariables.appUrl+value.files" download class="text-blue-600 underline">Download DOC</a>
+                                </div>
+                              </template>
+
+                              <!-- Action Buttons -->
+                              <div v-if="ticket.user_id == value.user.id" class="mt-2">
+                                <button title="Edit"
+                                  type="button"
+                                  @click="CommentEdit(value.id)"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#commentEditModal"
+                                  class="btn btn-sm btn-outline-primary me-2"
+                                >
+                                  <i class="far fa-edit"></i>
+                                </button>
+                                <button
+                                title="Delete"
+                                  type="button"
+                                  @click="CommentDelete(value.id)"
+                                  class="btn btn-sm btn-outline-danger"
+                                >
+                                  <i class="far fa-trash-alt"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
                     </div>
+                  </div>
+
                     
                     <template v-if="ticket.status == 'Re-Open'">
                         <div class="card mt-4">
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <label for="comment" class="required mb-1">Comment</label>
+                                        <label for="comment" class="required mb-1">Comment</label><span class="word_limit">(Word Count: {{ wordCount }} / 200) 
+                                          <span v-if="wordLimitReached" style="color: red;">(Word limit reached)</span></span>
                                         <textarea v-model="comment" ref="Comment" id="comment" class="form-control"  required="required" rows="4"></textarea>
                                         <div v-if="validationErrors && validationErrors.comment" class="text-danger">
                                             {{ validationErrors.comment[0] }}
                                         </div>
                                     </div>
 
-                                    <div class="form-group mt-3">
-                                        <label class="d-block mb-1">Images</label>
-                                            <div class="custom-file">
-                                                <input  type="file" class="form-control" ref="fileInput"  @change="handleImageUpload" id="customFile"/>
+                                    <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                              <label class="d-block mb-1">Images</label>
+                                              <div class="custom-file">
+                                                  <input  type="file" class="form-control" ref="fileInput" accept=".jpg, .png, .pdf, .docx"  @change="handleImageUpload($event)" id="customFile"/>
+                                              </div>
                                             </div>
+                                            <div class="col-sm-6">
+                                              <img style="width: 140px;" v-if="themeShowImage.theme_logo" :src="themeShowImage.theme_logo" class="imgpreview">
+                                          </div>
                                     </div>
 
                                     <div class="form-group mt-3">
@@ -107,7 +163,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="text-end mt-3">
                                         <button type="button" @click="replayComment()" class="btn btn-sm btn-primary">Reply Comment</button>
                                     </div>
@@ -129,6 +184,22 @@
                                         <td><strong>Full Name</strong></td>
                                         <td>{{ ticket && ticket.user && ticket.user.fname }} {{ ticket && ticket.user && ticket.user.lname }}</td>
                                     </tr>
+                                    <tr style="line-height: 2rem">
+                                        <td><strong>Browser</strong></td>
+                                        <td>{{ ticket && ticket.user && ticket.user.browser }}</td>
+                                    </tr>
+                                    <tr style="line-height: 2rem">
+                                        <td><strong>Operating System</strong></td>
+                                        <td>{{ ticket && ticket.user && ticket.user.os }}</td>
+                                    </tr>
+                                    <template v-if="ticket && ticket.user && ticket.user.country_code != null">
+                                      <tr style="line-height: 2rem">
+                                          <td><strong>Country</strong></td>
+                                          <td>
+                                            <img class="w-20" :src="'https://flagicons.lipis.dev/flags/4x3/' + ticket.user.country_code + '.svg'" alt="Country Flag">
+                                          </td>
+                                      </tr>
+                                    </template>
                                     <tr style="line-height: 2rem">
                                         <td><strong>Ticket ID</strong></td>
                                         <td>#{{ ticket.ticket_no }}</td>
@@ -194,11 +265,14 @@
               </div>
 
               <div class="row mt-3">
-                <div class="col-md-12">
+                <div class="col-md-6">
                   <div class="form-group">
                     <label for="image" class="required">Image</label>
-                    <input type="file" @change="handleImageUpload"  class="form-control" id="customFile"/>
+                    <input type="file" @change="handleImageUploadEdit($event)"  class="form-control" accept=".jpg, .png, .pdf, .docx" id="customFile"/>
                   </div>
+                </div>
+                <div class="col-sm-6">
+                  <img style="width:140px;" v-if="themeShowEditImage.theme_logo" :src="themeShowEditImage.theme_logo" class="imgpreview">
                 </div>
               </div>
             </div>
@@ -262,6 +336,14 @@ export default {
         image : "",
         status : "",
       },
+      wordCount: 0,
+      wordLimitReached: false,
+      themeShowImage: {
+        theme_logo: "",
+      },
+      themeShowEditImage: {
+        theme_logo: "",
+      },
     };
   },
   async mounted() { 
@@ -275,6 +357,21 @@ export default {
     }
   },
   methods: {
+    getExtension(file) {
+      return file.split('.').pop().toLowerCase();
+    },
+    isImage(file) {
+      const ext = this.getExtension(file);
+      return ['png', 'jpg', 'jpeg', 'gif'].includes(ext);
+    },
+    isPDF(file) {
+      return this.getExtension(file) === 'pdf';
+    },
+    isDoc(file) {
+      const ext = this.getExtension(file);
+      return ['doc', 'docx'].includes(ext);
+    },
+
     getTicketSubjectViewData() {
       this.getLoader = true;
       axios
@@ -299,14 +396,27 @@ export default {
         .finally(() => {
           this.getLoader = false;
           $(this.$refs.Comment).summernote({
-            placeholder: "Type your text here...",
+            placeholder: 'Please explain your issue in detail. Include any error messages, dates, or campaign names.',
             height: 200,
             callbacks: {
-                onChange: (contents) => {
-                    this.messageCreate.comment = contents;
-                },
-            },
-    });
+              onChange: contents => {
+                const text = $('<div>').html(contents).text(); 
+                const words = text.trim().split(/\s+/); 
+                const wordCount = words.filter(w => w.length > 0).length;
+
+                if (wordCount > 200) {
+                  const limitedText = words.slice(0, 200).join(' ');
+                  $(this.$refs.Comment).summernote('code', limitedText);
+                  this.messageCreate.comment = limitedText;
+                  this.wordLimitReached = true;
+                } else {
+                  this.messageCreate.comment = contents;
+                  this.wordLimitReached = false;
+                }
+                this.wordCount = wordCount; 
+              }
+            }
+          });
         });
     },
 
@@ -325,6 +435,11 @@ export default {
         )
         .then((res) => {
           toastr.success(res.data.message);
+          // const modal = document.getElementById("TrafficInfoCreate");
+          // const bootstrapModal = bootstrap.Modal.getInstance(modal);
+          // if (bootstrapModal) {
+          //   bootstrapModal.hide();
+          // }
           this.$router.push("/publisher-support-tickets");
         })
         .catch((error) => {
@@ -401,10 +516,10 @@ export default {
             });
     },
     
-    handleImageUpload(event) {
-      this.editComment.image = event.target.files[0];
-      this.messageCreate.image = event.target.files[0];
-    },
+    // handleImageUpload(event) {
+    //   this.editComment.image = event.target.files[0];
+    //   this.messageCreate.image = event.target.files[0];
+    // },
 
     CommentEdit(id) {
         this.editedData.data_id = id;
@@ -446,7 +561,13 @@ export default {
             if(res.data.status == 'success'){
               toastr.success(res.data.message);
               this.getTicketSubjectViewData();
-              location.reload();
+              const modal = document.getElementById("commentEditModal");
+              const bootstrapModal = bootstrap.Modal.getInstance(modal);
+              if (bootstrapModal) {
+                this.editComment.image = "";
+                this.themeShowEditImage.theme_logo = "";
+                bootstrapModal.hide();
+              }
             }else{
               toastr.error(res.data.message);
             }
@@ -457,6 +578,46 @@ export default {
           .finally(() => {
             this.getLoader = false;
           });
+    },
+
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        const typeParts = file.type.split('/');
+        const fileType = typeParts[1] || file.type; 
+        toastr.info(`Your file type: ${fileType}.`);
+      }
+      this.messageCreate.image = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (!file.type.startsWith('image/')) {
+          this.themeShowImage.theme_logo = '';
+        }else{
+          this.themeShowImage.theme_logo = reader.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    },
+
+    handleImageUploadEdit(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        const typeParts = file.type.split('/');
+        const fileType = typeParts[1] || file.type; 
+        toastr.info(`Your file type: ${fileType}.`);
+      }
+      this.editComment.image = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (!file.type.startsWith('image/')) {
+          this.themeShowEditImage.theme_logo = '';
+        }else{
+          this.themeShowEditImage.theme_logo = reader.result;
+        }
+      };
+      reader.readAsDataURL(file);
     },
 
     CommentDelete(id) {
@@ -502,5 +663,18 @@ export default {
 .modal-dialog {
 	max-width: 460px !important;
 	width: 100% !important;
+}
+.support-avatar{
+  width:55px;
+  height : 50px;
+}
+.support-avatar img{
+  width:100%;
+}
+.user-background {
+	background: #eeeeee70;
+}
+.admin-background {
+	background: #b5b5b570;
 }
 </style>

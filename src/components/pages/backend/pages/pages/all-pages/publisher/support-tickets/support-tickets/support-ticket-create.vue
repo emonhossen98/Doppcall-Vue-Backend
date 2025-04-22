@@ -70,7 +70,7 @@
                                     <div class="col-12">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" hidden="hidden" id="username" @change="changeStatus($event)">
-                                            <label class="switch"  for="username"></label>Ticket Active Status
+                                            <label class="switch"  for="username" ></label><span class="required">Ticket Active Status</span>
                                             <div v-if="validationErrors && validationErrors.is_active" class="text-danger">
                                                 {{ validationErrors.is_active[0] }}
                                             </div>
@@ -151,13 +151,12 @@ export default {
             height: 200,
             callbacks: {
               onChange: contents => {
-                const text = $('<div>').html(contents).text(); // Strip HTML
-                const words = text.trim().split(/\s+/); // Split by spaces
+                const text = $('<div>').html(contents).text();
+                const words = text.trim().split(/\s+/);
                 const wordCount = words.filter(w => w.length > 0).length;
 
-                if (wordCount > 10) {
-                  // Prevent adding more words
-                  const limitedText = words.slice(0, 10).join(' ');
+                if (wordCount > 200) {
+                  const limitedText = words.slice(0, 200).join(' ');
                   $(this.$refs.Description).summernote('code', limitedText);
                   this.ticketCreate.description = limitedText;
                   this.wordLimitReached = true;
@@ -165,8 +164,7 @@ export default {
                   this.ticketCreate.description = contents;
                   this.wordLimitReached = false;
                 }
-
-                this.wordCount = wordCount; // Store for display
+                this.wordCount = wordCount; 
               }
             }
           });
@@ -197,7 +195,10 @@ export default {
       const file = event.target.files[0];
       if (!file) return;
       if (!file.type.startsWith('image/')) {
-        toastr.info('info',`Your file type: ${file.type}.`);
+        const typeParts = file.type.split('/');
+        const fileType = typeParts[1] || file.type; 
+        console.log(fileType);
+        toastr.info(`Your file type: ${fileType}.`);
       }
       this.ticketCreate.image = file;
       const reader = new FileReader();
@@ -209,14 +210,6 @@ export default {
         }
       };
       reader.readAsDataURL(file);
-      // const file = event.target.files[0];
-      // this.ticketCreate.image = file;
-      // if (!file || file.type.indexOf('image/') === -1) return;
-      // const reader = new FileReader();
-      // reader.onload = () => {
-      //   this.themeShowImage.theme_logo = reader.result; // Update imgsrc with filename
-      // };
-      // reader.readAsDataURL(file);
     },
 
     SupportTicketsSave() {
