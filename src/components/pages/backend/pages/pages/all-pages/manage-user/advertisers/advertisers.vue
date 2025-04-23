@@ -281,6 +281,10 @@ export default {
       startPage : 0,
       endPage : 0,
       searchInputValue : "",
+      bulkactionids : {
+        selectedIds: [],
+        status: "",
+      },
     };
   },
   async mounted() { 
@@ -373,6 +377,8 @@ export default {
             this.attachEventListeners();
             this.attachEventListenersForMenu();
             this.attachEventListenersForSearch();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
 
             const searchInput = $("#advertiser_datatables_filter input");
             searchInput.val(this.searchInputValue);
@@ -396,10 +402,10 @@ export default {
               targets: 0,
               orderable: false,
               checkboxes: {
-                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
               },
-              render: function () {
-                return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row[3]}">`;
               },
               searchable: false
             },
@@ -426,6 +432,24 @@ export default {
             }
           },
           buttons: [
+          {
+                text: `
+                  <div id="bulk-action-wrapper">
+                    <select id="bulk-action-select" class="form-select form-select-sm">
+                      <option value=""> ✓ Bulk Actions</option>
+                      <option value="delete">Bulk Delete</option>
+                      <option value="0">Bulk Pending</option>
+                      <option value="1">Bulk Approved</option>
+                      <option value="2">Bulk Suspend</option>
+                      <option value="3">Bulk Unsuspend</option>
+                      <option value="4">Bulk Pause</option>
+                      <option value="5">Bulk Resume</option>
+                    </select>
+                  </div>
+                `,
+                className: "me-2 p-0 btn-primary d-none",
+                attr: { id: "bulk-action-container" },
+              },
             {
               extend: 'collection',
               className: 'btn btn-label-primary dropdown-toggle me-3',
@@ -474,6 +498,7 @@ export default {
           this.getLoader = false;
         });
     },
+
     attachEventListenersForSearch() {
       $("#advertiser_datatables_wrapper #advertiser_datatables_filter input").on("keyup", (event) => {
         const target = $(event.target);
@@ -545,6 +570,163 @@ export default {
 
         }else if(dataClass === 'log-in-publisher'){
           this.loginAsAdvertisher(dataId);
+        }
+      });
+    },
+    attachEventListenersBlulkAction() {
+      $('#advertiser_datatables').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#advertiser_datatables thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#advertiser_datatables tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        
+        if (action === 'delete') {
+          this.bulkDelete();
+        } else {
+          if (action === "0") {
+            this.bulkactionids.status = '0';
+            const alertTitle = "User Want to Pending";
+            this.bulkStatusChange(alertTitle);
+          } else if (action === "1") {
+            this.bulkactionids.status = '1';
+            const alertTitle = "User Want to Approved";
+            this.bulkStatusChange(alertTitle);
+          } else if (action === "2") {
+            this.bulkactionids.status = '2';
+            const alertTitle = "User Want to Suspend";
+            this.bulkStatusChange(alertTitle);
+          } else if (action === "3") {
+            this.bulkactionids.status = '3';
+            const alertTitle = "User Want to Unsuspend";
+            this.bulkStatusChange(alertTitle);
+          }else if (action === "4"){
+            this.bulkactionids.status = '4';
+            const alertTitle = "User Want to Pause";
+            this.bulkStatusChange(alertTitle);
+          }else{
+            this.bulkactionids.status = '5';
+            const alertTitle = "User Want to Resume";
+            this.bulkStatusChange(alertTitle);
+          }
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/manage/super-admin/delete/bulk",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getAdvertiserData();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
+        }
+      });
+    },
+
+    bulkStatusChange(alertTitle) {
+      Swal.fire({
+        text: alertTitle,
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/manage/super-admin/status/bulk",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getAdvertiserData();
+                  this.bulkactionids.selectedIds = [];
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
         }
       });
     },

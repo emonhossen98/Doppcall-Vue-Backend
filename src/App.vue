@@ -963,7 +963,6 @@ export default {
         created_at : this.getLaravelFormattedTime(),
       };
       if(this.createMessage.message != '' && this.createMessage.message != null){
-        console.log(this.getMessages);
         this.getMessages.push(chatMessage);
         this.showEmojiPicker = false;
         this.getMessageText.message = '';

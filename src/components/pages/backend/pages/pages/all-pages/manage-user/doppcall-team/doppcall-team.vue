@@ -370,7 +370,7 @@ export default {
           this.invaiteMember.email = "";
           this.invaiteMember.role_name = "";
           this.getInvitations();
-          this.callAllNext();
+          this.callAllInvitationNext();
           const modal = document.getElementById("inviteMemberModal");
           const bootstrapModal = bootstrap.Modal.getInstance(modal);
           if (bootstrapModal) {
@@ -679,7 +679,7 @@ export default {
       });
     },
 
-    callAllNext(){
+    callAllInvitationNext(){
       this.$nextTick(() => {
       const dataTableWrapper = document.querySelectorAll('#invitations_tables_wrapper .row.mx-2');
       if (dataTableWrapper.length > 0) {
@@ -687,6 +687,8 @@ export default {
         dataTableWrapper[1].style.display = 'none';
       }
     });
+    },
+    callAllNext(){
     this.$nextTick(() => {
       const dataTableWrapper = document.querySelectorAll('#super_admin_datatables_wrapper .row.mx-2');
       if (dataTableWrapper.length > 0) {
@@ -891,25 +893,29 @@ export default {
         if (action === 'delete') {
           this.bulkAdminDelete();
         } else {
-          if (action === "1") {
-            this.bulkactionadminids.status = '1';
-            const alertTitle = "Offer Want to Approved";
-            this.bulkAdminStatusChange(alertTitle);
-          } else if (action === "0") {
+          if (action === "0") {
             this.bulkactionadminids.status = '0';
-            const alertTitle = "Offer Want to Pending";
+            const alertTitle = "User Want to Pending";
             this.bulkAdminStatusChange(alertTitle);
-          } else if (action === "3") {
-            this.bulkactionadminids.status = '3';
-            const alertTitle = "Offer Want to Resume";
+          } else if (action === "1") {
+            this.bulkactionadminids.status = '1';
+            const alertTitle = "User Want to Approved";
             this.bulkAdminStatusChange(alertTitle);
           } else if (action === "2") {
             this.bulkactionadminids.status = '2';
-            const alertTitle = "Offer Want to Pause";
+            const alertTitle = "User Want to Suspend";
+            this.bulkAdminStatusChange(alertTitle);
+          } else if (action === "3") {
+            this.bulkactionadminids.status = '3';
+            const alertTitle = "User Want to Unsuspend";
+            this.bulkAdminStatusChange(alertTitle);
+          }else if (action === "4"){
+            this.bulkactionadminids.status = '4';
+            const alertTitle = "User Want to Pause";
             this.bulkAdminStatusChange(alertTitle);
           }else{
-            this.bulkactionadminids.status = '4';
-            const alertTitle = "Offer Want to Reject";
+            this.bulkactionadminids.status = '5';
+            const alertTitle = "User Want to Resume";
             this.bulkAdminStatusChange(alertTitle);
           }
         }
@@ -938,8 +944,8 @@ export default {
           (this.getLoader = true),
             axios
               .post(
-                this.globalVariables.apiUrl + "admin/offers/bulk/delete",
-                this.bulkactionids,
+                this.globalVariables.apiUrl + "admin/manage/super-admin/delete/bulk",
+                this.bulkactionadminids,
                 {
                   headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -976,8 +982,8 @@ export default {
           (this.getLoader = true),
             axios
               .post(
-                this.globalVariables.apiUrl + "admin/offers/status/bulk",
-                this.bulkactionids,
+                this.globalVariables.apiUrl + "admin/manage/super-admin/status/bulk",
+                this.bulkactionadminids,
                 {
                   headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
@@ -1002,9 +1008,6 @@ export default {
       });
     },
 
-    // actions (){
-    //   <template></template>
-    // },
 
     attachEventDoppCallTeam() {
       $("#super_admin_datatables").on("click", ".super-admin-action", (event) => {

@@ -989,6 +989,7 @@
                 </template>
                 </div>
               </div>
+              
               <div class="chat_body px-3 pt-4 pb-2" id="chatBodyForScroll" @scroll="messageOnScroll($event,chatInfos && chatInfos.chatstatus.id,chatInfos.id)">
               <template v-if="chatInfos != null && chatInfos  != ''">
                 <template v-if="chatInfos && chatInfos.userAllMessages != null && chatInfos.userAllMessages != ''" >
@@ -2750,7 +2751,7 @@ window.Echo = new Echo({
         const getdata = rawData ? JSON.parse(rawData) : {};
         if (getdata?.userAllMessages?.data?.length > 0) {
           const filteredMessages = getdata.userAllMessages.data.filter(
-            (message) => message.sender.id === id
+            (message) => message?.sender?.id === id
           );
           const collections = filteredMessages.map((message) => Number(message.message_read));
           return collections.filter((value) => value == 0 || value == 2).length;
@@ -3294,6 +3295,18 @@ window.Echo = new Echo({
         });
         });
       };
+      const getUser = () =>  {
+        var authUser = JSON.parse(localStorage.getItem('authUserFromLocalStorage')) || {};
+        updateFavicon(authUser?.favicon);
+      };
+
+      const updateFavicon = (url)=> {
+        let link = document.querySelector("link[rel='icon']") || document.createElement('link');
+        link.type = 'image/x-icon';
+        link.rel = 'icon';
+        link.href = url;
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }; 
 
       watch(() => route.params.id, (newId) => {
         if(newId == '000'){
@@ -3593,6 +3606,7 @@ window.Echo = new Echo({
             listenForNewChatUser(getUserdata && getUserdata.id);
             listenForCountMessages(getUserdata && getUserdata.id);
             listenForMessagesReact(getUserdata && getUserdata.id);
+            getUser();
             userLoading.value = true;
             const chatUserStoreIds = localStorage.getItem('chatUserStoreIds');
             if (chatUserStoreIds && chatUserStoreIds.length > 0) {

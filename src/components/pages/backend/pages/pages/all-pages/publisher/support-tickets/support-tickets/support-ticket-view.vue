@@ -161,6 +161,14 @@
                                                 <input class="form-check-input status" @click="statusChange('Close')" :checked=" ticket.status == 'Close' " type="radio" name="status" id="close" value="Close">
                                                 <label class="form-check-label" for="close">Close</label>
                                             </div>
+                                            <div class="form-check form-check-inline">
+                                              <input class="form-check-input status" @click="statusChange('Open')" :checked=" ticket.status == 'Open' " type="radio" name="status" id="open" value="Open">
+                                              <label class="form-check-label" for="open">Open</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                              <input class="form-check-input status" @click="statusChange('Process')" :checked=" ticket.status == 'Process' " type="radio" name="status" id="process" value="Process">
+                                              <label class="form-check-label" for="process">Process</label>
+                                          </div>
                                         </div>
                                     </div>
                                     <div class="text-end mt-3">
@@ -176,7 +184,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="support-info">
-                                <div class="support-img text-center">
+                                <div class="support-img text-center overflow-hidden">
                                     <img :src="ticket.convart_image" alt="DOPPCALL">
                                 </div>
                                 <table class="w-100 mt-3 support-table">
@@ -189,7 +197,7 @@
                                         <td>{{ ticket && ticket.user && ticket.user.browser }}</td>
                                     </tr>
                                     <tr style="line-height: 2rem">
-                                        <td><strong>Operating System</strong></td>
+                                        <td><strong>OS</strong></td>
                                         <td>{{ ticket && ticket.user && ticket.user.os }}</td>
                                     </tr>
                                     <template v-if="ticket && ticket.user && ticket.user.country_code != null">
@@ -224,11 +232,11 @@
 
                                 <div class="ticket-close text-center mt-4">
                                     <template v-if="ticket.status == 'Re-Open'">
-                                        <button @click="updateStatus('Close',ticket.id)" class="btn btn-sm btn-danger">Closed</button>
-                                        </template>
-                                        <template v-else>
-                                        <button @click="updateStatus('Re-Open',ticket.id)" class="btn btn-sm btn-info">Re-Open</button>
-                                        </template>
+                                      <button @click="updateStatus('Close',ticket.id)" class="btn btn-sm btn-danger">Closed</button>
+                                    </template>
+                                    <template v-else>
+                                      <button @click="updateStatus('Re-Open',ticket.id)" class="btn btn-sm btn-info">Re-Open</button>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +275,7 @@
               <div class="row mt-3">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="image" class="required">Image</label>
+                    <label for="image">Image</label>
                     <input type="file" @change="handleImageUploadEdit($event)"  class="form-control" accept=".jpg, .png, .pdf, .docx" id="customFile"/>
                   </div>
                 </div>
@@ -477,6 +485,7 @@ export default {
             toastr.success(res.data.message);
             this.getTicketSubjectViewData();
             $(this.$refs.Comment).summernote('code', '');
+            this.themeShowImage.theme_logo = '';
         })
         .catch((error) => {
           if (

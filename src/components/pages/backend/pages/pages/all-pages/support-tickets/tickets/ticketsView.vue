@@ -137,6 +137,14 @@
                         <input class="form-check-input status" @click="statusChange('Close')" :checked=" viewTicket.status == 'Close' " type="radio" name="status" id="close" value="Close">
                         <label class="form-check-label" for="close">Close</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input status" @click="statusChange('Open')" :checked=" viewTicket.status == 'Open' " type="radio" name="status" id="open" value="Open">
+                        <label class="form-check-label" for="open">Open</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input status" @click="statusChange('Process')" :checked=" viewTicket.status == 'Process' " type="radio" name="status" id="process" value="Process">
+                        <label class="form-check-label" for="process">Process</label>
+                    </div>
                   </div>
                 </div>
                 <div class="text-end mt-3">
@@ -152,7 +160,7 @@
           <div class="card">
             <div class="card-body">
               <div class="support-info">
-                <div class="support-img text-center">
+                <div class="support-img text-center overflow-hidden">
                  <img :src="viewTicket.convart_image" alt="DOPPCAALL">
                 </div>
                 <table class="w-100 mt-3 support-table">
@@ -165,7 +173,7 @@
                       <td>{{ viewTicket && viewTicket.user && viewTicket.user.browser }}</td>
                   </tr>
                   <tr>
-                      <td><strong>Operating System</strong></td>
+                      <td><strong>OS</strong></td>
                       <td>{{ viewTicket && viewTicket.user && viewTicket.user.os }}</td>
                   </tr>
                   <template v-if="viewTicket && viewTicket.user && viewTicket.user.country_code != null">
@@ -243,7 +251,7 @@
               <div class="row mt-3">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="image" class="required">Image</label>
+                    <label for="image">Image</label>
                     <input type="file" @change="handleImageUploadEdit($event)"  class="form-control" accept=".jpg, .png, .pdf, .docx" id="customFile"/>
                   </div>
                 </div>
@@ -524,6 +532,7 @@ export default {
             this.messageCreate.comment = '';
             this.messageCreate.image = '';
             $(this.$refs.CommentReplay).summernote('code','');
+            this.themeShowImage.theme_logo = '';
           })
           .catch((e) => {
             return e;

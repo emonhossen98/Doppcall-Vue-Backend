@@ -28,7 +28,7 @@
                                     <select v-model="invaiteMemberCreate.role_name" id="role_name" class="form-select">
                                         <option value="">Select Role</option>
                                         <option v-for="role in InviteMember.roles" :value="role.id" :key="role.id">
-                                        {{ role.name }}
+                                        {{ role.secondary_name }}
                                         </option>
                                     </select>
                                     <div v-if="validationErrors && validationErrors.role_name" class="text-danger">
@@ -115,6 +115,9 @@ export default {
       },
       InviteMember : "",
       validationErrors : null,
+      bulkactionids : {
+        selectedIds: [],
+      },
     };
   },
   async mounted() { 
@@ -166,18 +169,20 @@ export default {
               }
             
           ],
-          initComplete: () => { // Using an arrow function here
+          initComplete: () => { 
             this.attachEventListeners();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
           },
           columnDefs: [
             {
               targets: 0,
               orderable: false,
               checkboxes: {
-                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
               },
-              render: function () {
-                return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
               },
               searchable: false
             },
@@ -203,7 +208,18 @@ export default {
             }
           },
           buttons: [
-       
+          {
+            text: `
+              <div id="bulk-action-wrapper">
+                <select id="bulk-action-select" class="form-select form-select-sm">
+                  <option value=""> ✓ Bulk Actions</option>
+                  <option value="delete">Bulk Delete</option>
+                </select>
+              </div>
+            `,
+            className: "me-2 p-0 btn-primary d-none",
+            attr: { id: "bulk-action-container" },
+          },
           ],
         });
         this.getLoader = false;
@@ -215,6 +231,100 @@ export default {
           this.getLoader = false;
         });
     },
+
+    attachEventListenersBlulkAction() {
+      $('#invations_table').on('change', '.row-checkbox', (event) => {
+        const id = parseInt(event.target.dataset.id);
+        if (event.target.checked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+        }
+
+        this.toggleBulkActionVisibility();
+      });
+      $('#invations_table thead').on('change', 'input[type="checkbox"]', (event) => {
+        const isChecked = event.target.checked;
+        $('#invations_table tbody .row-checkbox').each((index, checkbox) => {
+          checkbox.checked = isChecked;
+          const id = parseInt(checkbox.dataset.id);
+
+          if (isChecked) {
+            if (!this.bulkactionids.selectedIds.includes(id)) {
+              this.bulkactionids.selectedIds.push(id);
+            }
+          } else {
+            this.bulkactionids.selectedIds = [];
+          }
+        });
+
+        this.toggleBulkActionVisibility();
+      });
+    },
+
+    attachEventListenersBlulkActionSubmit() {
+      $('#bulk-action-select').off().on('change', (e) => {
+        const action = e.target.value;
+        if (!action || this.bulkactionids.selectedIds.length === 0) {
+          return;
+        }
+        
+        if (action === 'delete') {
+          this.bulkDelete();
+        }
+        $('#bulk-action-select').val('');
+      });
+    },
+
+    toggleBulkActionVisibility() {
+      const bulkActionWrapper = $('#bulk-action-container');
+      if (this.bulkactionids.selectedIds.length > 0) {
+        bulkActionWrapper?.removeClass('d-none');
+      } else {
+        bulkActionWrapper?.addClass('d-none');
+      }
+    },
+
+    bulkDelete() {
+      Swal.fire({
+        text: 'Are Sure Delete',
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          (this.getLoader = true),
+            axios
+              .post(
+                this.globalVariables.apiUrl + "admin/invitations/bulk/delete",
+                this.bulkactionids,
+                {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.data.status == "success") {
+                  toastr.success(res.data.message);
+                  this.getInviteMemberData();
+                } else {
+                  toastr.error(res.data.message);
+                }
+              })
+              .catch((e) => {
+                return e;
+              })
+              .finally(() => {
+                this.getLoader = false;
+              });
+        }
+      });
+    },
+
     attachEventListeners() {
       $("#invations_table").on("click", ".invaite-delete-btn", (event) => {
         const target = $(event.target);
@@ -250,6 +360,7 @@ export default {
         });
       });
     },
+
     invaiteMemberSave() {
       this.getLoader = true;
       axios
