@@ -20,10 +20,11 @@
                             <thead>
                             <tr>
                               <!-- <th></th> -->
-                              <th></th> <th>SL</th> 
+                              <!-- <th></th>  -->
+                              <th>SL</th> 
                               <th>To</th>
                               <th>Subject</th>
-                              <th class="text-center">Action</th>
+                              <th class="text-center" id="action-incompleted">Action</th>
                               <!-- <th>Body</th> -->
                             </tr>
                             </thead>
@@ -193,7 +194,7 @@ export default {
               data: data,
               columns: [
                 // { data: 'id' },
-                 { data: 'id' },
+                //  { data: 'id' },
                  { data: 'id' },
                  { data: 'user' },
                  { data: 'subject' },
@@ -226,22 +227,22 @@ export default {
               createdRow: function (row, data, dataIndex) {
                 const perPage = 10; 
                 const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
-                $('td:eq(1)', row).html(rowNumber);
+                $('td:eq(0)', row).html(rowNumber);
               },
-              columnDefs: [
-                {
-                  targets: 0,
-                  orderable: false,
-                  checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
-                  },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
-                  },
-                  searchable: false
-                },
-              ],
-              order: [[1, 'desc']],
+              // columnDefs: [
+              //   {
+              //     targets: 0,
+              //     orderable: false,
+              //     checkboxes: {
+              //       selectAllRender: '<input type="checkbox" class="form-check-input">'
+              //     },
+              //     render: function () {
+              //       return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+              //     },
+              //     searchable: false
+              //   },
+              // ],
+              order: [[0, 'desc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4 px-0"f>' + 
                 '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
