@@ -5,18 +5,18 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <div class="col-md-8 col-12 mx-auto">
+            <div class="col-md-12 col-12 mx-auto">
                 <div class="card">
                     <div class="card-header py-2">
                     <h5 class="card-title d-flex align-items-center justify-content-between mt-3">
                     Payment History
 
-                    <button v-if="showModelInRole == 3" title="Payment" class="btn btn-primary payment-btn btn-sm" data-bs-toggle="modal"  data-bs-target="#depositeModal"> Add Payment </button>
+                    <button v-if="showModelInRole == 3" title="Payment" class="btn btn-primary payment-btn btn-sm" data-bs-toggle="modal"  data-bs-target="#depositeModal"><i class="fa-solid fa-plus me-2"></i> Add Payment </button>
 
-                    <button v-if="showModelInRole == 2" title="Payment" class="btn btn-primary payment-btn btn-sm" data-bs-toggle="modal"  data-bs-target="#addPaymentModalAdvertisher"> Add Payment </button>
+                    <button v-if="showModelInRole == 2" title="Payment" class="btn btn-primary payment-btn btn-sm" data-bs-toggle="modal"  data-bs-target="#addPaymentModalAdvertisher"><i class="fa-solid fa-plus me-2"></i> Add Payment </button>
 
                     </h5>
                 </div>

@@ -5,10 +5,10 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <div class="col-12 col-md-8 mx-auto">
+            <div class="col-12 col-md-12 mx-auto">
             <div class="card">
                 <div class="card-header py-3">
                     <h5 class="card-title mb-0">Balance Limit</h5>

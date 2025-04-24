@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="breadcrumbs && breadcrumbs.length > 0"
-    class="breadcrumb-header example align-items-center justify-content-between p-3 bg-white shadow-sm  d-block"
+    class="breadcrumb-header example align-items-center justify-content-between p-3 bg-white shadow-sm  d-block rounded-2"
   >
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb mb-0">

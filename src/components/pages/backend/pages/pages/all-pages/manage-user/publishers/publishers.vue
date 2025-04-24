@@ -5,7 +5,7 @@
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
       <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
       <div class="row mt-4">
         <div class="col-12">
@@ -64,7 +64,7 @@
                     <th>Balance</th>
                     <th>Manager</th>
                     <th>Status</th>
-                    <th class="text-center" style="width: 35%;">Action</th>
+                    <th class="text-center" style="width: 50%;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -406,6 +406,7 @@ export default {
               },
               searchable: false
             },
+            { targets: 9, orderable: false, className: 'dt-center' }
           ],
           order: [[1, 'asc']],
           dom: '<"row mx-2"' +

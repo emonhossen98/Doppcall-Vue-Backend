@@ -5,7 +5,7 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
             <div class="col-12">
@@ -23,7 +23,7 @@
                               <th></th> <th>SL</th> 
                               <th>To</th>
                               <th>Subject</th>
-                              <th>Action</th>
+                              <th class="text-center">Action</th>
                               <!-- <th>Body</th> -->
                             </tr>
                             </thead>
@@ -201,7 +201,7 @@ export default {
                 {
                  data : "updated_at",
                  render: function (data, type, row) {
-                  return '<button data-id="'+row.id+'" title="View"  data-bs-toggle="modal" data-bs-target="#emailLogsContent" id="content-view" class="industial_contact_view text-info border-0"><i id="content-view" class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button>'
+                  return '<div class="text-center"><button data-id="'+row.id+'" title="View"  data-bs-toggle="modal" data-bs-target="#emailLogsContent" id="content-view" class="industial_contact_view text-info border-0"><i id="content-view" class="fas fa-eye fa-sm" data-id="'+row.id+'"></i></button></div>'
                  }
               }
                 

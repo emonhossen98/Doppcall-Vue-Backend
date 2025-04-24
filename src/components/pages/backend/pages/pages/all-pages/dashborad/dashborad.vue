@@ -2,7 +2,7 @@
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
-    <div class="container-xxl flex-grow-1">
+    <div class="container-fluid flex-grow-1">
       <!-- row -->
       <div class="row row-sm mt-4 admin-dashboard">
         <div class="col-md-6 mb-4">

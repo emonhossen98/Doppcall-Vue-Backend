@@ -1,13 +1,13 @@
-  <template>
+<template>
   <div v-if="getLoader">
     <Loader></Loader>
   </div>
   <!-- Content wrapper -->
-  <div class="content-wrapper" id="admin_campaings">
+  <div class="content-wrapper">
     <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
       <div class="row g-4 mb-4">
-        <div class="col-sm-6 col-xl-3 ps-lg-0">
+        <div class="col-sm-6 col-xl-3">
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between">
@@ -151,8 +151,8 @@
         </div>
       </div>
       <div class="row mt-4">
-        <!-- Offer List Table -->
-        <div class="card px-0">
+        <div class="col-12">
+          <div class="card px-0">
           <div class="card-header border-bottom">
             <!-- <template v-if="!getSkeletonLoader">
               <SkeletonShape
@@ -279,6 +279,7 @@
               </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
     <!-- / Content -->
@@ -286,7 +287,6 @@
   </div>
   <!-- Content wrapper -->
 </template>
-
 <script>
 import axios from "axios";
 import toastr from "toastr";
@@ -1214,10 +1214,13 @@ export default {
 
 <style>
 #offer_datatables td {
-  white-space: nowrap; /* Prevents wrapping */
-  overflow: hidden; /* Hides overflow */
-  text-overflow: ellipsis; /* Adds "..." for overflow */
-  max-width: 100px; /* Set max width for cell */
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  max-width: 100px; 
+}
+#offer_datatables td:last-child {
+  max-width: 250px !important; 
 }
 .action-btn {
   width: 25px;

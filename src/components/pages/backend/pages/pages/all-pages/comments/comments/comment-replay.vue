@@ -5,10 +5,10 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <div class="col-sm-8" style="margin: 0 auto">
+            <div class="col-sm-12" style="margin: 0 auto">
             <div class="card">
                 <div class="card-header py-2">
                     <h5 class="card-title d-flex justify-content-between align-items-center mb-0">Reply Edit 

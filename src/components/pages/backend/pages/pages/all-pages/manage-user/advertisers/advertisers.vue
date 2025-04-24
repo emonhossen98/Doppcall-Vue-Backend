@@ -5,7 +5,7 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
             <div class="col-12">
@@ -409,7 +409,7 @@ export default {
               },
               searchable: false
             },
-           
+            { targets: 9, orderable: false, className: 'dt-center' }
           ],
           order: [[1, 'asc']],
           dom: '<"row mx-2"' +
@@ -864,10 +864,10 @@ export default {
 	width: 14%;
 }
 #advertiser_datatables td {
-  white-space: nowrap; /* Prevents wrapping */
-  overflow: hidden; /* Hides overflow */
-  text-overflow: ellipsis; /* Adds "..." for overflow */
-  max-width: 100px !important; /* Set max width for cell */
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  max-width: 100px; 
 }
 #advertiser_datatables {
   min-height: 500px;

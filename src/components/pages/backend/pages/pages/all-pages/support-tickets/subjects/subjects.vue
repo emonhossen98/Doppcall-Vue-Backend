@@ -5,7 +5,7 @@
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
       <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
       <div class="row mt-4">
         <div class="col-12">
@@ -106,7 +106,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel1">Edit offer Type</h5>
+            <h5 class="modal-title" id="exampleModalLabel1">Edit Ticket Subject</h5>
             <button
               type="button"
               class="btn-close"

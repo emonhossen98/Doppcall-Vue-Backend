@@ -5,10 +5,10 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <div class="col-md-8 mx-auto">
+            <div class="col-md-12 mx-auto">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title mb-0 mt-2">New Find Us Create</h5>

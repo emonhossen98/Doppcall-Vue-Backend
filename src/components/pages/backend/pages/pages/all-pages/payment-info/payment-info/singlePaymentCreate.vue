@@ -5,10 +5,10 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4 d-flex justify-content-center">
-          <div class="col-md-9">
+          <div class="col-md-12">
             <form class="justify-content-center">
               <div class="card padding-standart3 p-5">
                 <div class="row form-group mt-3">

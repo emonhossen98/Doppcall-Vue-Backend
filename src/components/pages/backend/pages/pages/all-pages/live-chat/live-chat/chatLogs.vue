@@ -4,7 +4,7 @@
   </div>
   <!-- Content wrapper -->
   <div class="content-wrapper">
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
       <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
       <div class="row mt-4">
         <div class="col-12">

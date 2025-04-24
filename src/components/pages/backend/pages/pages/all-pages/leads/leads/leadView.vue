@@ -5,10 +5,10 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <div class="col-md-8 mx-auto">
+            <div class="col-md-12 mx-auto">
             <div class="card">
                 <div class="card-body">
                    <div class="row">
@@ -20,54 +20,54 @@
                                 <table class="table table-hover mb-0 text-md-nowrap mt-4">
                                     <tbody>
                                             <tr v-if="IndexLeads.company_name">
-                                                <th style="width: 20%">Company Name</th>
-                                                <th style="width: 5%">:</th>
-                                                <td>{{ IndexLeads.company_name }}</td>
+                                                <th style="width: 30%">Company Name</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.company_name }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.first_name">
-                                                <th style="width: 20%">Full Name</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.first_name ?? ''  }} {{ IndexLeads.last_name ?? ''}}</td>
+                                                <th style="width: 30%">Full Name</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.first_name ?? ''  }} {{ IndexLeads.last_name ?? ''}}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.email">
-                                                <th style="width: 20%">Email</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.email }}</td>
+                                                <th style="width: 30%">Email</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.email }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.phone">
-                                                <th style="width: 20%">Phone</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.phone }}</td>
+                                                <th style="width: 30%">Phone</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.phone }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.website">
-                                                <th style="width: 20%">Website</th>
-                                                <th style="width: 2%">:</th>
-                                                <td><a :href="IndexLeads.website" target="_blank">{{ IndexLeads.website }}</a></td>
+                                                <th style="width: 30%">Website</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end"><a :href="IndexLeads.website" target="_blank">{{ IndexLeads.website }}</a></td>
                                             </tr> 
                                             <tr v-if="IndexLeads.country">
-                                                <th style="width: 20%">Country</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.country }}</td>
+                                                <th style="width: 30%">Country</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.country }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.buy_call">
-                                                <th style="width: 20%">Buy Call</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.buy_call }}</td>
+                                                <th style="width: 30%">Buy Call</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.buy_call }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.vertical_calls">
-                                                <th style="width: 20%">Vertical Calls</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.vertical_calls }}</td>
+                                                <th style="width: 30%">Vertical Calls</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.vertical_calls }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.get_calls">
-                                                <th style="width: 20%">Get Calls</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{ IndexLeads.get_calls }}</td>
+                                                <th style="width: 30%">Get Calls</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{ IndexLeads.get_calls }}</td>
                                             </tr> 
                                             <tr v-if="IndexLeads.created_at">
-                                                <th style="width: 20%">Created At</th>
-                                                <th style="width: 2%">:</th>
-                                                <td>{{IndexLeads.created_at }}</td>
+                                                <th style="width: 30%">Created At</th>
+                                                <th style="width: 30%">:</th>
+                                                <td style="width: 40%" class="text-end">{{IndexLeads.created_at }}</td>
                                             </tr> 
                                     </tbody>
                                 </table>

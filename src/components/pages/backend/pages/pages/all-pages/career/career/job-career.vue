@@ -6,7 +6,7 @@
   <div class="content-wrapper">
     <!-- {{ jobcareers }} -->
     <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-fluid flex-grow-1 container-p-y">
       <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
       <div class="row mt-4">
         <div class="col-md-12 mb-sm-0 mb-3">
