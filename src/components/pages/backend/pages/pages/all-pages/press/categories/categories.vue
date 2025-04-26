@@ -68,6 +68,10 @@
           { label: "Categories", url: "" },
         ],
         getLoader: false,
+        bulkactionids : {
+          selectedIds: [],
+          status : "",
+        },
       };
     },
     async mounted() { 
@@ -142,25 +146,28 @@
               initComplete: () => { 
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
+
+                this.attachEventListenersBlulkAction();
+               this.attachEventListenersBlulkActionSubmit();
               },
               createdRow: function (row, data, dataIndex) {
-                  $('td:eq(0)', row).html(dataIndex + 1);
+                  $('td:eq(1)', row).html(dataIndex + 1);
               },
               columnDefs: [
                 {
                   targets: 0,
                   orderable: false,
                   checkboxes: {
-                    selectAllRender: '<input type="checkbox" class="form-check-input">'
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                   },
-                  render: function () {
-                    return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                   },
                   searchable: false
                   
                 },
               ],
-              order: [[2, 'desc']],
+              order: [[1, 'desc']],
               dom: '<"row mx-2"' +
                 '<"col-md-4 px-0"f>' + 
                 '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
@@ -181,6 +188,20 @@
                 }
               },
               buttons: [
+              {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                        <option value="0">Bulk Pending</option>
+                        <option value="1">Bulk Publish</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
                 {
                   text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Create</span>',
                   className: 'create-new btn btn-primary',
@@ -196,7 +217,148 @@
             this.getLoader = false;
           });
       },
-  
+  attachEventListenersBlulkAction() {
+    $('#press_categiories_datatables').on('change', '.row-checkbox', (event) => {
+      const id = parseInt(event.target.dataset.id);
+
+      if (event.target.checked) {
+        if (!this.bulkactionids.selectedIds.includes(id)) {
+          this.bulkactionids.selectedIds.push(id);
+        }
+      } else {
+        this.bulkactionids.selectedIds = this.bulkactionids.selectedIds.filter(item => item !== id);
+      }
+
+      this.toggleBulkActionVisibility();
+    });
+    $('#press_categiories_datatables thead').on('change', 'input[type="checkbox"]', (event) => {
+      const isChecked = event.target.checked;
+      $('#press_categiories_datatables tbody .row-checkbox').each((index, checkbox) => {
+        checkbox.checked = isChecked;
+        const id = parseInt(checkbox.dataset.id);
+
+        if (isChecked) {
+          if (!this.bulkactionids.selectedIds.includes(id)) {
+            this.bulkactionids.selectedIds.push(id);
+          }
+        } else {
+          this.bulkactionids.selectedIds = [];
+        }
+      });
+
+      this.toggleBulkActionVisibility();
+    });
+  },
+
+  attachEventListenersBlulkActionSubmit() {
+    $('#bulk-action-select').off().on('change', (e) => {
+      const action = e.target.value;
+      if (!action || this.bulkactionids.selectedIds.length === 0) {
+        return;
+      }
+      
+      if (action === 'delete') {
+        this.bulkDelete();
+      } else {
+        if (action === "1") {
+          this.bulkactionids.status = '1';
+          const alertTitle = "Press Category Want to Publish";
+          this.bulkStatusChange(alertTitle);
+        }else{
+          this.bulkactionids.status = '0';
+          const alertTitle = "Press Category Want to Pending";
+          this.bulkStatusChange(alertTitle);
+        }
+      }
+      $('#bulk-action-select').val('');
+    });
+  },
+
+  toggleBulkActionVisibility() {
+    const bulkActionWrapper = $('#bulk-action-container');
+    if (this.bulkactionids.selectedIds.length > 0) {
+      bulkActionWrapper?.removeClass('d-none');
+    } else {
+      bulkActionWrapper?.addClass('d-none');
+    }
+  },
+
+  bulkDelete() {
+    Swal.fire({
+      text: 'Are Sure Delete',
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.value) {
+        (this.getLoader = true),
+          axios
+            .post(
+              this.globalVariables.apiUrl + "admin/pressCategories/bulk/delete",
+              this.bulkactionids,
+              {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              }
+            )
+            .then((res) => {
+              if (res.data.status == "success") {
+                toastr.success(res.data.message);
+                this.categoriesData();
+              } else {
+                toastr.error(res.data.message);
+              }
+            })
+            .catch((e) => {
+              return e;
+            })
+            .finally(() => {
+              this.getLoader = false;
+            });
+      }
+    });
+  },
+
+  bulkStatusChange(alertTitle) {
+    Swal.fire({
+      text: alertTitle,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.value) {
+        (this.getLoader = true),
+          axios
+            .post(
+              this.globalVariables.apiUrl + "admin/pressCategories/bulk/status",
+              this.bulkactionids,
+              {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+              }
+            )
+            .then((res) => {
+              if (res.data.status == "success") {
+                toastr.success(res.data.message);
+                this.categoriesData();
+                this.bulkactionids.selectedIds = [];
+              } else {
+                toastr.error(res.data.message);
+              }
+            })
+            .catch((e) => {
+              return e;
+            })
+            .finally(() => {
+              this.getLoader = false;
+            });
+      }
+    });
+  },
   
       attachEventListeners() {
         $('#press_categiories_datatables').on('click', '.type-datatables-action', (event) => {

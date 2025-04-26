@@ -96,26 +96,21 @@
                       </span>
                     </td>
                     <td>
-                      <div v-if="isAdminPaymentHistory" class="dropdown">
-                        <button class="btn border-0 bg-transparent"  type="button"  id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="fa-solid fa-ellipsis-vertical"></i>
-                        </button>
-                        <div class="dropdown-menu tx-13">
-                          <button  @click="withdrawPayments(value.user_id)" data-bs-toggle="modal"  data-bs-target="#depositeModal"  class="dropdown-item align-items-center" data-placement="top" title="Withdraw Payment">
-                              <i class="fas fa-shopping-basket fa-sm text-warning"></i> Withdraw
+                      <div v-if="isAdminPaymentHistory" class="d-flex align-items-center tx-13">
+                          <button  @click="withdrawPayments(value.user_id)" data-bs-toggle="modal" data-bs-target="#depositeModal"  class="align-items-center bg-transparent border-0" data-placement="top" title="Withdraw Payment">
+                              <i class="fas fa-shopping-basket fa-sm text-info me-2"></i> 
                             </button>
 
-                          <RouterLink :to="'/admin-pay-details/' + value.id"  data-placement="top" title="View"  target="_blank" class="dropdown-item align-items-center">
-                              <i class="fas fa-eye text-primary"></i> View</RouterLink >
+                          <RouterLink :to="'/admin-pay-details/' + value.id"  data-placement="top" title="View"  target="_blank" class="align-items-center">
+                              <i class="fas fa-eye text-primary me-2"></i></RouterLink >
 
-                          <button v-if="value.status === 'Paid'" @click="changePaymentStatus(value.id, 'Pending')" class="dropdown-item align-items-center" data-placement="top" title="Payment Status (Pending)"
-                          > <i class="fas fa-times fa-sm text-danger"></i> Pending</button>
+                          <button v-if="value.status === 'Paid'" @click="changePaymentStatus(value.id, 'Pending')" class="align-items-center bg-transparent border-0" data-placement="top" title="Payment Status (Pending)"
+                          > <i class="fa-solid fa-hourglass-half me-2 text-warning"></i></button>
 
-                          <button  v-else @click="changePaymentStatus(value.id, 'Paid')" class="dropdown-item align-items-center" data-placement="top" title="Payment Status (Paid)" >
-                            <i class="fas fa-check fa-sm text-success"></i> Paid
+                          <button  v-else @click="changePaymentStatus(value.id, 'Paid')" class="align-items-center" data-placement="top" title="Payment Status (Paid)" >
+                            <i class="fas fa-check fa-sm text-success"></i>
                           </button>
                         </div>
-                      </div>
                       <a v-else-if="isPublisherPaymentHistory" :href="'publisher/payment-history/details/' + value.id" target="_blank" class="rounded-circle btn-style-info align-items-center" >
                         <i class="fas fa-eye"></i>
                       </a>

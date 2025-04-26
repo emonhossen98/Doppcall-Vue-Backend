@@ -129,7 +129,7 @@ export default {
         category_icon: "",
         meta_title: "",
         meta_description: "",
-        status: "",
+        status: "1",
       },
       validationErrors: null,
     };
