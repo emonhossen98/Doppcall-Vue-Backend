@@ -6,7 +6,7 @@
   <!-- Content wrapper -->
   <div class="content-wrapper">
     <!-- Content -->
-    <div class="container-xxl flex-grow-1 container-p-y"> 
+    <div class="container-fluid flex-grow-1 container-p-y"> 
       <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
       <div class="row mt-4">
         <div id="save-change-form">
@@ -70,7 +70,11 @@
 
                   <div class="form-group mb-3">
                     <label for="rules" class="mb-1">Rules</label>
-                    <textarea v-model="offersCreate.rules" ref="summernoteRules" required id="rules"></textarea>
+                    <Editor api-key="jal9cu31r6q4w7fvp4i1fldbggmn9ai0egqalbhez8afsa86"  :init="editorConfig" v-model="offersCreate.rules"/>
+                      <div v-if="validationErrors && validationErrors.rules" class="text-danger">
+                          {{ validationErrors.rules[0] }}
+                      </div>
+                    <!-- <textarea v-model="offersCreate.rules" ref="summernoteRules" required id="rules"></textarea> -->
                   </div>
 
                   <div class="form-group mb-3">
@@ -84,7 +88,12 @@
                     <template v-if="showTranffic">
                       <div id="textareaContainer">
                         <label for="trafics" class="mb-2">Traffics</label>
-                        <textarea ref="summernoteTrafics" v-model="offersCreate.trafics"  required id="trafics" class="form-control"></textarea>
+                        <Editor api-key="jal9cu31r6q4w7fvp4i1fldbggmn9ai0egqalbhez8afsa86"  :init="editorConfigTrafic" v-model="offersCreate.trafics"/>
+                        <div v-if="validationErrors && validationErrors.rules" class="text-danger">
+                            {{ validationErrors.rules[0] }}
+                        </div>
+
+                        <!-- <textarea ref="summernoteTrafics" v-model="offersCreate.trafics"  required id="trafics" class="form-control"></textarea> -->
                       </div>
                     </template>
                   </div>
@@ -99,7 +108,11 @@
                     </label> Description
                     <div v-if="showDescription" id="textareadescription">
                       <label for="description" class="mb-2">Description</label>
-                    <textarea ref="summernoteDescription"  v-model="offersCreate.description" required id="description" class="form-control"></textarea>
+                      <Editor api-key="jal9cu31r6q4w7fvp4i1fldbggmn9ai0egqalbhez8afsa86"  :init="editorConfigDescription" v-model="offersCreate.description"/>
+                      <div v-if="validationErrors && validationErrors.rules" class="text-danger">
+                          {{ validationErrors.rules[0] }}
+                      </div>
+                    <!-- <textarea ref="summernoteDescription"  v-model="offersCreate.description" required id="description" class="form-control"></textarea> -->
                     </div>
                   </div>
 
@@ -113,7 +126,11 @@
                     </label>Important Rules
                     <div v-if="showImportant" id="textarearules">
                       <label for="important_rules" class="mb-2">Important Rules</label>
-                      <textarea  ref="summernoteImportant" v-model="offersCreate.important_rules" required id="important_rules" class="form-control"></textarea>
+                      <Editor api-key="jal9cu31r6q4w7fvp4i1fldbggmn9ai0egqalbhez8afsa86"  :init="editorConfigImportantRules" v-model="offersCreate.important_rules"/>
+                      <div v-if="validationErrors && validationErrors.rules" class="text-danger">
+                          {{ validationErrors.rules[0] }}
+                      </div>
+                      <!-- <textarea  ref="summernoteImportant" v-model="offersCreate.important_rules" required id="important_rules" class="form-control"></textarea> -->
                     </div>
                   </div>
 
@@ -132,11 +149,11 @@
                                 <label class="form-label required" for="">Attachment</label>
                             </td>
                           </tr>
-                          <tr  v-for="(row, index) in rows" :key="index">
+                          <tr v-for="(row, index) in rows" :key="index" class="mb-3">
                             <td>
-                              <input v-model="row.selectedQuestion" @focus="showQuestionList(row)" type="text" class="form-control" placeholder="Question?" />
+                              <input v-model="row.selectedQuestion" @click="showQuestionList(row)" type="text" class="form-control" placeholder="Question?" />
                               <ul class="quslist" v-show="row.showList">
-                                <li v-for="question in questionList"@click="selectQuestion(row, question)">
+                                <li v-for="question in questionList" @click="selectQuestion(row, question)">
                                   {{ question }}
                                 </li>
                               </ul>
@@ -148,9 +165,12 @@
                               <input type="checkbox" v-model="row.fileRequired" class="custom_selectBox" placeholder="Required Col?" />
                             </td>
                             <td>
-                              <button type="button" class="bg-danger border-0 rounded py-1 px-2 text-white" v-if="index != 0" @click="deleteRow(index)"><i class="fas fa-trash-alt"></i></button>
+                              <button type="button" class="bg-danger border-0 rounded py-1 px-2 text-white" v-if="index != 0" @click="deleteRow(index)">
+                                <i class="fas fa-trash-alt"></i>
+                              </button>
                             </td>
                           </tr>
+
                         </thead>
                         <tbody class="new_field">
                         </tbody>
@@ -263,9 +283,9 @@
                   </select>
                   </div>
 
-                  <div class="form-group mb-3 d-flex align-items-center ">
-                    <label for="featured" class=" ">Featured</label>
-                    <input type="checkbox" v-model="offersCreate.featured"  style="width: 20px;" name="featured" checked class="custom_selectBox ms-2" value="1">
+                  <div class="form-check form-switch">
+                      <input  v-model="offersCreate.featured" :true-value="1" :false-value="0" type="checkbox" id="featured" class="form-check-input">
+                    <label for="featured" class="form-check-label mb-1">Featured</label>
                   </div>
                   <div class="form-group mb-3 text-right mt-2">
                     <button type="button" @click="offersSave()" class="btn btn-sm btn-primary save_btn py-2">
@@ -294,6 +314,7 @@ import "toastr/build/toastr.min.css";
 import PrimaryCountry from '../../../../../include/Primary_country.vue'
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import Editor from '@tinymce/tinymce-vue';
 
 export default {
   setup() {
@@ -305,33 +326,139 @@ export default {
     Loader,
     Breadcrumb,
     PrimaryCountry,
+    Editor ,
   },
   data() {
     return {
+      editorConfig: {
+        referrer_policy: "origin",
+        height: 270,
+        menubar: true,
+        plugins: 'lists link image table code help wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: (cb, value, meta) => {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+
+          input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              const id = 'blobid' + (new Date()).getTime();
+              const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+              const base64 = reader.result.split(',')[1];
+              const blobInfo = blobCache.create(id, file, base64);
+              blobCache.add(blobInfo);
+              cb(blobInfo.blobUri(), { title: file.name });
+            });
+            reader.readAsDataURL(file);
+          });
+          input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      },
+      editorConfigTrafic: {
+        referrer_policy: "origin",
+        height: 270,
+        menubar: true,
+        plugins: 'lists link image table code help wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: (cb, value, meta) => {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+
+          input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              const id = 'blobid' + (new Date()).getTime();
+              const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+              const base64 = reader.result.split(',')[1];
+              const blobInfo = blobCache.create(id, file, base64);
+              blobCache.add(blobInfo);
+              cb(blobInfo.blobUri(), { title: file.name });
+            });
+            reader.readAsDataURL(file);
+          });
+          input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      },
+      editorConfigDescription: {
+        referrer_policy: "origin",
+        height: 270,
+        menubar: true,
+        plugins: 'lists link image table code help wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: (cb, value, meta) => {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+
+          input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              const id = 'blobid' + (new Date()).getTime();
+              const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+              const base64 = reader.result.split(',')[1];
+              const blobInfo = blobCache.create(id, file, base64);
+              blobCache.add(blobInfo);
+              cb(blobInfo.blobUri(), { title: file.name });
+            });
+            reader.readAsDataURL(file);
+          });
+          input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      },
+      editorConfigImportantRules: {
+        referrer_policy: "origin",
+        height: 270,
+        menubar: true,
+        plugins: 'lists link image table code help wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: (cb, value, meta) => {
+          const input = document.createElement('input');
+          input.setAttribute('type', 'file');
+          input.setAttribute('accept', 'image/*');
+
+          input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              const id = 'blobid' + (new Date()).getTime();
+              const blobCache = tinymce.activeEditor.editorUpload.blobCache;
+              const base64 = reader.result.split(',')[1];
+              const blobInfo = blobCache.create(id, file, base64);
+              blobCache.add(blobInfo);
+              cb(blobInfo.blobUri(), { title: file.name });
+            });
+            reader.readAsDataURL(file);
+          });
+          input.click();
+        },
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+      },
       showTranffic : false,
       select2Instance: [],
       selectedQuestion: '',
       rows: [{ question: '', required: false, fileRequired: false }], 
-      questionList: [
-        "Are you using any of the following methods to generate calls?",
-        "Are you currently selling this vertical calls to any other networks or buyers?",
-        "Do you buy data from third party or use your O&O generated leads?",
-        "Are your leads TCPA opt-in?",
-        "Data Source URL:",
-        "Do you have Jornaya for each lead?",
-        "Do you have O&O websites to generate leads?",
-        "Do you have TrustedForms for each lead?",
-        "How many calls you can send daily to this specific campaign?",
-        "If you engage in sending fraudulent calls or instruct customers to provide false information simply to exceed the threshold, you will not receive payment. Is this clear to you?",
-        "If you make repeated calls to a customer, there is a risk of receiving legal complaints. Can you please ensure a double verification of the call before proceeding with the transfer?",
-        "Landing Page URL:",
-        "Share Personal LinkedIn Profile URL (Not Company Page):",
-        "Upload A Few Pre-qualify call recordings",
-        "Upload A Few Sample Ads Snapshot",
-        "What is your average call duration for this vertical?",
-        "Where is your call center located?",
-        "Which traffic source do you use to generate calls?"
-      ],
+      questionList: [],
       showDescription : false,
       showImportant : false,
       tags: [],
@@ -377,42 +504,7 @@ export default {
       try {
         const { role, isAuthorized } = await fetchUserRole();
         if (role == 'Super' || role == 'Admin') {
-          $(this.$refs.summernoteImportant).summernote({
-          placeholder: 'Type your text here...',
-          height: 100,
-          callbacks: {
-            onChange: contents => {
-            this.offersCreate.important_rules = contents;
-            }
-          }
-        });
-        $(this.$refs.summernoteDescription).summernote({
-          placeholder: 'Type your text here...',
-          height: 100,
-          callbacks: {
-            onChange: contents => {
-            this.offersCreate.description = contents;
-            }
-          }
-        });
-        $(this.$refs.summernoteTrafics).summernote({
-          placeholder: 'Type your text here...',
-          height: 100,
-          callbacks: {
-            onChange: contents => {
-            this.offersCreate.trafics = contents;
-            }
-          }
-        });
-        $(this.$refs.summernoteRules).summernote({
-          placeholder: 'Type your text here...',
-          height: 100,
-          callbacks: {
-            onChange: contents => {
-            this.offersCreate.rules = contents;
-            }
-          }
-        });
+          this.getAllQuestions();
         document.addEventListener('click', this.hideQuestionList);
         const vm = this;
         $(this.$refs.select2).select2({
@@ -439,6 +531,21 @@ export default {
   }
 },
   methods: {
+    getAllQuestions(){
+      axios
+          .get(this.globalVariables.apiUrl + "admin/offer-question/offer-create", {
+            headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          })
+          .then((res) => {
+            this.questionList = res.data.data;
+          })
+          .catch((e) => {
+            return e;
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+    },
     offersSave() {
           this.getLoader = true;
           var allTags                    = this.tags.join(",");
@@ -471,21 +578,17 @@ export default {
         });
     },
     showQuestionList(row) {
-      if (row.selectedQuestion !== '') {
-        row.showList = true;
-      } else {
-        row.showList = false;
-      }
+      row.showList = !row.showList;
     },
     selectQuestion(row, question) {
-      row.selectedQuestion = question; 
-      row.showList = false; 
+      row.selectedQuestion = question;
+      row.showList = false;
     },
     addRow() {
-      this.rows.push({ question: '', required: false, fileRequired: false }); // Add a new row object
+      this.rows.push({ selectedQuestion: '', required: false, fileRequired: false, showList: false });
     },
     deleteRow(index) {
-      this.rows.splice(index, 1); // Remove the row at the given index
+      this.rows.splice(index, 1); 
     },
     hideQuestionList(event) {
       if (!event.target.classList.contains('quslist') && !event.target.closest('.quslist') && event.target.type !== 'text') {
@@ -517,51 +620,12 @@ export default {
     },
     toggleShowTraffic() {
       this.showTranffic = !this.showTranffic;
-      if(this.showTranffic == true){
-        setTimeout(() => {
-          $(this.$refs.summernoteTrafics).summernote({
-            placeholder: 'Type your text here...',
-            height: 100,
-            callbacks: {
-              onChange: contents => {
-              this.offersCreate.trafics = contents;
-              }
-            }
-          });
-        }, 20);
-      }
     },
     showDescriptionText(){
      this.showDescription = !this.showDescription;
-     if(this.showDescription == true){
-        setTimeout(() => {
-          $(this.$refs.summernoteDescription).summernote({
-            placeholder: 'Type your text here...',
-            height: 100,
-            callbacks: {
-              onChange: contents => {
-              this.offersCreate.description = contents;
-              }
-            }
-          });
-        }, 20);
-      }
     },
     showImportantText(){
      this.showImportant = !this.showImportant;
-     if(this.showImportant == true){
-        setTimeout(() => {
-          $(this.$refs.summernoteImportant).summernote({
-          placeholder: 'Type your text here...',
-          height: 100,
-          callbacks: {
-            onChange: contents => {
-            this.offersCreate.important_rules = contents;
-            }
-          }
-        });
-        }, 20);
-      }
     },
   },
 };

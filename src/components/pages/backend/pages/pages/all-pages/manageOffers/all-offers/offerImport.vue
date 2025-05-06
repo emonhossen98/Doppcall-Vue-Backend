@@ -7,12 +7,12 @@
     <div class="content-wrapper">
       <!-- Content -->
       <!-- {{ OfferCreate }} -->
-      <div class="container-xxl flex-grow-1 container-p-y"> 
+      <div class="container-fluid flex-grow-1 container-p-y"> 
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
                 <form>
                     <div class="row justify-content-center">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="card">
                                 <div class="custom-card-header border-bottom px-4 pb-2 pt-3">
                                     <h5 class="card-title mb-0">Import Offer</h5>

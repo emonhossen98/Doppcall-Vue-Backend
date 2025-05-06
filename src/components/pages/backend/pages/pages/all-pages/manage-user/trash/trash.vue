@@ -21,11 +21,15 @@
                   <tr>
                     <!-- <th></th> -->
                     <th></th>
-                    <th>SL</th>
+                    <th>User Type</th>
                     <th>First Name</th>
                     <th>Email</th>
-                    <th>Deleted at</th>
-                    <th>Action</th>
+                    <th>Country</th>
+                    <th>Deleted By</th>
+                    <th>Reason for Deletion</th> 
+                    <th>Original Created Date</th>
+                    <th>Deleted Time</th>
+                    <th id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -88,6 +92,14 @@ export default {
     } catch (error) {
       console.error("Error fetching user role:", error);
     }
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('a[data-vue-route]');
+      if (target) {
+        e.preventDefault();
+        const route = target.getAttribute('href');
+        this.$router.push(route);
+      }
+    }, true);
   },
   methods: {
     getUserTrashs() {
@@ -106,9 +118,88 @@ export default {
           columns: [
             // { data: 'id' },
             { data: 'id' },
-            { data: 'id' },
-            { data: "fname" },
+            {
+              data: "role_id",
+              render: function (data, type, row) {
+                console.log(row)
+                if(row.role_id == 1){
+                  return '<span class="badge bg-success">Super Administrator</span>';
+                }else if(row.role_id == 2){
+                  return '<span class="badge bg-warning">Advertiser</span>';
+                }else if(row.role_id == 3){
+                  return '<span class="badge bg-primary">Publisher</span>';
+                }else if(row.role_id == 4){
+                  return '<span class="badge bg-info">Account Manager</span>';
+                }else if(row.role_id == 5){
+                  return '<span class="badge bg-success">System Administrator</span>';
+                }else if(row.role_id == 6){
+                  return '<span class="badge bg-info">Support Representative (Live Chat)</span>';
+                }else{
+                  return '<span class="badge bg-secondary">Author </span>';
+                }
+              },
+            },
+            {
+              data: "fname",
+              render: function (data, type, row) {
+                if(row.role_id == 1){
+                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                }else if(row.role_id == 2){
+                  return '<a data-vue-route href="/admin-manage-advertiser-view/'+row.id+'" title="Go To Profile">'+row?.fname+'</a>';
+                }else if(row.role_id == 3){
+                  return '<a data-vue-route href="/admin-manage-publishers-view/'+row.id+'" title="Go To Profile">'+row?.fname+'</a>';
+                }else if(row.role_id == 4){
+                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                }else if(row.role_id == 5){
+                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                }else if(row.role_id == 6){
+                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                }else{
+                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                }
+
+              },
+            },
             { data: "email" },
+            {
+              data: "user_location",
+              render: function (data, type, row) {
+                if(row?.user_location?.country){
+                  return row?.user_location?.country;
+                }else{
+                  return '-----';
+                }
+              },
+            },
+            {
+              data: "deleted_by",
+              render: function (data, type, row) {
+                if(row?.deleted_by?.email){
+                  return row?.deleted_by?.email;
+                }else{
+                  return '-----';
+                }
+              },
+            },
+            {
+              data: "deleted_note",
+              render: function (data, type, row) {
+                if(row?.deleted_note != null){
+                  return '<button type="button" title="Reason for Deletion Note" class="btn btn-info px-2 py-2" data-bs-toggle="modal" data-bs-target="#singleDeleteModal'+row.id+'"><i class="fa-solid fa-eye"></i></button><div class="modal fade" id="singleDeleteModal'+row.id+'" tabindex="-1" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="assignToManager3">Reason for Deletion</h5><button type="button"class="btn-close"data-bs-dismiss="modal"aria-label="Close"></button></div><div class="modal-body">'+row?.deleted_note+'</div></div></div></div>';
+                }else{
+                  return '-----';
+                }
+              },
+            },
+            {
+              data: "created_at",
+              render: function (data, type, row) {
+                if (row.created_at!= null) {
+                  return formateDate(row.created_at);
+                }
+                return '----------';
+              },
+            },
             {
               data: "deleted_at",
               render: function (data, type, row) {
@@ -132,9 +223,6 @@ export default {
             this.attachEventListenersBlulkAction();
             this.attachEventListenersBlulkActionSubmit();
           },
-          createdRow: function (row, data, dataIndex) {
-              $('td:eq(0)', row).html(dataIndex + 1);
-          },
           columnDefs: [
             {
               targets: 0,
@@ -149,7 +237,7 @@ export default {
             },
             
           ],
-          order: [[2, 'desc']],
+          order: [[8, 'asc']],
           dom: '<"row mx-2"' +
             '<"col-md-4 px-0"f>' + 
             '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
@@ -407,5 +495,11 @@ bulkDelete() {
 }
 #trashs_datatables .dt-checkboxes-cell{
 	padding: 0.7rem 0.5rem !important;
+}
+#trashs_datatables td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 120px;
 }
 </style>

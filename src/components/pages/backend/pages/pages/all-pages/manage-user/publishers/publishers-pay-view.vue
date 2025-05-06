@@ -582,6 +582,7 @@ export default {
           { headers: { Authorization: "Bearer " + localStorage.getItem("token") } }
         )
         .then((res) => {
+          console.log(res);
           this.company_name = res.data.userDetails.company_name;
           this.publisherViewData = res.data.userDetails;
           this.Banlance = res.data.balance;

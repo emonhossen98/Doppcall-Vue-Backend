@@ -233,7 +233,7 @@
                 <thead class="border-top">
                   <tr>
                     <th></th>
-                    <!-- <th>ID</th> -->
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Featured</th>
                     <th>Country</th>
@@ -444,7 +444,7 @@ export default {
                 className: 'dt-center select-checkbox',
                 orderable: false
               },
-              // { data: "id" },
+              { data: "id" },
               { data: "convart_offer_name" ?? '------' },
               { data: "convart_featured" },
               { data: "convart_primary_contry" ?? '------' },
@@ -1331,9 +1331,9 @@ ul.filter-input-list {
   padding: 15px !important;
 }
 
-#offer_datatables {
+/* #offer_datatables {
   min-height: 500px;
-}
+} */
 #offer_datatables colgroup:nth-of-type(2) {
   display: none !important;
 }

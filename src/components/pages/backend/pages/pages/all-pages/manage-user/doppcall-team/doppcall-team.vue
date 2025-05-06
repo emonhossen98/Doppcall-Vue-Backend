@@ -48,7 +48,7 @@
               </form>
             </div>
           </div> -->
-          <div class="card mt-4">
+          <div class="card mt-4"  :class="showInvateSection == true ? '' : 'd-none'">
             <div class="card-header pt-3 pb-0">
               <h5 class="card-title ms-2">Invitations</h5>
             </div>
@@ -121,6 +121,107 @@
       </div>
     </div>
     <!-- / Content -->
+  </div>
+
+  <!-- Large Modal -->
+  <div class="modal fade" id="singleDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="assignToManager3">Team Member Delete Note</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <label for="deletenote" class="required">Note</label>
+              <textarea v-model="deleteUser.deleted_note" id="deletenote" class="form-control" placeholder="Enter Your Note" rows="5"></textarea>
+              <div v-if="validationErrorsForNote && validationErrorsForNote.deleted_note" class="text-danger">
+                {{ validationErrorsForNote.deleted_note[0] }}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" @click="deleteTeamMemberWithNote()" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i> Submit</button>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <!-- Large Modal -->
+  <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="assignToManager3">Team Member Delete Note</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="deletenote" class="required">Note</label>
+          <textarea v-model="bulkactionadminids.deleted_note" id="deletenote" class="form-control" placeholder="Enter Your Note" rows="5"></textarea>
+          <div v-if="validationErrorsForNote && validationErrorsForNote.deleted_note" class="text-danger">
+            {{ validationErrorsForNote.deleted_note[0] }}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" @click="bulkactionsubmission()" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="roleChangeModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Manage Roles</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="card-body px-3">
+              <form>
+                <div class="row-mb">
+                  <div class="form-group mt-3">
+                    <label for="role_name" class="required">Role Name</label>
+                    <select  v-model="changeUserRole.role_id" id="role_name" class="form-select">
+                      <option value="">Select Role</option>
+                      <option v-for="role in doppcallTeam.roles" :value="role.id" :key="role.id" >
+                        {{ role.secondary_name }}
+                      </option>
+                    </select>
+                    <div v-if="validationErrorsForChangeRole && validationErrorsForChangeRole.role_id" class="text-danger">
+                      {{ validationErrorsForChangeRole.role_id[0] }}
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12 text-end my-3">
+                      <button type="button" class="btn btn-primary btn-sm" @click="userRoleChange()">
+                        <i class="fas fa-check fa-sm me-2"></i>
+                        Change Role
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
   </div>
 
   <div class="modal fade" id="inviteMemberModal" tabindex="-1" aria-hidden="true">
@@ -266,8 +367,11 @@ export default {
       ],
       getLoader: false,
       validationErrors: null,
-      deleteUser : {
-        data : "",
+      validationErrorsForChangeRole: null,
+      validationErrorsForNote : null,
+      deleteUser:{
+        user_id : '',
+        deleted_note: ''
       },
       changeStatus:{
         data : "",
@@ -275,17 +379,23 @@ export default {
       },
       selectedValues: [], 
       allChecked: false, 
+      showInvateSection: false, 
       checkBoxOptions: ["1", "2"],
       modalTitle : 'Permission Create',
       createUserPermission : {
         user_id : '',
         permisstion : [],
       },
+      changeUserRole : {
+        user_id : '',
+        role_id : '',
+      },
       bulkactionids : {
         selectedIds: [],
       },
       bulkactionadminids : {
         selectedIds: [],
+        deleted_note : "",
       },
     };
   },
@@ -396,6 +506,11 @@ export default {
         .then((res) => {
           if ($.fn.DataTable.isDataTable("#invitations_tables")) {
           $('#invitations_tables').DataTable().destroy();
+        }
+        if(res?.data?.invitations?.length > 0){
+          this.showInvateSection = true;
+        }else{
+          this.showInvateSection = false;
         }
         var formateDate = this.formatDates;
         var table = $('#invitations_tables').DataTable({
@@ -522,16 +637,6 @@ export default {
                     exportOptions: { columns: [1, 2, 3] },
                   },
                 ],
-              },
-              {
-                text:
-                  '<span><i class="ti ti-plus me-1 ti-xs"></i>Add Invite Member</span>',
-                className: "btn btn-primary",
-                action: function () {
-                  const modalElement = document.getElementById("inviteMemberModal");
-                  const modalInstance = new bootstrap.Modal(modalElement);
-                  modalInstance.show();
-                },
               },
           ],
         });
@@ -688,6 +793,7 @@ export default {
       }
     });
     },
+
     callAllNext(){
     this.$nextTick(() => {
       const dataTableWrapper = document.querySelectorAll('#super_admin_datatables_wrapper .row.mx-2');
@@ -839,6 +945,16 @@ export default {
                   },
                 ],
               },
+              {
+                text:
+                  '<span><i class="ti ti-plus me-1 ti-xs"></i>Add Invite Member</span>',
+                className: "btn btn-primary",
+                action: function () {
+                  const modalElement = document.getElementById("inviteMemberModal");
+                  const modalInstance = new bootstrap.Modal(modalElement);
+                  modalInstance.show();
+                },
+              },
           ],
         });
         this.getLoader = false;
@@ -941,7 +1057,17 @@ export default {
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.value) {
-          (this.getLoader = true),
+          const modalElement = document.getElementById('bulkDeleteModal');
+          const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+          if(modal){
+            modal.show();
+          }
+        }
+      });
+    },
+
+    bulkactionsubmission(){
+      (this.getLoader = true),
             axios
               .post(
                 this.globalVariables.apiUrl + "admin/manage/super-admin/delete/bulk",
@@ -956,18 +1082,23 @@ export default {
                 if (res.data.status == "success") {
                   toastr.success(res.data.message);
                   this.getDoppcallTeams();
+                  const modalElement = document.getElementById('bulkDeleteModal');
+                  const modals = bootstrap.Modal.getInstance(modalElement);
+                  if(modals){
+                    modals.hide();
+                  }
                 } else {
                   toastr.error(res.data.message);
                 }
               })
-              .catch((e) => {
-                return e;
+              .catch((error) => {
+                if (error?.response?.data?.errors) {
+                  this.validationErrorsForNote = error.response.data.errors;
+                }
               })
               .finally(() => {
                 this.getLoader = false;
               });
-        }
-      });
     },
 
     bulkAdminStatusChange(alertTitle) {
@@ -1014,7 +1145,7 @@ export default {
         const target = $(event.target);
         const dataId = target.data("id");
         const dataClass = target.data('action');
-        this.deleteUser.data = dataId;
+        this.deleteUser.user_id = dataId;
         if(dataClass === 'delete-btn'){
           Swal.fire({
             text: "Are you sure delete",
@@ -1024,29 +1155,13 @@ export default {
             cancelButtonText: "Cancel",
           }).then((result) => {
             if (result.value) {
-              (this.getLoader = true),
-                axios
-                  .post(
-                    this.globalVariables.apiUrl+"admin/manage/user/delete",this.deleteUser,{
-                      headers: {
-                        Authorization: "Bearer " + localStorage.getItem("token"),
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    if(res.data.status == 'success'){
-                      toastr.success(res.data.message);
-                      this.getDoppcallTeams();
-                    }else{
-                      toastr.error(res.data.message);
-                    }
-                  })
-                  .catch((e) => {
-                    return e;
-                  })
-                  .finally(() => {
-                    this.getLoader = false;
-                  });
+              if (result.value) {
+                const modalElement = document.getElementById('singleDeleteModal');
+                const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+                if(modal){
+                  modal.show();
+                }
+              } 
             }
           });
         }else if(dataClass === 'pause-btn'){
@@ -1104,8 +1219,43 @@ export default {
             .catch((e) => {
               return e;
             })
+        }else if(dataClass === 'manage-roles'){
+          this.changeUserRole.user_id = dataId;
         }
       });
+    },
+
+    deleteTeamMemberWithNote(){
+      (this.getLoader = true),
+        axios
+          .post(
+            this.globalVariables.apiUrl+"admin/manage/user/delete",this.deleteUser,{
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            }
+          )
+          .then((res) => {
+            if(res.data.status == 'success'){
+              toastr.success(res.data.message);
+              this.getDoppcallTeams();
+              const modalElement = document.getElementById('singleDeleteModal');
+              const modals = bootstrap.Modal.getInstance(modalElement);
+              if(modals){
+                modals.hide();
+              }
+            }else{
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+                if (error?.response?.data?.errors) {
+                  this.validationErrorsForNote = error.response.data.errors;
+                }
+              })
+          .finally(() => {
+            this.getLoader = false;
+          });
     },
 
     // getAccountManagers() {
@@ -1359,6 +1509,39 @@ export default {
       }else{
         toastr.warning('Select any permisstion');
       }
+    },
+
+    userRoleChange(){
+        this.getLoader = true;
+        axios
+          .post(this.globalVariables.apiUrl+"admin/manage/role-change", this.changeUserRole, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((res) => {
+            if(res.data.status == 'success'){
+              toastr.success(res.data.message);
+              this.getDoppcallTeams();
+              this.callAllNext();
+              this.selectedValues = [];
+              const modal = document.getElementById("roleChangeModal");
+              const bootstrapModal = bootstrap.Modal.getInstance(modal);
+              if (bootstrapModal) {
+                bootstrapModal.hide();
+              }
+            }else{
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error?.response?.data?.errors) {
+              this.validationErrorsForChangeRole = error.response.data.errors;
+            }
+          })
+          .finally(()=> {
+            this.getLoader = false;
+          });
     },
   },
 };

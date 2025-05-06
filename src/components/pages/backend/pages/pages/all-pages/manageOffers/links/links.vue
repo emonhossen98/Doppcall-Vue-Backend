@@ -18,8 +18,12 @@
                 <thead class="border-top">
                   <tr>
                     <th></th>
-                    <!-- <th>SL</th> -->
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Categorie</th>
+                    <th>Created By</th>
                     <th>Link</th>
+                    <th>Status</th>
                     <th class="text-end">Action</th>
                   </tr>
                 </thead>
@@ -46,20 +50,52 @@
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col mb-3">
-                <label for="nameBasic" class="form-label">URL</label>
-                <input
-                  type="text"
-                  id="type_name"
-                  class="form-control"
-                  v-model="createLink.url"
-                  placeholder="Enter valid url"
-                />
-                <div
-                  v-if="validationErrors && validationErrors.url"
-                  class="text-danger"
-                >
+              <div class="col-12 mb-3">
+                <label for="title" class="form-label required">Title</label>
+                <input type="title" id="text" class="form-control" v-model="createLink.title" placeholder="Enter Your Title"/>
+                <div v-if="validationErrors && validationErrors.title" class="text-danger">
+                  {{ validationErrors.title[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="date" class="form-label required">Date</label>
+                <input type="date" id="date" class="form-control" v-model="createLink.date"/>
+                <div v-if="validationErrors && validationErrors.date" class="text-danger">
+                  {{ validationErrors.date[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="nameBasic" class="form-label required">URL</label>
+                <input type="text" id="type_name" class="form-control" v-model="createLink.url" placeholder="Enter valid url"/>
+                <div v-if="validationErrors && validationErrors.url" class="text-danger">
                   {{ validationErrors.url[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="select-category" class="form-label required">Select Category</label>
+                <select class="form-select" id="select-category" v-model="createLink.category_id">
+                  <template v-if="categoryOffers.length > 0">
+                    <option value="0">Select Category</option>
+                    <template v-for="(category,index) in categoryOffers" :key="index">
+                      <option :value="category.id">{{ category.name ?? '' }}</option>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <option class="text-danger" disabled>Category Not found</option>
+                  </template>
+                </select>
+                <div v-if="validationErrors && validationErrors.category_id" class="text-danger">
+                  {{ validationErrors.category_id[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="status" class="form-label required">Status</label>
+                <select v-model="createLink.status" id="status" class="form-select">
+                  <option value="1">Active</option>
+                  <option value="0">Inactive</option>
+                </select>
+                <div v-if="validationErrors && validationErrors.status" class="text-danger">
+                  {{ validationErrors.status[0] }}
                 </div>
               </div>
             </div>
@@ -91,15 +127,53 @@
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col mb-3">
-                <label for="nameBasic" class="form-label">URL</label>
-                <input
-                  type="text"
-                  id="type_name"
-                  class="form-control"
-                  v-model="createLink.url"
-                  placeholder="Enter Valid Url"
-                />
+              <div class="col-12 mb-3">
+                <label for="title" class="form-label required">Title</label>
+                <input type="title" id="text" class="form-control" v-model="createLink.title" placeholder="Enter Your Title"/>
+                <div v-if="validationErrors && validationErrors.title" class="text-danger">
+                  {{ validationErrors.title[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="date" class="form-label required">Date</label>
+                <input type="date" id="date" class="form-control" v-model="createLink.date"/>
+                <div v-if="validationErrors && validationErrors.date" class="text-danger">
+                  {{ validationErrors.date[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="nameBasic" class="form-label required">URL</label>
+                <input type="text" id="type_name" class="form-control" v-model="createLink.url" placeholder="Enter valid url"/>
+                <div v-if="validationErrors && validationErrors.url" class="text-danger">
+                  {{ validationErrors.url[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="select-category" class="form-label required">Select Category</label>
+                <select class="form-select" id="select-category" v-model="createLink.category_id">
+                  <template v-if="categoryOffers.length > 0">
+                    <option value="0">Select Category</option>
+                    <template v-for="(category,index) in categoryOffers" :key="index">
+                      <option :value="category.id">{{ category.name ?? '' }}</option>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <option class="text-danger" disabled>Category Not found</option>
+                  </template>
+                </select>
+                <div v-if="validationErrors && validationErrors.category_id" class="text-danger">
+                  {{ validationErrors.category_id[0] }}
+                </div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="status" class="form-label required">Status</label>
+                <select v-model="createLink.status" id="status" class="form-select">
+                  <option value="1">Active</option>
+                  <option value="0">Inactive</option>
+                </select>
+                <div v-if="validationErrors && validationErrors.status" class="text-danger">
+                  {{ validationErrors.status[0] }}
+                </div>
               </div>
             </div>
           </div>
@@ -147,12 +221,17 @@ export default {
         { label: "Links", url: "" },
       ],
       createLink: {
-        id: null, 
-        url: "",
+        id : null,
+        date : "",
+        url : "",
+        title : "",
+        category_id : "0",
+        status : "1",
       },
       bulkactionids : {
         selectedIds: [],
       },
+      categoryOffers : [],
       validationErrors: null,
     };
   },
@@ -161,6 +240,7 @@ export default {
         const { role, isAuthorized } = await fetchUserRole();
         if (role == 'Super' || role == 'Admin') {
           this.getOffersLinks();
+          this.getcategories();
           this.$nextTick(() => {
             const dataTableWrapper = document.querySelectorAll(
               "#links-tables_wrapper .row.mx-2"
@@ -176,6 +256,23 @@ export default {
       }
     },
   methods: {
+    getcategories() {
+      this.getLoader = true,
+      axios
+        .get(this.globalVariables.apiUrl+"admin/offers/categories", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+          this.categoryOffers = res?.data?.categoryOffers;
+          this.getLoader = false;
+        })
+        .catch((e) => {
+          return e;
+        })
+        .finally(() => {
+            this.getLoader = false;
+        });
+    },
     getOffersLinks() {
       this.getLoader = true;
       axios
@@ -190,8 +287,57 @@ export default {
             data: res.data.data,
             columns: [
               { data: "id" },
-              // { data: "id" },
+              {
+                data: "title",
+                render: function (data, type, row) {
+                  if(row?.title != null){
+                    return row?.title;
+                  }else{
+                    return '-----';
+                  }
+                },
+              },
+              {
+                data: "date",
+                render: function(data) {
+                  if (!data) return '-----';
+
+                  const date = new Date(data);
+                  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+                  return date.toLocaleDateString('en-GB', options);
+                }
+              },
+              {
+                data: "category",
+                render: function (data, type, row) {
+                  if(row?.category != null){
+                    return row?.category?.name;
+                  }else{
+                    return '-----';
+                  }
+                },
+              },
+              {
+                data: "user_id",
+                render: function (data, type, row) {
+                  if(row?.user?.fname != null){
+                    return row?.user?.fname;
+                  }else{
+                    return '-----';
+                  }
+                },
+              },
               { data: "url" },
+              {
+                data: "status",
+                render: function (data, type, row) {
+                  if(row?.status == '1'){
+                    return '<span class="badge bg-success">Active</span>';
+                  }else{
+                    return '<span class="badge bg-warning">Inactive</span>';
+                  }
+                },
+              },
               {
                 data: "pay_out",
                 render: function (data, type, row) {
@@ -231,7 +377,7 @@ export default {
                 searchable: false,
               },
             ],
-            order: [[1, "asc"]],
+            order: [[2, "desc"]],
             dom:
               '<"row mx-2"' +
               '<"col-md-4"f>' +
@@ -266,6 +412,43 @@ export default {
                 attr: { id: "bulk-action-container" },
               },
               {
+              extend: 'collection',
+              className: 'btn btn-label-primary dropdown-toggle me-3',
+              text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+              buttons: [
+                {
+                  extend: 'print',
+                  text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1,2, 3, 4, 5,6] }
+                },
+                {
+                  extend: 'csv',
+                  text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1,2, 3, 4, 5,6] }
+                },
+                {
+                  extend: 'excel',
+                  text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1,2, 3, 4, 5,6] }
+                },
+                {
+                  extend: 'pdf',
+                  text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1,2, 3, 4, 5,6] }
+                },
+                {
+                  extend: 'copy',
+                  text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1,2, 3, 4, 5,6] }
+                }
+              ]
+            },
+              {
                 text:
                   '<span data-bs-toggle="modal" data-bs-target="#LinkCreate"><i class="ti ti-plus me-1 ti-xs"></i>Create Link</span>',
                 className: "create-new btn btn-primary",
@@ -281,6 +464,7 @@ export default {
           this.getLoader = false;
         });
     },
+
 
     attachEventListeners() {
       $("#links-tables").on("click", ".links-datatables-action", (event) => {
@@ -298,8 +482,16 @@ export default {
               headers: { Authorization: "Bearer " + localStorage.getItem("token") },
             })
             .then((res) => {
-              this.createLink.id = res.data.data.id;
-              this.createLink.url = res.data.data.url;
+              this.createLink.id = res?.data?.data?.id;
+              this.createLink.title = res?.data?.data?.title;
+              this.createLink.url = res?.data?.data?.url;
+              if(res?.data?.data?.date != null){
+                this.createLink.date = res?.data?.data?.date.split(' ')[0];
+              }else{
+                this.createLink.date = null;
+              }
+              this.createLink.category_id = res?.data?.data?.category_id;
+              this.createLink.status = res?.data?.data?.status;
             })
             .catch((error) => {
               return error;
@@ -486,6 +678,9 @@ export default {
           this.getOffersLinks();
           this.createLink.id = "";
           this.createLink.url = "";
+          this.createLink.date = null;
+          this.createLink.category_id = "";
+          this.createLink.title = "";
           this.validationErrors = null;
         })
         .catch((error) => {

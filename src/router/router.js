@@ -47,6 +47,8 @@ const adminAllowTrafficEdit = () => import("../components/pages/backend/pages/pa
 
 const adminOfferslinks = () => import("../components/pages/backend/pages/pages/routes/manage-offer/links/links.vue");
 
+const adminOffersQuestions = () => import("../components/pages/backend/pages/pages/routes/manage-offer/questions/questions.vue");
+
 const adminCampaignsIndex = () => import("../components/pages/backend/pages/pages/routes/campaine/admin-campaine/admin-campaine.vue");
 const adminCampaignsEdit = () => import("../components/pages/backend/pages/pages/routes/campaine/admin-campaine/edit-campaign.vue");
 const adminCampaignsView = () => import("../components/pages/backend/pages/pages/routes/campaine/admin-campaine/view-campaign.vue");
@@ -312,9 +314,13 @@ const authorPagesCreate = () => import("../components/pages/backend/pages/pages/
 const authorPagesEdit = () => import("../components/pages/backend/pages/pages/routes/author/pages/pagesEdit.vue");
 
 
-const authorBlogPosts = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/posts.vue");;
-const authorBlogPostsCreate = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/postscreate.vue");;
-const authorBlogPostsEdit = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/postsedit.vue");;
+const authorBlogPosts = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/posts.vue");
+const authorBlogPostsCreate = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/postscreate.vue");
+const authorBlogPostsEdit = () => import("../components/pages/backend/pages/pages/routes/author/blog/posts/postsedit.vue");
+
+const authorMedia = () => import("../components/pages/backend/pages/pages/routes/author/media/index.vue");
+const authorMediaCreate = () => import("../components/pages/backend/pages/pages/routes/author/media/create.vue");
+const authorMediaEdit = () => import("../components/pages/backend/pages/pages/routes/author/media/edit.vue");
 
 
 
@@ -552,6 +558,15 @@ const routes = [{
         component: adminOfferslinks,
         meta: {
           title: 'Links',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+      {
+        path: '/admin-questions',
+        component: adminOffersQuestions,
+        meta: {
+          title: 'Questions',
           requiresAuth: true,
           requiredRoles: ['Super', 'Admin', ],
         }
@@ -2157,6 +2172,33 @@ const routes = [{
         component: authorBlogPostsEdit,
         meta: {
           title: 'Blog Post Edit',
+          requiresAuth: true,
+          requiredRoles: ['Author'],
+        }
+      },
+      {
+        path: '/author-media-index',
+        component: authorMedia,
+        meta: {
+          title: 'Media',
+          requiresAuth: true,
+          requiredRoles: ['Author'],
+        }
+      },
+      {
+        path: '/author-media-create',
+        component: authorMediaCreate,
+        meta: {
+          title: 'Media Create',
+          requiresAuth: true,
+          requiredRoles: ['Author'],
+        }
+      },
+      {
+        path: '/author-media-edit/:id',
+        component: authorMediaEdit,
+        meta: {
+          title: 'Media Edit',
           requiresAuth: true,
           requiredRoles: ['Author'],
         }

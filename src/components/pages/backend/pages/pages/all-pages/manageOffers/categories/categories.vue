@@ -195,9 +195,6 @@ export default {
             this.attachEventListenersBlulkAction();
             this.attachEventListenersBlulkActionSubmit();
           },
-          createdRow: function (row, data, dataIndex) {
-              $('td:eq(0)', row).html(dataIndex + 1);
-          },
           columnDefs: [
             {
               targets: 0,
@@ -211,7 +208,7 @@ export default {
               searchable: false
             },
           ],
-          order: [[3, 'desc']],
+          order: [[1, 'asc']],
           dom: '<"row mx-2"' +
             '<"col-md-4"f>' + 
             '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 

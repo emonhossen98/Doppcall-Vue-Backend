@@ -93,47 +93,100 @@
                                     <label for="role_name" class="required mb-1">Role Name</label>
                                     <select v-model="publisherEditData.role_name" id="role_name" class="form-select">
                                         <option value="">Select Role</option>
-                                        <option v-for="(role,index) in roles" ::key="index" :value="role.id" :data-name="role.name" :selected="publisherEditData.role_name == role.id">{{ role.name }}</option>
+                                        <option v-for="(role,index) in roles" ::key="index" :value="role.id" :data-name="role.name" :selected="publisherEditData.role_name == role.id">{{ role.secondary_name ?? '' }}</option>
                                     </select>
                                     </div>
 
                                     <div class="form-group mt-3">
                                         <label for="account_manager" class="required mb-1">Account Manager</label>
                                         <select v-model="publisherEditData.account_manager" id="account_manager" class="form-select">
-                                            <option value="">No Account Manager</option>
+                                            <option value="0">No Account Manager</option>
                                             <option v-for="(account, index) in accountManagers" :key="index" :value="account.id" :selected="publisherEditData.account_manager == account.id">
                                                 {{ account.fname }} {{ account.lname }}
                                             </option>
                                         </select>
                                     </div>
 
-                                    <div class="form-group mt-3">
-                                        <label for="profile_editable" class="required mb-1">Profile Editable</label>
-                                        <select v-model="publisherEditData.profile_editable" id="profile_editable" class="form-select">
+                                   <!-- <div class="form-group mt-3">
+                                        <div class="form-check form-switch">
+                                          {{ publisherEditData.profile_editable }}
+                                          <input v-model="publisherEditData.profile_editable" class="form-check-input"  type="checkbox" id="allow_edit_profile">
+                                          <label for="allow_edit_profile" class="form-check-label required mb-1">Allow User To Edit Profile</label>
+                                        </div>
+                                         <select v-model="publisherEditData.profile_editable" id="profile_editable" class="form-select">
                                             <option>Select Please</option>
                                             <option value="0" :selected="publisherEditData.profile_editable == 0">Pending</option>
                                             <option value="1" :selected="publisherEditData.profile_editable == 1">Approved</option>
-                                        </select>
-                                    </div>
+                                        </select> 
+                                    </div>-->
 
                                     <div class="form-group mt-3">
-                                    <label for="verifiable" class="required mb-1">Verifiable</label>
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="publisherEditData.profile_editable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="allow_edit_profile"
+                                      class="form-check-input">
+                                    <label for="allow_edit_profile" class="form-check-label required mb-1">Allow User To Edit Profile</label>
+                                  </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="publisherEditData.verifiable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="email_verified"
+                                      class="form-check-input">
+                                    <label for="email_verified" class="form-check-label required mb-1">Email Verified</label>
+                                  </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="publisherEditData.accessable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="account_access"
+                                      class="form-check-input">
+                                    <label for="account_access" class="form-check-label required mb-1">Account Access</label>
+                                  </div>
+                                </div>
+
+                                   <!--  <div class="form-group mt-3">
+                                      <div class="form-check form-switch">
+                                        {{ publisherEditData.verifiable }}
+                                          <input v-model="publisherEditData.verifiable" class="form-check-input"  type="checkbox" id="email_verified">
+                                          <label for="email_verified" class="form-check-label required mb-1">Email Verified</label>
+                                        </div>
+
+                                    <label for="verifiable" class="required mb-1">Email Verified</label>
                                     <select v-model="publisherEditData.verifiable" id="verifiable" class="form-select">
                                       <option :value="currentTime">Verified</option>
-                                      <option value="null">Unverified</option>
+                                      <option value="null">Unverified</option> 
                                   </select>
-                                    </div>
+                                    </div>-->
 
-                                    <div class="form-group mt-3">
-                                        <label for="accessable" class="required mb-1">Accessable</label>
+                                    <!--<div class="form-group mt-3">
+                                        <div class="form-check form-switch">
+                                          {{ publisherEditData.accessable }}
+                                          <input v-model="publisherEditData.accessable" class="form-check-input"  type="checkbox" id="account_access">
+                                          <label for="account_access" class="form-check-label required mb-1">Account Access</label>
+                                        </div>
+
+                                         <label for="accessable" class="required mb-1">Account Access </label>
                                         <select v-model="publisherEditData.accessable" id="accessable" class="form-select">
                                             <option value="">Select Please</option>
                                             <option value="1" :selected="publisherEditData.accessable == 1">Pending</option>
                                             <option value="2" :selected="publisherEditData.accessable == 2">Approved</option>
-                                            <option value="3" :selected="publisherEditData.accessable == 3">Pause</option>
-                                            <option value="4" :selected="publisherEditData.accessable == 4">Resume</option>
                                         </select>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group mt-3 row">
                                         <label for="profile_image mb-1">Profile image</label>
@@ -146,10 +199,10 @@
                                                 class="py-1 px-2 d-block">The image dimensions 150*150 and max size 1M, type: jpg,png.jpeg.svg</span>
                                         </div>
                                         <div class="col-sm-6">
-                                            <img v-if="publisherShowImage.profile_image" :src="publisherShowImage.profile_image" class="imgpreview">
+                                            <img v-if="publisherShowImage.profile_image" :src="publisherShowImage.profile_image" class="imgpreviewadvertisher">
                                         </div>
                                     <div class="form-group text-left mt-4 submit-btn">
-                                        <button type="button" @click="publisherUpdate" class="btn btn-primary btn-sm"><i class="fas fa-check fa-sm me-1"></i>
+                                        <button type="button" @click="publisherUpdate" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i>
                                                 Update
                                         </button>
                                     </div>
@@ -366,15 +419,15 @@ export default {
         this.publisherEditData.available_time = res.data.user.available_time;
         this.publisherEditData.offers = res.data.user.user_offers;
         this.publisherEditData.role_name = res.data.user.role_id;
-        this.publisherEditData.account_manager = res.data.user.account_manager_id;
-        this.publisherEditData.profile_editable = res.data.user.editable;
+        this.publisherEditData.account_manager = res.data.user.account_manager_id ?? '';
+        this.publisherEditData.profile_editable = res.data.user.editable == '1' ? '1' : '0';
         if(res && res.data && res.data.user && res.data.user.is_email_verified != null){
-          this.publisherEditData.verifiable = this.currentTime;
+          this.publisherEditData.verifiable = 1;
         }else{
-          this.publisherEditData.verifiable = null;
+          this.publisherEditData.verifiable = 0;
         }
-        this.publisherEditData.accessable = res.data.user.account_access;
-        this.publisherShowImage.profile_image = this.globalVariables.appUrl+ res.data.user.avatar;
+        this.publisherEditData.accessable = res.data.user.account_access == 1 ? 1 : 0;
+        this.publisherShowImage.profile_image = res.data.user.avatar ?  this.globalVariables.appUrl+ res.data.user.avatar : null;
         this.selectedIndustrie = res.data.user.user_offers;
         })
         .catch((e) => {
@@ -410,8 +463,9 @@ export default {
 }
 </style>
 <style scoped>
-.imgpreview{
-    width: 80px;
+.imgpreviewadvertisher {
+	width: 80px;
+	border: 1px solid #7367f0;
+	border-radius: 4px;
 }
-
 </style>

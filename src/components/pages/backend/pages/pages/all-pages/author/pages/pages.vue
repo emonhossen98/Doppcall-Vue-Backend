@@ -189,7 +189,7 @@ export default {
                 this.attachEventListenersOfButton();
 
                 this.attachEventListenersForMenu();
-              this.attachEventListenersForSearch();
+               this.attachEventListenersForSearch();
 
               const searchInput = $("#pages_tables_filter input");
               searchInput.val(this.searchInputValue);

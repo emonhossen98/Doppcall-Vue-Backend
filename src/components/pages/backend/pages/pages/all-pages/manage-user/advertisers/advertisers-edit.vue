@@ -90,18 +90,17 @@
                                         <option v-for="(role,index) in roles" ::key="index" :value="role.id" :data-name="role.name" :selected="advertisherEditData.role_name == role.id">{{ role.name }}</option>
                                     </select>
                                     </div>
-
                                     <div class="form-group mt-3">
                                         <label for="account_manager" class="required mb-1">Account Manager</label>
                                         <select v-model="advertisherEditData.account_manager" id="account_manager" class="form-select">
-                                            <option value="" :selected="advertisherEditData.account_manager == '0'">No Account Manager</option>
+                                            <option value="0">No Account Manager</option>
                                             <option v-for="(account, index) in accountManagers" :key="index" :value="account.id" :selected="advertisherEditData.account_manager == account.id">
-                                                {{ account.fname }}
+                                                {{ account.fname }} {{ account.lname }}
                                             </option>
                                         </select>
                                     </div>
 
-                                    <div class="form-group mt-3">
+                                    <!-- <div class="form-group mt-3">
                                         <label for="profile_editable" class="required mb-1">Profile Editable</label>
                                         <select v-model="advertisherEditData.profile_editable" id="profile_editable" class="form-select">
                                             <option value="">Select Please</option>
@@ -128,7 +127,46 @@
                                             <option value="3" :selected="advertisherEditData.accessable == 3">Pause</option>
                                             <option value="4" :selected="advertisherEditData.accessable == 4">Resume</option>
                                         </select>
-                                    </div>
+                                    </div> -->
+
+                                    <div class="form-group mt-3">
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="advertisherEditData.profile_editable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="allow_edit_profile"
+                                      class="form-check-input">
+                                    <label for="allow_edit_profile" class="form-check-label required mb-1">Allow User To Edit Profile</label>
+                                  </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="advertisherEditData.verifiable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="email_verified"
+                                      class="form-check-input">
+                                    <label for="email_verified" class="form-check-label required mb-1">Email Verified</label>
+                                  </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                  <div class="form-check form-switch">
+                                    <input 
+                                      v-model="advertisherEditData.accessable"
+                                      :true-value="1"
+                                      :false-value="0"
+                                      type="checkbox"
+                                      id="account_access"
+                                      class="form-check-input">
+                                    <label for="account_access" class="form-check-label required mb-1">Account Access</label>
+                                  </div>
+                                </div>
 
                                     <div class="form-group mt-3 row">
                                         <label for="profile_image" class="mb-1">Profile image</label>
@@ -141,10 +179,10 @@
                                                 class="py-1 px-2 d-block">The image dimensions 150*150 and max size 1M, type: jpg,png.jpeg.svg</span>
                                         </div>
                                         <div class="col-sm-6">
-                                            <img v-if="publisherShowImage.profile_image" :src="publisherShowImage.profile_image" class="imgpreview">
+                                            <img v-if="publisherShowImage.profile_image" :src="publisherShowImage.profile_image" class="imgpreviewpublisher">
                                         </div>
                                     <div class="form-group text-left mt-4 submit-btn">
-                                        <button type="button" @click="publisherUpdate" class="btn btn-primary btn-sm"><i class="fas fa-check fa-sm me-1"></i>
+                                        <button type="button" @click="publisherUpdate" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i>
                                                 Update
                                         </button>
                                     </div>
@@ -359,10 +397,14 @@ export default {
         this.advertisherEditData.offers = res.data.user.user_offers;
         this.advertisherEditData.role_name = res.data.user.role_id;
         this.advertisherEditData.account_manager = res.data.user.account_manager_id;
-        this.advertisherEditData.profile_editable = res.data.user.editable;
-        this.advertisherEditData.verifiable = res.data.user.is_email_verified;
-        this.advertisherEditData.accessable = res.data.user.account_access;
-        this.publisherShowImage.profile_image = this.globalVariables.appUrl+res.data.user.avatar;
+        this.advertisherEditData.profile_editable = res.data.user.editable == '1' ? '1' : '0';
+        if(res && res.data && res.data.user && res.data.user.is_email_verified != null){
+          this.advertisherEditData.verifiable = 1;
+        }else{
+          this.advertisherEditData.verifiable = 0;
+        }
+        this.advertisherEditData.accessable = res.data.user.account_access == 1 ? 1 : 0;
+        this.publisherShowImage.profile_image = res.data.user.avatar ?  this.globalVariables.appUrl+ res.data.user.avatar : null;;
         })
         .catch((error) => {
           console.error(error);
@@ -397,7 +439,9 @@ export default {
 }
 </style>
 <style scoped>
-.imgpreview{
-    width: 80px;
+.imgpreviewpublisher {
+	width: 80px;
+	border: 1px solid #7367f0;
+	border-radius: 4px;
 }
 </style>

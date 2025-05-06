@@ -22,8 +22,15 @@
                       <!-- <th></th> -->
                       <th></th>
                       <th>SL</th>
-                      <th>Ip Address</th>
-                      <th class="text-end">Action</th>
+                      <th width="20%">Blocked Date & Time</th>
+                      <th>Country</th>
+                      <th>Location</th>
+                      <th>Attempted Username(s)</th>
+                      <th>Number of Attempts</th>
+                      <th>User Agent / Device</th>
+                      <th>Status</th>
+                      <th width="20%">Ip Address</th>
+                      <th class="text-end" id="action-incompleted">Action</th>
                     </tr>
                   </thead>
                   <tbody></tbody>
@@ -95,21 +102,95 @@
             headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           })
           .then((res) => {
-            if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
-                $('#blockedip_datatables').DataTable().destroy();
-            }
+          if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
+              $('#blockedip_datatables').DataTable().destroy();
+          }
+          console.log(res.data.blockedips);
           var table = $('#blockedip_datatables').DataTable({
             data: res.data.blockedips,
             columns: [
               // { data: 'id' },
               { data: 'id' },
               { data: 'id' },
-              { data: 'ip_address' },
               {
-                  data: "updated_at",
+                data: 'updated_at',
+                render: function (data, type, row) {
+                  if (data) {
+                    const date = new Date(data);
+                    const day = String(date.getDate()).padStart(2, '0'); 
+                    const month = date.toLocaleString('en-US', { month: 'long' }); 
+                    const year = date.getFullYear();
+                    
+                    let hours = date.getHours();
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    
+                    return `${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+                  } else {
+                    return '';
+                  }
+                }
+              },
+              { 
+                data: 'user_country',
+                render: function(data, type, row) {
+                  return data ? data : '------';
+                }
+              },
+              { 
+                data: 'user_address',
+                render: function(data, type, row) {
+                  return data ? data : '------';
+                }
+              },
+              { 
+                data: 'user_name',
+                render: function(data, type, row) {
+                  return data ? data : '------';
+                }
+              },
+              { 
+                data: 'attempts',
+                render: function(data, type, row) {
+                  return data ? data : '------';
+                }
+              },
+              {
+                data: "user_agent",
+                render: function (data, type, row) {
+                  if (data != null) {
+                    return data.slice(0, 20);
+                  }
+                  return "--------";
+                },
+              },
+              {
+                  data: "action",
+                  render: function (data, type, row) {
+                    if(row.blocked_until != null){
+                      return '<span class="badge bg-danger">Block</span>'
+                    }else{
+                      return '<span class="badge bg-success">Unblock</span>'
+                    }
+                  }
+                },
+              {
+                data: "ip_address",
+                render: function (data, type, row) {
+                  if (data != null) {
+                    return data.slice(0, 20);
+                  }
+                  return "--------";
+                },
+              },
+              {
+                  data: "action",
                   render: function (data, type, row) {
                      return (
-                      '<div class="blocked_action text-end"><button title="Delete" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-trash" id="delete_btn" data-id='+row.id +'></i></button></div>'
+                      '<div class="blocked_action text-end"><button title="Unblock" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-unlock-keyhole" id="delete_btn" data-id='+row.id +'></i></button></div>'
                     );
                   }
                 },

@@ -52,6 +52,11 @@
               <div data-i18n="offers-links">Links</div>
             </RouterLink>
           </li>
+          <li class="menu-item" :class="{ 'active': isExpandedSubMenu === 'questions' }">
+            <RouterLink :to="'/admin-questions'" class="menu-link" @click="toggleSubmenu('manage-offer','questions')">
+              <div data-i18n="questions ">Questions</div>
+            </RouterLink>
+          </li>
         </ul>
       </li>
 
@@ -1084,6 +1089,14 @@
           <RouterLink :to="'/author-blog-posts'" class="menu-link" @click="toggleSubmenu('','blogs')">
             <i class="menu-icon fa-brands fa-blogger-b"></i>
             <div data-i18n="blog" class="mt-1">Blog Posts</div>
+          </RouterLink>
+        </li>
+
+        <!-- Media -->
+        <li class="menu-item" v-if="userRole == 'Author'" :class="{ 'active': isExpandedSubMenu === 'media' }">
+          <RouterLink :to="'/author-media-index'" class="menu-link" @click="toggleSubmenu('','media')">
+            <i class="menu-icon fa-solid fa-photo-film"></i>
+            <div data-i18n="blog" class="mt-1">Media</div>
           </RouterLink>
         </li>
         <!-- Athor Dashboard Dashboard End -->

@@ -124,7 +124,7 @@
             <div class="card card-body border-0 p-0 table-responsive table-overflow-hidden">
               <table class="table table-sm table-hover table-bordered">
                 <tr>
-                  <td class="font-weight-bold">First Name :</td>
+                  <td class="font-weight-bold w-25">First Name :</td>
                   <td id="f-name"></td>
                 </tr>
                 <tr>
@@ -182,6 +182,26 @@
                 <tr>
                   <td class="font-weight-bold">Facebook Id :</td>
                   <td id="facebook_id"></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Ip Address :</td>
+                  <td id="ip_address"></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">User Agent :</td>
+                  <td id="user_agent"></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Browser :</td>
+                  <td id="browser"></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">OS :</td>
+                  <td id="os"></td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Step :</td>
+                  <td id="step"></td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">User Type :</td>
@@ -314,21 +334,21 @@ export default {
                     }
                   },
                 },
-                { data: "fname" },
-                { data: "lname" },
-                { data: "email" },
-                { data: "phone_no" },
-                { data: "country" },
-                { data: "company_name" },
-                { data: "company_website" },
-                { data: "created_at" },
-                { data: "address" },
-                { data: "city" },
-                { data: "state" },
-                { data: "zip_code" },
-                { data: "country" },
-                { data: "skype_id" },
-                { data: "linkedin_id" },
+                { data: "fname", render: function(data) { return data ? data : '-----'; } },
+                { data: "lname", render: function(data) { return data ? data : '-----'; } },
+                { data: "email", render: function(data) { return data ? data : '-----'; } },
+                { data: "phone_no", render: function(data) { return data ? data : '-----'; } },
+                { data: "country", render: function(data) { return data ? data : '-----'; } },
+                { data: "company_name", render: function(data) { return data ? data : '-----'; } },
+                { data: "company_website", render: function(data) { return data ? data : '-----'; } },
+                { data: "created_at", render: function(data) { return data ? data : '-----'; } },
+                { data: "address", render: function(data) { return data ? data : '-----'; } },
+                { data: "city", render: function(data) { return data ? data : '-----'; } },
+                { data: "state", render: function(data) { return data ? data : '-----'; } },
+                { data: "zip_code", render: function(data) { return data ? data : '-----'; } },
+                { data: "country", render: function(data) { return data ? data : '-----'; } },
+                { data: "skype_id", render: function(data) { return data ? data : '-----'; } },
+                { data: "linkedin_id", render: function(data) { return data ? data : '-----'; } },
                 {
                   data: "updated_at",
                   render: function (data, type, row) {
@@ -485,7 +505,6 @@ export default {
                         } else if (id === "step-2") {
                           this.changeTableStatus(2);
                         }
-
                         $(".dropdown-menu").remove();
                       });
 
@@ -547,6 +566,7 @@ export default {
                 res.data.data.company_name ?? "--------";
               document.querySelector("#company_website").innerHTML =
                 res.data.data.company_website ?? "--------";
+
               document.querySelector("#address").innerHTML =
                 res.data.data.address ?? "--------";
               document.querySelector("#city").innerHTML =
@@ -563,6 +583,23 @@ export default {
                 res.data.data.linkedin_id ?? "--------";
               document.querySelector("#facebook_id").innerHTML =
                 res.data.data.facebook_id ?? "--------";
+
+              document.querySelector("#ip_address").innerHTML =
+                res.data.data.ip_address ?? "--------";
+              document.querySelector("#user_agent").innerHTML =
+                res.data.data.user_agent ?? "--------";
+              document.querySelector("#browser").innerHTML =
+                res.data.data.browser ?? "--------";
+              document.querySelector("#os").innerHTML =
+                res.data.data.os ?? "--------";
+
+              if(res.data.data.address != null || res.data.data.city != null || res.data.data.state != null || res.data.data.zip_code != null ||res.data.data.country != null || res.data.data.skype_id != null || res.data.data.linkedin_id != null || res.data.data.facebook_id != null){
+                document.querySelector("#step").innerHTML = 2 ;
+              }else{
+                document.querySelector("#step").innerHTML = 1 ;
+              }
+              
+
               if (res.data.data.user_type == "advertiser-register") {
                 document.querySelector("#user_type").innerHTML =
                   '<span class="badge bg-warning text-white">Advertiser</span>';

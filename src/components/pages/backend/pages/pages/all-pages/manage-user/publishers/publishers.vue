@@ -110,6 +110,100 @@
     <div>
 
       <!-- Large Modal -->
+      <div class="modal fade" id="singleDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="assignToManager3">Publisher Delete Note</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <label for="deletenote" class="required">Note</label>
+              <textarea v-model="deleteUser.deleted_note" id="deletenote" class="form-control" placeholder="Enter Your Note" rows="5"></textarea>
+              <div v-if="validationErrorsForNote && validationErrorsForNote.deleted_note" class="text-danger">
+                {{ validationErrorsForNote.deleted_note[0] }}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" @click="deletePublisherWithNote()" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i> Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Large Modal -->
+      <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="assignToManager3">Publisher Delete Note</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <label for="deletenote" class="required">Note</label>
+              <textarea v-model="bulkactionids.deleted_note" id="deletenote" class="form-control" placeholder="Enter Your Note" rows="5"></textarea>
+              <div v-if="validationErrorsForNote && validationErrorsForNote.deleted_note" class="text-danger">
+                {{ validationErrorsForNote.deleted_note[0] }}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" @click="bulkactionsubmission()" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i> Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large Modal -->
+      <div class="modal fade" id="assignToManager" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="assignToManager3">Assign To Manager</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <template v-if="publisherIndex?.accountManagers">
+                <select v-model="assignuser.managerid" class="form-control">
+                    <option value="">Select Manager</option>
+                    <template v-if="publisherIndex.accountManagers.length > 0">
+                      <option v-for="manager in publisherIndex.accountManagers" :value="manager.id" :key="manager.id">
+                      {{ manager.fname }} {{ manager.lname }}
+                      </option>
+                    </template>
+                    <template v-else>
+                      <option value="" class="text-danger">No account manager found</option>
+                    </template>
+                </select>
+              </template>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" @click="assignAccountManager()" class="btn btn-primary"><i class="fas fa-check fa-sm me-1"></i> Assign Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Large Modal -->
       <div class="modal fade" id="statusChangeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
@@ -273,6 +367,10 @@ export default {
         note: "",
         mailAction: "",
       },
+      deleteUser:{
+        user_id : '',
+        deleted_note: ''
+      },
       currentPage: 1,
       lastPage: 1,
       recordsTotal : 0,
@@ -282,7 +380,13 @@ export default {
       bulkactionids : {
         selectedIds: [],
         status: "",
+        deleted_note : "",
       },
+      validationErrorsForNote : null,
+      assignuser : {
+        userid : "",
+        managerid : "",
+      }
     };
   },
   async mounted() { 
@@ -361,8 +465,20 @@ export default {
             // { data: "1" }, 
             { data: "1" }, 
             { data: "1" }, 
-            { data: "2" }, 
-            { data: "4" }, 
+            {
+                data: "2",
+                render: function (data, type, row) {
+                  return '<a data-vue-route title="View" href="/admin-manage-publishers-view/'+row['3']+'">'+row['2']+'</a>';
+                },
+              },
+            {
+                data: "4",
+                render: function (data, type, row) {
+                  return '<a data-vue-route title="View" href="/admin-manage-publishers-view/'+row['3']+'">'+row['4']+'</a>';
+                },
+              },
+            // { data: "2" }, 
+            // { data: "4" }, 
             { data: "5" }, 
             { data: "6" }, 
             { data: "7" }, 
@@ -373,6 +489,7 @@ export default {
           ],
           initComplete: () => { 
             this.attachEventListeners();
+            this.attachEventListenersAssigModal();
             this.attachEventListenersForMenu();
             this.attachEventListenersForSearch();
             this.attachEventListenersBlulkAction();
@@ -553,6 +670,16 @@ export default {
         }
       });
     },
+
+    attachEventListenersAssigModal() {
+      $("#publisher_datatables").on("click", "#assign-manager", (event) => {
+        const target = $(event.target);
+        const dataId = target.data("id");
+        const dataManager = target.data("manager");
+        this.assignuser.userid = dataId;
+        this.assignuser.managerid = dataManager ? dataManager : "";
+      });
+    },
     
     attachEventListenersForSearch() {
       $("#publisher_datatables_wrapper #publisher_datatables_filter input").on("keyup", (event) => {
@@ -660,7 +787,17 @@ export default {
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.value) {
-          (this.getLoader = true),
+          const modalElement = document.getElementById('bulkDeleteModal');
+          const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+          if(modal){
+            modal.show();
+          }
+        }
+      });
+    },
+
+    bulkactionsubmission(){
+      (this.getLoader = true),
             axios
               .post(
                 this.globalVariables.apiUrl + "admin/manage/super-admin/delete/bulk",
@@ -675,18 +812,23 @@ export default {
                 if (res.data.status == "success") {
                   toastr.success(res.data.message);
                   this.getPublisherData();
+                  const modalElement = document.getElementById('bulkDeleteModal');
+                  const modals = bootstrap.Modal.getInstance(modalElement);
+                  if(modals){
+                    modals.hide();
+                  }
                 } else {
                   toastr.error(res.data.message);
                 }
               })
-              .catch((e) => {
-                return e;
+              .catch((error) => {
+                if (error?.response?.data?.errors) {
+                  this.validationErrorsForNote = error.response.data.errors;
+                }
               })
               .finally(() => {
                 this.getLoader = false;
               });
-        }
-      });
     },
 
     bulkStatusChange(alertTitle) {
@@ -726,6 +868,40 @@ export default {
               });
         }
       });
+    },
+
+    // Account Manager Settings
+    assignAccountManager() {
+      this.getLoader = true;
+      axios
+        .post(
+          this.globalVariables.apiUrl+"admin/manage/user/assign-account-manager",
+          this.assignuser,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if(res.data.status == 'success'){
+            this.getPublisherData();
+            toastr.success(res.data.message);
+            const modalElement = document.getElementById('assignToManager');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if(modal){
+              modal.hide();
+            }
+          }else{
+            toastr.error(res.data.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
     },
 
     // Account Access Settings
@@ -817,7 +993,7 @@ export default {
     
     // User Delete
     deltePublisher(id) {
-      var mydata = { data: id }; 
+      this.deleteUser.user_id = id; 
       Swal.fire({
         text: "Are you sure delete",
         icon: "info",
@@ -826,30 +1002,46 @@ export default {
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.value) {
-          this.getLoader = true;
-          axios
-            .post(this.globalVariables.apiUrl+"admin/manage/user/delete", mydata, {
-              headers: {
-                Authorization: "Bearer " + localStorage.getItem("token"),
-              },
-            })
-            .then((res) => {
-              toastr.success(res.data.message);
-              this.getPublisherData();
-            })
-            .catch((e) => {
-              return e;
-            })
-            .finally(() => {
-              this.getLoader = false;
-            });
+          const modalElement = document.getElementById('singleDeleteModal');
+          const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+          if(modal){
+            modal.show();
+          }
         } 
       });
+    },
+    deletePublisherWithNote(){
+      this.getLoader = true;
+        axios
+          .post(this.globalVariables.apiUrl+"admin/manage/user/delete", this.deleteUser, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((res) => {
+            toastr.success(res.data.message);
+            this.getPublisherData();
+            const modalElement = document.getElementById('singleDeleteModal');
+            const modals = bootstrap.Modal.getInstance(modalElement);
+            if(modals){
+              modals.hide();
+            }
+          })
+          .catch((error) => {
+            if (error?.response?.data?.errors) {
+              this.validationErrorsForNote = error.response.data.errors;
+            }
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
     },
     // Model Close
     modalClose() {
       this.modalDisplay = "none";
     },
+
+    
   },
 };
 </script>
@@ -887,9 +1079,9 @@ export default {
   white-space: nowrap; 
   overflow: hidden; 
   text-overflow: ellipsis; 
-  max-width: 100px; 
+  max-width: 120px; 
 }
-#publisher_datatables  {
+/* #publisher_datatables  {
   min-height: 500px;
-}
+} */
 </style>
