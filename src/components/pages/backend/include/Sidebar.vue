@@ -239,6 +239,11 @@
               <div data-i18n="blocked_id">Blocked Ip</div>
             </RouterLink>
           </li>
+          <li class="menu-item" :class="{ 'active': isExpandedSubMenu === 'admin_activities' }">
+            <RouterLink :to="'/admin-manage-admin-activities'" class="menu-link" @click="toggleSubmenu('manage_users','admin_activities')">
+              <div data-i18n="admin_activities">Admin Activities </div>
+            </RouterLink>
+          </li>
         </ul>
       </li>
 

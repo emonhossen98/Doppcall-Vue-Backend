@@ -103,7 +103,56 @@
                 </div>
               </div>
 
-              <div class="form-group mt-3">
+                <div class="form-group mt-3">
+                  <div class="form-check form-switch">
+                    <input 
+                      v-model="addNewUserCreate.profile_editable"
+                      :true-value="1"
+                      :false-value="0"
+                      type="checkbox"
+                      id="allow_edit_profile"
+                      class="form-check-input">
+                    <label for="allow_edit_profile" class="form-check-label required mb-1">Allow User To Edit Profile</label>
+                  </div>
+                  <div v-if="validationErrors && validationErrors.profile_editable" class="text-danger">
+                    {{ validationErrors.profile_editable[0] }}
+                  </div>
+                </div>
+
+                <div class="form-group mt-3">
+                  <div class="form-check form-switch">
+                    <input 
+                      v-model="addNewUserCreate.verifiable"
+                      :true-value="1"
+                      :false-value="0"
+                      type="checkbox"
+                      id="email_verified"
+                      class="form-check-input">
+                    <label for="email_verified" class="form-check-label required mb-1">Email Verified</label>
+                  </div>
+                  <div v-if="validationErrors && validationErrors.verifiable" class="text-danger">
+                    {{ validationErrors.verifiable[0] }}
+                  </div>
+                </div>
+
+                <div class="form-group mt-3">
+                  <div class="form-check form-switch">
+                    <input 
+                      v-model="addNewUserCreate.accessable"
+                      :true-value="1"
+                      :false-value="0"
+                      type="checkbox"
+                      id="account_access"
+                      class="form-check-input">
+                    <label for="account_access" class="form-check-label required mb-1">Account Access</label>
+                  </div>
+                  <div v-if="validationErrors && validationErrors.accessable" class="text-danger">
+                    {{ validationErrors.accessable[0] }}
+                  </div>
+                </div>
+
+
+              <!-- <div class="form-group mt-3">
                 <label for="profile_editable" class="required mb-1">Profile Editable</label>
                 <select  v-model="addNewUserCreate.profile_editable"  id="profile_editable" required class="form-select">
                   <option value="">Select Please</option>
@@ -139,7 +188,7 @@
                 <div v-if="validationErrors && validationErrors.accessable" class="text-danger">
                   {{ validationErrors.accessable[0] }}
                 </div>
-              </div>
+              </div> -->
 
               <div class="form-group mt-3 row">
                 <div class="col-sm-6">
@@ -149,7 +198,7 @@
                       class="py-1 px-2 d-block">The image dimensions 150*150 and max size 1M, type: jpg,png.jpeg.svg</span>
                 </div>
                 <div class="col-sm-6">
-                  <img v-if="showNewUserImage.profile_image" :src="showNewUserImage.profile_image" class="imgpreview">
+                  <img v-if="showNewUserImage.profile_image" :src="showNewUserImage.profile_image" class="imgpreviewwithcreate">
                 </div>
                 <div v-if="validationErrors && validationErrors.profile_image" class="text-danger">
                   {{ validationErrors.profile_image[0] }}
@@ -293,4 +342,8 @@ export default {
 
 </script>
 
-
+<style>
+.imgpreviewwithcreate{
+  width:100%;
+}
+</style>

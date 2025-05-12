@@ -111,6 +111,7 @@ const adminInviteMember = () => import("../components/pages/backend/pages/pages/
 const adminManageUserTrash = () => import("../components/pages/backend/pages/pages/routes/manage-user/trash/trash.vue");
 const adminManageUserIncompleted = () => import("../components/pages/backend/pages/pages/routes/manage-user/incompleted/incompleted.vue");
 const adminManageUserBlockedIp = () => import("../components/pages/backend/pages/pages/routes/manage-user/blockedip/blockedip.vue");
+const adminManageAdminActivities = () => import("../components/pages/backend/pages/pages/routes/manage-user/admin-activities/admin-activities.vue");
 
 const adminBanners = () => import("../components/pages/backend/pages/pages/routes/banner/banner/banner.vue")
 const adminBannersCreate = () => import("../components/pages/backend/pages/pages/routes/banner/banner/bannerCreate.vue");
@@ -970,6 +971,15 @@ const routes = [{
         component: adminManageUserBlockedIp,
         meta: {
           title: 'Blocked Ip',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+      {
+        path: '/admin-manage-admin-activities',
+        component: adminManageAdminActivities,
+        meta: {
+          title: 'Admin Activities',
           requiresAuth: true,
           requiredRoles: ['Super', 'Admin', ],
         }

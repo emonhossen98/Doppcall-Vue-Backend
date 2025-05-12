@@ -71,6 +71,7 @@
                                     </div>
 
                                     <div class="form-group my-3">
+                                      
                                         <label for="offers" class="required mb-1">Select Your Preferred Industry Verticals</label><br>
                                         <select v-model="advertisherEditData.offers" class="js-select2" ref="select2" multiple>
                                          <option v-for="(industrie,index) in industries" :value="industrie.name" :key="index">{{ industrie.name }}</option>
