@@ -95,7 +95,7 @@
             <div class="col-12">
                 <div class="form-group">
                     <label for="user_name" class="required">User</label>
-                    <select v-model="adverstiserDepositeData.user_name" id="user_name" class="form-select" required>
+                    <select v-model="adverstiserDepositeData.user_name" id="user_name" class="select2 form-select" required>
                         <option value="">Select Please</option>
                         <option v-for="user in advertisers.adverstisers" :value="user.id" :key="user.id">
                             {{ user.fname }} - {{ user.company_name }} - {{ user.email }}
@@ -448,6 +448,7 @@ methods: {
           initComplete: () => { 
             this.attachEventListenersForMenu();
             this.attachEventListenersForSearch();
+            this.attachEventListenersOfButton();
 
             const searchInput = $("#publisher_datatables_filter input");
             searchInput.val(this.searchInputValue);
@@ -674,7 +675,6 @@ methods: {
         },
       })
       .then((res) => {  
-        console.log(res.data);
         if(res.data.status == 'success'){
           toastr.success(res.data.message);
           this.$router.push('/admin-manage-advertiser-pay-details/'+this.adverstiserDepositeData.user_name);
@@ -699,6 +699,12 @@ methods: {
         const target = $(event.target);
         const dataId = target.data("id");
         this.adverstiserDepositeData.user_name = dataId;
+        this.$nextTick(() => {
+          this.initializeSelect2();
+          setTimeout(() => {
+            $('#user_name').val(dataId).trigger('change');
+          }, 50);
+        });
         this.showModal = true;
       });
     },
@@ -707,6 +713,18 @@ methods: {
         const target = $(event.target);
         const dataId = target.data("id");
         this.paymentsDtails(dataId);
+      });
+    },
+    attachEventListenersOfButton() {
+      $("#publisher_datatables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if (dataClass === "create") {
+          this.$nextTick(() => {
+            this.initializeSelect2();
+          });
+          this.showModal = true;
+        } 
       });
     },
 
@@ -757,11 +775,28 @@ methods: {
         this.adverstiserDepositeData.payment_name = "deposit";
       }
     },
+    initializeSelect2(){
+      $('#user_name').select2({
+        width: '100%', 
+        dropdownParent: $('#addPaymentModal')
+      }).on('change', (e) => {
+          this.adverstiserDepositeData.user_name = $(e.target).val();
+      });
+    },
 },
 };
 </script>
 
 <style>
+#addPaymentModal .select2-container .select2-selection--single {
+	height: 40px !important;
+}
+#addPaymentModal .select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 39px !important;
+}
+#addPaymentModal .select2-container--default .select2-selection--single .select2-selection__arrow b {
+	margin-top: 4px !important;
+}
 #publisher_datatables colgroup:nth-of-type(2) {
 	display: none !important;
 }

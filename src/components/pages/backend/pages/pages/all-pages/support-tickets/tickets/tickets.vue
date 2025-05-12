@@ -21,11 +21,13 @@
                               <th></th>
                               <th>SL</th>
                               <th>Ticket No</th>
+                              <th>Priority</th>
                               <th>Subject</th>
                               <th>Buyer</th>
                               <th>Role</th>
                               <th>Date</th>
                               <th>Status</th>
+                              <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -186,11 +188,18 @@ export default {
                 { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_ticket_no' },
+                { data: 'priority' },
                 { data: 'subject.name' },
                 { data: 'user.fname' },
                 { data: 'convart_role.name' },
                 { data: 'convart_date' },
                 { data: 'convart_status' },
+                {
+                   data: 'created_at',
+                   render: function (data, type, full, meta) {
+                    return '<div class="ticket_action d-flex align-items-center"><a data-vue-route title="View" href="/admin-tickets-view/'+full.ticket_no+'" class="bg-transparent border-0 text-success me-2"><i class="fas fa-eye fa-sm"></i></a><a data-vue-route title="Edit" href="/admin-tickets-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button id="delete-btn" type="button" title="Delete" data-id='+full.id +' class="bg-transparent border-0 text-danger"><i id="delete-btn" class="far fa-trash-alt fa-sm" data-id='+full.id +'></i></button></div>';
+                  }
+                },
                 
               ],
               initComplete: () => { // Using an arrow function here
@@ -232,15 +241,6 @@ export default {
                   },
                   searchable: false
                 },
-                {
-                  targets: -1, // Actions column
-                  title: 'Actions',
-                  searchable: false,
-                  orderable: false,
-                  render: function (data, type, full, meta) {
-                    return '<div class="ticket_action d-flex align-items-center"><a data-vue-route title="View" href="/admin-tickets-view/'+full.ticket_no+'" class="bg-transparent border-0 text-success me-2"><i class="fas fa-eye fa-sm"></i></a><a data-vue-route title="Edit" href="/admin-tickets-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button id="delete-btn" type="button" title="Delete" data-id='+full.id +' class="bg-transparent border-0 text-danger"><i id="delete-btn" class="far fa-trash-alt fa-sm" data-id='+full.id +'></i></button></div>';
-                  }
-                }
               ],
               order: [[1, 'desc']],
               dom: '<"row mx-2"' +

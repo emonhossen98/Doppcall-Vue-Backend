@@ -6,29 +6,27 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <!-- Content -->
-      <div class="container-fluid flex-grow-1 container-p-y"> 
+      <div class="container-xxl flex-grow-1 container-p-y"> 
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
         <div class="row mt-4">
-            <!-- <h3 class="mb-0">Assign Campaign</h3> -->
             <form >
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <RouterLink :to="'/admin-offers-view/'+getOffers.id" class="sub-heading d-flex align-items-center">
-                                    <img class="country-flag-campaigen" :src="getAllData.primary_country_code" alt=""> {{ getOffers.name }}
+                            <div class=" d-flex align-items-center">
+                                <RouterLink :to="'/admin-offers-view/'+getOffers.id" class="country-sub-campaign sub-heading d-flex align-items-center">
+                                    <img class="country-flagofCampaign" :src="getAllData.primary_country_code" alt=""> {{ getOffers.name }}
+                                    <template v-if="getOffers.offer_tag">
+                                      {{ tagConvart(getOffers.offer_tag) }}
+                                      <span v-for="(tag, index) in offerTags" :key="index" class="badge bg-primary ms-1">
+                                          {{ tag }}
+                                      </span>
+                                  </template>
                                 </RouterLink>
-                                <template v-if="getOffers.offer_tag">
-                                    {{ tagConvart(getOffers.offer_tag) }}
-                                    <span v-for="(tag, index) in offerTags" :key="index" class="badge bg-primary ms-1">
-                                        {{ tag }}
-                                    </span>
-                                </template>
                             </div>
                         </div>
                     </div>
-                    
                     <div class="card mt-4">
                         <div class="card-header custom-card-header border-bottom">
                             <h5 class="card-title mb-0">New Create Campaign</h5>
@@ -37,27 +35,13 @@
                             <div class="row-mb">
                                 <div class="row">
                                   <div class="col-md-2">
-                                    <label for="Publisher" class="required">Publisher</label>
-                                  </div>
-                                  <div class="col-md-10" id="selectPublisher">
-                                  <template v-if="getAllData && getAllData.publishers">
-                                    <select  v-model="campaineCreate.Publisher" id="Publishers" class="select2 form-select">
-                                      <option value="">Select Publisher</option>
-                                      <option v-for="(user,index) in getAllData.publishers" :value="user.id" :key="index">{{ user.fname ?? '' }} {{ user.lname ?? ''  }} --  {{ user.email ?? '' }} -- {{ user.company_name ?? '' }}</option>
-                                    </select>
-                                  </template>
-                                  </div>
-                                </div>
-
-                                <div class="row mt-3">
-                                  <div class="col-md-2">
                                     <label for="name" class="required">Campaign Name</label>
                                   </div>
                                   <div class="col-md-10">
-                                        <input type="text" v-model="campaineCreate.name" id="name" class="form-control" placeholder="Enter Campaign Name">
-                                        <div v-if="validationErrors &&  validationErrors.name" class="text-danger">
-                                        {{ validationErrors.name[0] }}
-                                        </div>
+                                    <input type="text" v-model="campaineCreate.name" id="name" class="form-control" placeholder="Enter Campaign Name">
+                                    <div v-if="validationErrors &&  validationErrors.name" class="text-danger">
+                                      {{ validationErrors.name[0] }}
+                                  </div>
                                   </div>
                                 </div>
 
@@ -146,7 +130,6 @@
     </div>
     <!-- Content wrapper -->
 </template>
-
   <script>
   import axios from "axios";
   import Loader from '../../../../../include/loader.vue';
@@ -177,7 +160,6 @@
         ],
         
         campaineCreate: {
-            Publisher                 : "",
             answers                   : [],
             question_ids              : [],
             offer_id                  : "",
@@ -190,6 +172,7 @@
             phone_number              : "",
             accept                    : true,
         },
+
         getAllData : "",
         getOffers : "",
         validationErrors: null,
@@ -240,9 +223,6 @@
             this.getOffers                  = res.data.offer;
             this.offerTagString             = res.data.offer.offer_tag;
             $(this.$refs.summernoteRules).summernote('code', res.data.offer.rules ?? '');
-            this.$nextTick(() => {
-              this.initializeSelect2();
-            });
           })
           .catch((error) => {
             return error;
@@ -251,27 +231,18 @@
             this.getLoader = false;
           });
       },
-      initializeSelect2(){
-        if ($.fn.select2 && $('#Publishers').hasClass("select2-hidden-accessible")) {
-          $('#Publishers').select2('destroy');
-        }
-        $('#Publishers').select2({
-          width: '100%', 
-        }).on('change', (e) => {
-            this.campaineCreate.Publisher = $(e.target).val();
-        });
-      },
+
       offersCampaigenDataSave() {
         this.getLoader = true;
         axios
-          .post(this.globalVariables.apiUrl+"admin/campaigns/offer/assign/store", this.campaineCreate, {
+          .post(this.globalVariables.apiUrl+"admin/campaigns/store", this.campaineCreate, {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
             },
           })
           .then((res) => {
               toastr.success(res.data.message);
-              this.$router.push("/admin-campaigns-user");
+              this.$router.push("/admin-campaigns-index");
           })
           .catch((error) => {
             if (error.response && error.response.data && error.response.data.errors) {
@@ -296,20 +267,12 @@
   
 
 <style scoped>
-.country-flag-campaigen{
-  width: 30px;
-  margin-right: 5px;
+.country-sub-campaign{
+  width : 50%;
+}
+.country-flagofCampaign{
+  width : 4%;
+  margin-right : 4px;
 }
 
-</style>
-<style>
-#selectPublisher .select2-container .select2-selection--single {
-	height: 40px !important;
-}
-#selectPublisher .select2-container--default .select2-selection--single .select2-selection__rendered {
-	line-height: 36px !important;
-}
-#selectPublisher .select2-container--default .select2-selection--single .select2-selection__arrow {
-	height: 35px !important;
-}
-</style>
+  </style>

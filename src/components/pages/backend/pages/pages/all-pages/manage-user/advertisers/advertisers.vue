@@ -61,12 +61,16 @@
                               <!-- <th></th> -->
                               <th></th>
                               <th>SL</th>
+                              <!-- <th>User Type</th> -->
                               <th>Company</th>
                               <th>Name</th>
                               <th>Email</th>
                               <th>Phone</th>
                               <th>Balance</th>
                               <th>Manager</th>
+                              <!-- <th>Traffic Source</th>
+                              <th>City</th>
+                              <th>Country</th> -->
                               <th>Status</th>
                               <th class="text-center" style="width: 35%;">Action</th>
                             </tr>
@@ -451,6 +455,7 @@ export default {
         )
         .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
+          console.log(res.data)
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;

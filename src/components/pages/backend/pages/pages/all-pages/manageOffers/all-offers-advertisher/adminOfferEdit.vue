@@ -197,17 +197,17 @@
               </div>
               <div class="col-md-4">
                 <div class="card">
-                  <!-- <div class="card-header pt-3">
+                  <div class="card-header pt-3">
                     <h5 class="card-title mb-0">Assign To Advertiser Field</h5>
-                  </div> -->
-                  <div class="card-body ">
-                    <!-- <div class="form-group mb-3">
+                  </div>
+                  <div class="card-body mt-3">
+                    <div class="form-group mb-3">
                     <label for="assign_advertiser" class="mb-1">Advertiser</label>
                     <select v-model="offersCreate.assign_advertiser" id="assign_advertiser" class="form-select">
                       <option value="0">No Assign</option>
                       <option v-for="advertiser in OfferCreate.advertisers" :value="advertiser.id" :key="advertiser.id">{{ advertiser.fname +' '+ advertiser.lname +' -- '+advertiser.company_name }}</option>
                     </select>
-                    </div> -->
+                    </div>
   
                     <div class="form-group mb-3">
                     <label for="" class="mb-1">Hold Peiod</label>
@@ -536,7 +536,7 @@
           marchent_allow: "",
           materials_moderation: "",
           status: "",
-          offer_role_type : "publisher",
+          offer_role_type : "advertiser",
         },
         validationErrors: null,
         selectedAllowTrafic : [],
@@ -660,7 +660,7 @@
           .then((res) => {
             if(res.data.status == 'success'){
               toastr.success(res.data.message);
-              this.$router.push("/admin-offers");
+              this.$router.push("/admin-offers-advertiser");
             }else{
               toastr.error(res.data.message);
             }

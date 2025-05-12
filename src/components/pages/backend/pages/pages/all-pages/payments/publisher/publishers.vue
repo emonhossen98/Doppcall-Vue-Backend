@@ -90,7 +90,7 @@
           <div class="row">
             <div class="form-group">
               <label for="user_name" class="required mb-1">User</label>
-              <select v-model="publiserDepositeData.user_name" id="user_name" class="form-select" required>
+              <select v-model="publiserDepositeData.user_name" id="user_name" class="select2 form-select" required>
                 <option value="">Select Please</option>
                 <option  v-for="user in publishers.publisher" :value="user.id" :key="user.id">
                   {{ user.fname }} - {{ user.company_name }} - {{ user.email }}
@@ -288,6 +288,14 @@ export default {
       }
     }, true);
   },
+  // watch: {
+  //   'publishers.publisher'(newVal) {
+  //     this.$nextTick(() => {
+  //       this.initializeSelect2();
+  //       $('#user_name').val(this.publiserDepositeData.user_name).trigger('change');
+  //     });
+  //   }
+  // },
   computed: {
     paginationPages() {
       const pages = [];
@@ -509,6 +517,9 @@ export default {
         const target = $(event.target);
         const dataClass = target.attr("id");
         if (dataClass === "create") {
+          this.$nextTick(() => {
+            this.initializeSelect2();
+          });
           this.showModal = true;
         } 
       });
@@ -629,8 +640,7 @@ export default {
       axios
       .post(this.globalVariables.apiUrl+"admin/payment/publisher/deposit/user-select", this.publiserDepositeData, {
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("token"),
-          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + localStorage.getItem("token")
         },
       })
       .then((res) => {  
@@ -660,6 +670,12 @@ export default {
         const dataId = target.data("id");
         this.publiserDepositeData.user_name = dataId;
         this.showModal = true;
+        this.$nextTick(() => {
+          this.initializeSelect2();
+          setTimeout(() => {
+            $('#user_name').val(dataId).trigger('change');
+          }, 50);
+        });
       });
     },
 
@@ -671,6 +687,16 @@ export default {
       });
     },
 
+    initializeSelect2(){
+      $('#user_name').select2({
+        width: '100%', 
+        dropdownParent: $('#addPaymentModal')
+      }).on('change', (e) => {
+          this.publiserDepositeData.user_name = $(e.target).val();
+      });
+    },
+    
+
     //Payment Detailse View
     paymentsDtails(id) {
       this.getLoader = true;  
@@ -680,6 +706,7 @@ export default {
         })
         .then((res) => {
           if (res.data.status == "error") {
+            console.log(res.data);
             toastr.error(res.data.message);
           } else {
             window.open("/admin-manage-publishers-pay-details/" + id, "_blank");
@@ -708,6 +735,15 @@ export default {
 };
 </script>
 <style>
+#addPaymentModal .select2-container .select2-selection--single {
+	height: 40px !important;
+}
+#addPaymentModal .select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 39px !important;
+}
+#addPaymentModal .select2-container--default .select2-selection--single .select2-selection__arrow b {
+	margin-top: 4px !important;
+}
 #publisher_datatables colgroup:nth-of-type(2) {
 	display: none !important;
 }

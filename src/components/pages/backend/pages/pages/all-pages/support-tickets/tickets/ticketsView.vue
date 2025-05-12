@@ -23,9 +23,19 @@
                       <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center">
                           <div>
-                            <h5 class="mb-0">
-                              {{ viewTicket && viewTicket.user && viewTicket.user.fname }} {{ viewTicket && viewTicket.user && viewTicket.user.lname }}
-                            </h5>
+                            <div class="d-flex align-items-center">
+                              <h5 class="mb-0">
+                                {{ viewTicket?.user?.fname }} {{ viewTicket?.user?.lname }}
+                              </h5>
+                              <span class="text-white bg-info ms-1 px-2 rounded-1">
+                                <template v-if="viewTicket?.user?.role_id == 3">
+                                  {{ 'Publisher' }}
+                                </template>
+                                <template v-else-if="viewTicket?.user?.role_id == 2">
+                                  {{ 'Advertiser' }}
+                                </template>
+                              </span>
+                            </div>
                             <small class="text-muted">{{ viewTicket.convart_time }}</small>
                             <div class="support-message" v-html="viewTicket.description"></div>
                           </div>
@@ -109,7 +119,7 @@
             <div class="card-body">
               <form>
                 <div class="form-group">
-                <label for="comment" class="required mb-1">Comment</label><span class="word_limit">(Word Count: {{ wordCount }} / 200) 
+                <label for="comment" class="required mb-1">Reply to Ticket</label><span class="word_limit">(Word Count: {{ wordCount }} / 200) 
                   <span v-if="wordLimitReached" style="color: red;">(Word limit reached)</span></span>
                   <textarea  ref="CommentReplay" class="comment"></textarea>
                 </div>
@@ -156,7 +166,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-3">
+        <div class="col-12 col-lg-3" id="ticket-right-side">
           <div class="card">
             <div class="card-body">
               <div class="support-info">
@@ -166,7 +176,15 @@
                 <table class="w-100 mt-3 support-table">
                   <tr>
                     <td><strong>Full Name</strong></td>
-                    <td>{{ viewTicket && viewTicket.user && viewTicket.user.fname }}  {{  viewTicket && viewTicket.user && viewTicket.user.lname }}</td>
+                    <td>
+                      <RouterLink
+                          :to="viewTicket?.user?.role_id == 3
+                            ? '/admin-manage-publishers-view/' + viewTicket?.user?.id
+                            : '/admin-manage-advertiser-view/' + viewTicket?.user?.id"
+                        >
+                          {{ viewTicket?.user?.fname }} {{ viewTicket?.user?.lname }}
+                        </RouterLink>
+                    </td>
                   </tr>
                   <tr>
                       <td><strong>Browser</strong></td>
@@ -207,12 +225,16 @@
                 </table>
 
                 <div class="ticket-close text-center mt-4">
-                <template v-if="viewTicket.status == 'Re-Open'">
+                  <div class="form-check form-switch d-flex align-items-center">
+                    <input class="form-check-input" type="checkbox" id="viewStatus" :checked="viewTicket.status === 'Re-Open'" @change="toggleStatus(viewTicket)">
+                    <label class="form-check-label px-2 py-1" for="viewStatus">{{ viewTicket.status === 'Re-Open' ? 'Re-Open' : 'Closed' }}</label>
+                  </div>
+                <!-- <template v-if="viewTicket.status == 'Re-Open'">
                  <button @click="updateStatus('Close',viewTicket.id)" class="btn btn-sm btn-danger">Closed</button>
                 </template>
                 <template v-else>
                  <button @click="updateStatus('Re-Open',viewTicket.id)" class="btn btn-sm btn-info">Re-Open</button>
-                </template>
+                </template> -->
                 </div>
               </div>
             </div>
@@ -381,6 +403,10 @@ export default {
     isDoc(file) {
       const ext = this.getExtension(file);
       return ['doc', 'docx'].includes(ext);
+    },
+    toggleStatus(ticket) {
+      const newStatus = ticket.status === 'Re-Open' ? 'Close' : 'Re-Open';
+      this.updateStatus(newStatus, ticket.id);
     },
     getSupportTicketView() {
       this.getLoader = true;
@@ -667,6 +693,12 @@ tr {
 }
 .admin-background {
 	background: #b5b5b570;
+}
+
+#ticket-right-side {
+	position: fixed;
+	right: 0;
+	width: 20%;
 }
 </style>
 

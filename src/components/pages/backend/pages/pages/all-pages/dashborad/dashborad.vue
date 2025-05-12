@@ -580,7 +580,6 @@
               >
                 <thead>
                   <tr>
-                    <th></th>
                     <th>SL</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -1535,7 +1534,6 @@ export default {
             data: res.data.userActivities,
             columns: [
               { data: "id" },
-              { data: "id" },
               { data: "fname" },
               { data: "lname" },
               {
@@ -1573,22 +1571,9 @@ export default {
               },
             ],
             createdRow: function (row, data, dataIndex) {
-              $("td:eq(1)", row).html(dataIndex + 1);
+              $("td:eq(0)", row).html(dataIndex + 1);
             },
-            columnDefs: [
-              {
-                targets: 0,
-                orderable: false,
-                checkboxes: {
-                  selectAllRender: '<input type="checkbox" class="form-check-input">',
-                },
-                render: function () {
-                  return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
-                },
-                searchable: false,
-              },
-            ],
-            order: [[2, "desc"]],
+            order: [[0, "desc"]],
             dom:
               '<"row mx-2"' +
               '<"col-md-4"f>' +

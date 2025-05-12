@@ -39,11 +39,11 @@
                                   <div class="col-md-2">
                                     <label for="Publisher" class="required">Publisher</label>
                                   </div>
-                                  <div class="col-md-10" id="selectPublisher">
+                                  <div class="col-md-10">
                                   <template v-if="getAllData && getAllData.publishers">
-                                    <select  v-model="campaineCreate.Publisher" id="Publishers" class="select2 form-select">
+                                    <select v-model="campaineCreate.Publisher" id="Publisher" class="form-select">
                                       <option value="">Select Publisher</option>
-                                      <option v-for="(user,index) in getAllData.publishers" :value="user.id" :key="index">{{ user.fname ?? '' }} {{ user.lname ?? ''  }} --  {{ user.email ?? '' }} -- {{ user.company_name ?? '' }}</option>
+                                      <option v-for="(user,index) in getAllData.publishers" :value="user.id" :key="index">{{ user.name}}</option>
                                     </select>
                                   </template>
                                   </div>
@@ -240,9 +240,6 @@
             this.getOffers                  = res.data.offer;
             this.offerTagString             = res.data.offer.offer_tag;
             $(this.$refs.summernoteRules).summernote('code', res.data.offer.rules ?? '');
-            this.$nextTick(() => {
-              this.initializeSelect2();
-            });
           })
           .catch((error) => {
             return error;
@@ -251,16 +248,7 @@
             this.getLoader = false;
           });
       },
-      initializeSelect2(){
-        if ($.fn.select2 && $('#Publishers').hasClass("select2-hidden-accessible")) {
-          $('#Publishers').select2('destroy');
-        }
-        $('#Publishers').select2({
-          width: '100%', 
-        }).on('change', (e) => {
-            this.campaineCreate.Publisher = $(e.target).val();
-        });
-      },
+
       offersCampaigenDataSave() {
         this.getLoader = true;
         axios
@@ -299,17 +287,5 @@
 .country-flag-campaigen{
   width: 30px;
   margin-right: 5px;
-}
-
-</style>
-<style>
-#selectPublisher .select2-container .select2-selection--single {
-	height: 40px !important;
-}
-#selectPublisher .select2-container--default .select2-selection--single .select2-selection__rendered {
-	line-height: 36px !important;
-}
-#selectPublisher .select2-container--default .select2-selection--single .select2-selection__arrow {
-	height: 35px !important;
 }
 </style>

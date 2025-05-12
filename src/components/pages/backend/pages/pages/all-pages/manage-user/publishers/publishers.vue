@@ -51,20 +51,24 @@
               </h5>
             </div>
             <div class="card-body table-responsive table-overflow-hidden">
-              <table class="align-middle mb-0 table table-hover" id="publisher_datatables">
+              <table class="align-middle mb-0 table table-hover" id="publisher_datatables" style="width: 100%;">
                 <thead>
                   <tr>
                     <!-- <th></th> -->
                     <th></th>
                     <th>SL</th>
+                    <!-- <th>User Type</th> -->
                     <th>Company</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Balance</th>
                     <th>Manager</th>
+                    <!-- <th>Traffic Source</th>
+                    <th>City</th>
+                    <th>Country</th> -->
                     <th>Status</th>
-                    <th class="text-center" style="width: 50%;">Action</th>
+                    <th style="width: 20%;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -464,14 +468,20 @@ export default {
           columns: [
             // { data: "1" }, 
             { data: "1" }, 
-            { data: "1" }, 
+            { data: "1" },
+            // {
+            //     data: "12",
+            //     render: function (data, type, row) {
+            //       return '<span class="badge bg-success">'+row['12']+'</span>';
+            //     },
+            //   }, 
             {
                 data: "2",
                 render: function (data, type, row) {
                   return '<a data-vue-route title="View" href="/admin-manage-publishers-view/'+row['3']+'">'+row['2']+'</a>';
                 },
               },
-            {
+              {
                 data: "4",
                 render: function (data, type, row) {
                   return '<a data-vue-route title="View" href="/admin-manage-publishers-view/'+row['3']+'">'+row['4']+'</a>';
@@ -483,7 +493,15 @@ export default {
             { data: "6" }, 
             { data: "7" }, 
             { data: "8" }, 
+            // {
+            //     data: "11",
+            //     render: function (data, type, row) {
+            //       return '<a data-vue-route title="View" href="/admin-manage-publishers-view/'+row['3']+'">'+row['4']+'</a>';
+            //     },
+            //   },
             { data: "9" }, 
+            // { data: "9" }, 
+            // { data: "9" }, 
             { data: "10" }, 
             // { data: "11" }, 
           ],

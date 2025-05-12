@@ -15,15 +15,15 @@
                       <div class="card">
                           <div class="card-body">
                               <div class="d-flex align-items-center">
-                                <RouterLink :to="'/admin-offers-view/'+getOffers.id" class="sub-heading d-flex align-items-center">
+                                <RouterLink :to="'/admin-offers-view/'+getOffers.id" class="sub-heading d-flex align-items-center w-100">
                                     <img class="country-flag me-2" :src="getAllData.primary_country_code" alt=""> {{ getOffers.name }}
+                                    <template v-if="getOffers.offer_tag">
+                                        {{ tagConvart(getOffers.offer_tag) }}
+                                        <span v-for="(tag, index) in offerTags" :key="index" class="badge bg-primary ms-1">
+                                            {{ tag }}
+                                        </span>
+                                    </template>
                                 </RouterLink>
-                                <template v-if="getOffers.offer_tag">
-                                    {{ tagConvart(getOffers.offer_tag) }}
-                                    <span v-for="(tag, index) in offerTags" :key="index" class="badge bg-primary ms-1">
-                                        {{ tag }}
-                                    </span>
-                                </template>
                               </div>
                           </div>
                       </div>
@@ -31,7 +31,7 @@
                       <div class="card mt-3">
                           <div class="card-header custom-card-header border-bottom d-flex justify-content-between">
                               <h5 class="card-title mb-0">Edit Campaign</h5>
-                              <RouterLink class="btn btn-info btn-sm" :to="'/admin-chats'"><i class="fa fa-envelope" aria-hidden="true"></i></RouterLink>
+                              <RouterLink class="btn btn-info btn-sm" target="_blank" :to="'/admin-chats/000'"><i class="fa fa-envelope" aria-hidden="true"></i></RouterLink>
                           </div>
                           <div class="card-body mt-3">
                               <div class="row-mb">
@@ -52,7 +52,22 @@
                                     <label for="type">Type</label>
                                   </div>
                                   <div class="col-md-10">
-                                    <input type="text" v-model="campaineUpdate.type" id="type" class="form-control">
+                                    <input type="text" v-model="campaineUpdate.type" id="type" class="form-control" placeholder="Enter Your Type">
+                                  </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                  <div class="col-md-2">
+                                    <label for="type">Company Name</label>
+                                  </div>
+                                  <div class="col-md-10">
+                                    <RouterLink
+                                      :to="campaignuser?.role_id == 3
+                                        ? '/admin-manage-publishers-view/' + campaignuser?.id
+                                        : '/admin-manage-advertiser-view/' + campaignuser?.id"
+                                    >
+                                    {{ campaineUpdate.company_name ?? '' }} -- {{ campaignuser.phone_no ?? '' }}
+                                  </RouterLink>
                                   </div>
                                 </div>
 
@@ -61,7 +76,7 @@
                                     <label for="phone_number">Phone Number</label>
                                   </div>
                                   <div class="col-md-10">
-                                    <input type="number" v-model="campaineUpdate.phone_number" id="phone_number" class="form-control">
+                                    <input type="number" v-model="campaineUpdate.phone_number" id="phone_number" class="form-control" placeholder="Enter Your Phone Number">
                                   </div>
                                 </div>
 
@@ -176,6 +191,7 @@
             offer_campaign_material_id: "",
             name                      : "",
             type                      : "",
+            company_name              : "",
             trafic_source             : "",
             note                      : "",
             rules                     : "",
@@ -184,6 +200,7 @@
             submit_btn                : "",
             accept                    : true,
         },
+        campaignuser : "",
         getAllData : "",
         getOffers : "",
         validationErrors: null,
@@ -239,19 +256,21 @@
             },
           })
           .then((res) => {
-            this.getAllData                   = res.data;
-            this.campaign                     = res.data.campaign;
-            this.getOffers                    = res.data.offer;
-            this.offerTagString               = res.data.offer.offer_tag;
-            this.campaineUpdate.offer_id      = res.data.offer.id;
-            this.campaineUpdate.name          = res.data.campaign.name;
-            this.campaineUpdate.type          = res.data.campaign.type;
-            this.campaineUpdate.trafic_source = res.data.campaign.trafic_source;
-            this.campaineUpdate.note          = res.data.campaign.note;
-            this.campaineUpdate.rules         = res.data.campaign.rules;
-            this.campaineUpdate.phone_number  = res.data.campaign.phone_number;
-            $(this.$refs.summernoteRules).summernote('code', res.data.offer.rules ?? '');
-            $(this.$refs.summernoteNote).summernote('code', res.data.offer.note ?? '');
+            this.getAllData                   = res?.data;
+            this.campaign                     = res?.data?.campaign;
+            this.getOffers                    = res?.data?.offer;
+            this.offerTagString               = res?.data?.offer?.offer_tag;
+            this.campaineUpdate.offer_id      = res?.data?.offer?.id;
+            this.campaineUpdate.name          = res?.data?.campaign?.name;
+            this.campaineUpdate.type          = res?.data?.campaign?.type;
+            this.campaineUpdate.company_name  = res?.data?.campaign?.user?.company_name;
+            this.campaignuser                 = res?.data?.campaign?.user;
+            this.campaineUpdate.trafic_source = res?.data?.campaign?.trafic_source;
+            this.campaineUpdate.note          = res?.data?.campaign?.note;
+            this.campaineUpdate.rules         = res?.data?.campaign?.rules;
+            this.campaineUpdate.phone_number  = res?.data?.campaign?.phone_number;
+            $(this.$refs.summernoteRules).summernote('code', res?.data?.offer?.rules);
+            $(this.$refs.summernoteNote).summernote('code', res?.data?.offer?.note);
             console.log(res.data);
           })
           .catch((error) => {
@@ -297,7 +316,7 @@
   </script>
   <style>
 #edit-campaign-offer .country-flag {
-	width: 15%;
+	width: 3%;
 }
 </style>
   

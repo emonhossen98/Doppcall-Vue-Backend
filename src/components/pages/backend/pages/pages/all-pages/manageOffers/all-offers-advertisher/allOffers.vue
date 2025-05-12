@@ -337,7 +337,7 @@ export default {
         country: "",
         category: "",
         type: "",
-        role_type : "publisher",
+        role_type : "advertiser",
       },
       countendData: "",
       currentPage: 1,
@@ -420,7 +420,7 @@ export default {
     getOfferData(page = 1, perPage = 10, searchValue = '') {
       this.getLoader = true;
       axios
-        .get(this.globalVariables.apiUrl + "admin/offers/get-data", {
+        .get(this.globalVariables.apiUrl + "admin/offers/advertiser-get-data", {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           params: { page: page, perPage: perPage, search: searchValue },
         })
@@ -962,7 +962,7 @@ export default {
             })
             .then((res) => {
               toastr.success(res.data.message);
-              this.$router.push("admin-offers-edit/" + res.data.id);
+              this.$router.push("admin-advertiser-offers-edit/" + res.data.id);
             })
             .catch((e) => {
               return e;
@@ -1064,9 +1064,9 @@ export default {
         const target = $(event.target);
         const dataClass = target.attr("id");
         if (dataClass === "create") {
-          this.$router.push("/admin-offers/create");
+          this.$router.push("/admin-offers-advertiser/create");
         } else if (dataClass === "import") {
-          this.$router.push("/admin-offers-import");
+          this.$router.push("/admin-offers-advertiser-import");
         }
       });
     },

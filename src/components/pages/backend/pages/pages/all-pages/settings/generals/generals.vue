@@ -214,6 +214,36 @@
 
           <div class="card mt-4">
             <div class="card-header">
+              <h5 class="card-title mb-0">Publishers & Advertisers Live Support</h5>
+            </div>
+            <div class="card-body pt-1">
+              <form>
+                <div class="form-group mb-3">
+                  <label for="Label" class="mb-1">Label Name</label>
+                  <input type="text" v-model="aplivesupport.label" id="Label" class="form-control" placeholder="Enter Your Label Name"/>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="url" class="mb-1">URL</label>
+                  <input type="text" v-model="aplivesupport.url" id="url" class="form-control" placeholder="Enter Your URL"/>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="target" class="mb-1">Target</label>
+                  <select id="target" v-model="aplivesupport.target" class="form-select">
+                    <option value="0">Same Tab</option>
+                    <option value="1">New Tab</option>
+                  </select>
+                </div>
+                <div class="form-group text-end">
+                  <button type="button" @click="aplivesupportSave()" class="btn btn-primary btn-sm">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-header">
               <h5 class="card-title mb-0">Shortcode Form</h5>
             </div>
             <div class="card-body pt-1">
@@ -379,6 +409,11 @@ export default {
       footerMenu: {
         footer_menu: "",
       },
+      aplivesupport: {
+        label: "",
+        url: "",
+        target: "0",
+      },
       validationErrors: null,
     };
   },
@@ -488,6 +523,37 @@ export default {
         .post(
           this.globalVariables.apiUrl + "admin/mailsettings/generals/skype",
           this.skypeChart,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          toastr.success(res.data.message);
+          this.getGeneralsData();
+          this.validationErrors = "";
+        })
+        .catch((error) => {
+          if (
+            error &&
+            error.response &&
+            error.response.data &&
+            error.response.data.errors
+          ) {
+            this.validationErrors = error.response.data.errors;
+          }
+        })
+        .finally(() => {
+          this.getLoader = false;
+        });
+    },
+    aplivesupportSave() {
+      this.getLoader = true;
+      axios
+        .post(
+          this.globalVariables.apiUrl + "admin/mailsettings/generals/aplivesupport",
+          this.aplivesupport,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -635,6 +701,11 @@ export default {
 
           // Skype Chart
           this.skypeChart.skype_username = res.data.skype_chart;
+
+          // Live Support
+          this.aplivesupport.label = res.data.ap_live_support_label;
+          this.aplivesupport.url = res.data.ap_live_support_url;
+          this.aplivesupport.target = res.data.ap_live_support_target;
 
           // Shortcode Form
           this.shortcodeForm.date_time = res.data.meetingTime;

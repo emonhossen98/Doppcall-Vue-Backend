@@ -32,6 +32,11 @@
               <div data-i18n="all_offers">All Offers</div>
             </RouterLink>
           </li>
+          <li class="menu-item" :class="{ 'active': isExpandedSubMenu === 'all-offer-advertiser' }">
+            <RouterLink :to="'/admin-offers-advertiser'" class="menu-link" @click="toggleSubmenu('manage-offer','all-offer-advertiser')">
+              <div data-i18n="all_offers_advertiser">All Offers (Advertiser)</div>
+            </RouterLink>
+          </li>
           <li class="menu-item" :class="{ 'active': isExpandedSubMenu === 'type' }">
             <RouterLink :to="'/admin-offers-types'" class="menu-link" @click="toggleSubmenu('manage-offer','type')">
               <div data-i18n="types">Types</div>
@@ -772,13 +777,13 @@
               </li>
               <li class="menu-item">
                 <template  v-if="userData.is_email_verified != null && userData.account_access == 1">
-                  <a :href="'skype:'+skype_config" class="menu-link">
-                    <div data-i18n="liveskype_support">Live Skype Support</div>
+                  <a :target="ap_live_support_target == 1 ? '_blank' : ''" :href="ap_live_support_url ?? '#'" class="menu-link">
+                    <div data-i18n="liveskype_support">{{ ap_live_support_label ?? '' }}</div>
                   </a>
                 </template>
                 <template  v-else>
                   <a href="javascript:" @click="showErrorMessage()"class="menu-link">
-                    <div data-i18n="liveskype_support">Live Skype Support</div>
+                    <div data-i18n="liveskype_support">{{ ap_live_support_label ?? '' }}</div>
                   </a>
                 </template>
               </li>
@@ -832,7 +837,17 @@
               </template>
               <template  v-else>
                 <a href="javascript:" @click="showAdvertisherErrorMessage()" class="menu-link">
-                  <div data-i18n="email_support">All Offers</div>
+                  <div data-i18n="all_offers">All Offers</div>
+                </a>
+              </template>
+              <template  v-if="userData.is_email_verified != null && userData.account_access == 1">
+                <RouterLink :to="'/advertiser-assign-offers'" class="menu-link" @click="toggleSubmenu('manage-offer','assign-offer')">
+                  <div data-i18n="assign-offer">Assign Offers</div>
+                </RouterLink>
+              </template>
+              <template  v-else>
+                <a href="javascript:" @click="showAdvertisherErrorMessage()" class="menu-link">
+                  <div data-i18n="assign">Assign Offers</div>
                 </a>
               </template>
               </li>
@@ -982,8 +997,8 @@
             </template>
               </li>
               <li class="menu-item">
-                <a :href="'skype:'+skype_config" class="menu-link">
-                  <div data-i18n="liveskype_support">Live Skype Support</div>
+                <a :href="ap_live_support_url ?? '#'" :target="ap_live_support_target == 1 ? '_blank' : ''" class="menu-link">
+                  <div data-i18n="liveskype_support">{{ ap_live_support_label ?? '' }}</div>
                 </a>
               </li>
 
@@ -1150,6 +1165,11 @@ export default {
       skype_config: "",
       secondary_logo: "",
       getLoader: false,
+      getLoader: false,
+      getLoader: false,
+      ap_live_support_label : "",
+      ap_live_support_url : "",
+      ap_live_support_target : "",
     };
   },
   mounted() {
@@ -1167,6 +1187,9 @@ export default {
         })
         .then((res) => {
           const { offerCategories, logo } = res.data;
+          this.ap_live_support_label = res.data.ap_live_support_label;
+          this.ap_live_support_target = res.data.ap_live_support_target;
+          this.ap_live_support_url = res.data.ap_live_support_url;
           this.offerCategories = offerCategories;
           this.logo = logo.logo;
           this.secondary_logo = logo.secoundary_logo;
@@ -1175,7 +1198,7 @@ export default {
           console.error("Error fetching header data:", error);
         })
         .finally(() => {
-          this.getLoader = false; // Hide loader after data fetch is complete
+          this.getLoader = false; 
         });
     },
 

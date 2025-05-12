@@ -33,6 +33,15 @@ const adminCampaignsCreate = () => import("../components/pages/backend/pages/pag
 const adminCampaignsAssign = () => import("../components/pages/backend/pages/pages/all-pages/manageOffers/all-offers/adminCampaignsAssign.vue");
 const adminOfferImport = () => import("../components/pages/backend/pages/pages/all-pages/manageOffers/all-offers/offerImport.vue");
 
+
+
+const adminOffersAdvertiser = () => import("../components/pages/backend/pages/pages/routes/manage-offer/all-offer-advertisher/all-offer.vue");
+const adminOffersCreateAdvertiser = () => import("../components/pages/backend/pages/pages/routes/manage-offer/all-offer-advertisher/offer-create.vue");
+const adminOffersEditAdvertiser = () => import("../components/pages/backend/pages/pages/routes/manage-offer/all-offer-advertisher/adminOfferEdit.vue");
+const adminOfferImportAdvertiser = () => import("../components/pages/backend/pages/pages/all-pages/manageOffers/all-offers-advertisher/offerImport.vue");
+
+
+
 const adminOffersTypes = () => import("../components/pages/backend/pages/pages/routes/manage-offer/type/type.vue");
 const adminOffersTypesCreate = () => import('../components/pages/backend/pages/pages/routes/manage-offer/type/typeCreate.vue');
 const adminOffersTypesEdit = () => import('../components/pages/backend/pages/pages/routes/manage-offer/type/typeEdit.vue');
@@ -261,6 +270,7 @@ const PublisherSupportTicketView = () => import('../components/pages/backend/pag
 const AdvertiserDashboard = () => import('../components/pages/backend/pages/pages/routes/advertiser/dashboard/dashboard/dashboard.vue');
 
 const AdvertiserOffers = () => import('../components/pages/backend/pages/pages/routes/advertiser/offers/offers/offers.vue');
+const AdvertiserAssignOffers = () => import('../components/pages/backend/pages/pages/routes/advertiser/offers/offers/assign-offers.vue');
 const AdvertiserOffersView = () => import('../components/pages/backend/pages/pages/routes/advertiser/offers/offers/offer-view.vue');
 
 const AdvertiserLoginRingba = () => import('../components/pages/backend/pages/pages/routes/advertiser/ringbaLogin/ringbaLogin/ringbaLogin.vue');
@@ -472,6 +482,48 @@ const routes = [{
           requiredRoles: ['Super', 'Admin', ],
         }
       },
+
+
+
+
+      {
+        path: '/admin-offers-advertiser',
+        component: adminOffersAdvertiser,
+        meta: {
+          title: 'Advertiser Offers',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+      {
+        path: '/admin-offers-advertiser/create',
+        component: adminOffersCreateAdvertiser,
+        meta: {
+          title: 'Advertiser Offer Create',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+      {
+        path: '/admin-advertiser-offers-edit/:id',
+        component: adminOffersEditAdvertiser,
+        meta: {
+          title: 'Advertiser Offer Edit',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+      {
+        path: '/admin-offers-advertiser-import',
+        component: adminOfferImportAdvertiser,
+        meta: {
+          title: 'Advertiser Offer Import',
+          requiresAuth: true,
+          requiredRoles: ['Super', 'Admin', ],
+        }
+      },
+
+
       {
         path: '/admin-offers-types',
         component: adminOffersTypes,
@@ -1863,7 +1915,15 @@ const routes = [{
           requiredRoles: ['Advertiser', ],
         }
       },
-
+      {
+        path: '/advertiser-assign-offers',
+        component: AdvertiserAssignOffers,
+        meta: {
+          title: 'Assign Offers',
+          requiresAuth: true,
+          requiredRoles: ['Advertiser', ],
+        }
+      },
       {
         path: '/advertiser-offers-view/:id',
         component: AdvertiserOffersView,

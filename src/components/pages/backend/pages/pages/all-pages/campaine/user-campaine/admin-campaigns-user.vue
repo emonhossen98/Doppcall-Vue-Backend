@@ -20,8 +20,12 @@
                   <tr>
                     <th></th>
                     <!-- <th style="width: 1%;">SL</th> -->
-                    <th style="width: 35%;">Name</th>
-                    <th>Created By</th>
+                    <th>Campaign Name</th>
+                    <th>Company Name</th>
+                    <th>Person Name</th>
+                    <th>Traffic Source</th>
+                    <th>Offer Category</th>
+                    <th>DID Number</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Action</th>
@@ -182,7 +186,6 @@ methods: {
           if ($.fn.DataTable.isDataTable("#users_campaign_datatables")) {
             $('#users_campaign_datatables').DataTable().destroy();
           }
-          
           var table = $('#users_campaign_datatables').DataTable({
             data: data,
             columns: [
@@ -194,14 +197,69 @@ methods: {
                 data: "name",
                 render: function (data, type, row) {
                   if (row.name != null) {
-                    return row.name.length > 55 
-                      ? row.name.slice(0, 55) + '...'  
+                    return row.name.length > 25 
+                      ? row.name.slice(0, 25) + '...'  
                       : row.name; 
                   }
                   return '----------';
                 },
               },
-              { data: 'created_user' },
+              {
+                data: "index_number",
+                render: function (data, type, row) {
+                  if (row?.user?.company_name != null) {
+                    if(row?.user?.role_id == 3){
+                      return '<a data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
+                    }else{
+                      return '<a data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
+                    }
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: "user",
+                render: function (data, type, row) {
+                  if (row?.user?.fname != null) {
+                    if(row?.user?.role_id == 3){
+                      return '<a data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
+                    }else{
+                      return '<a data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
+                    }
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: "trafic_source",
+                render: function (data, type, row) {
+                  if (row?.trafic_source != null) {
+                    return row.name.length > 25 
+                      ? row.name.slice(0, 25) + '...'  
+                      : row.name; 
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: "offer",
+                render: function (data, type, row) {
+                  if (row?.offer?.category?.name != null) {
+                    return row?.offer?.category?.name;
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: "note",
+                render: function (data, type, row) {
+                  if (row?.user?.phone_no != null) {
+                    return row?.user?.phone_no;
+                  }
+                  return '----------';
+                },
+              },
+
               { data: 'convart_status' },
               { data: 'convart_date' },
               { data: '' }
@@ -301,31 +359,31 @@ methods: {
                   extend: 'print',
                   text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6,7,8,9] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6,7,8] }
                 },
                 {
                   extend: 'csv',
                   text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6,7,8,9] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6,7,8] }
                 },
                 {
                   extend: 'excel',
                   text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6,7,8,9] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6,7,8] }
                 },
                 {
                   extend: 'pdf',
                   text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6,7,8,9] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6,7,8] }
                 },
                 {
                   extend: 'copy',
                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6,7,8,9] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6,7,8] }
                 }
               ]
             },
@@ -715,9 +773,10 @@ input:focus {
 #dropdownMenuButton{
   background: transparent;
 }
-#users_campaign_datatables {
+/* #users_campaign_datatables {
   min-height: 200px;
-}
+} */
+
 #users_campaign_datatables .dropdown-item {
 	display: flex !important;
 	align-items: center !important;

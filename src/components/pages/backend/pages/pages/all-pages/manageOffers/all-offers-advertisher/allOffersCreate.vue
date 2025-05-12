@@ -190,17 +190,17 @@
             </div>
             <div class="col-md-4">
               <div class="card">
-                <!-- <div class="card-header pt-3 pb-0">
+                <div class="card-header pt-3 pb-0">
                   <h5 class="card-title">Assign To Advertiser Field</h5>
-                </div> -->
-                <div class="card-body">
-                  <!-- <div class="form-group mb-3">
+                </div>
+                <div class="card-body mt-3">
+                  <div class="form-group mb-3">
                   <label for="assign_advertiser" class="mb-1">Advertiser</label>
                   <select name="assign_advertiser" v-model="offersCreate.assign_advertiser" id="assign_advertiser" class="form-select">
-                    <option value="0">No Assign</option>
+                    <option value="">Select Advertiser</option>
                     <option v-for="advertiser in OfferCreate.advertisers" :value="advertiser.id" :key="advertiser.id">{{ advertiser.fname +' '+ advertiser.lname +' -- '+advertiser.company_name }}</option>
                   </select>
-                  </div> -->
+                  </div>
 
                   <div class="form-group mb-3">
                   <label for="" class="mb-1">Hold Peiod</label>
@@ -495,7 +495,7 @@ export default {
         marchent_allow: "",
         materials_moderation: "",
         status: "",
-        offer_role_type : "publisher",
+        offer_role_type : "advertiser",
       },
       validationErrors: null,
       selectedSocialMedia : [],
@@ -564,7 +564,7 @@ export default {
         .then((res) => {
           if(res.data.status == 'success'){
             toastr.success(res.data.message);
-            this.$router.push("/admin-offers");
+            this.$router.push("/admin-offers-advertiser");
           }else{
             toastr.error(res.data.message);
           }
