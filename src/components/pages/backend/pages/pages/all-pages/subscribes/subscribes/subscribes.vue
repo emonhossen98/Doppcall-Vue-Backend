@@ -25,7 +25,7 @@
                     <th>Sl</th>
                     <th>ID</th>
                     <th>Email</th>
-                    <th>Action</th>
+                    <th id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

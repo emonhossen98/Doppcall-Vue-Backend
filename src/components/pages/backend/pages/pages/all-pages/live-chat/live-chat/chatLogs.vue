@@ -23,7 +23,7 @@
                     <th>Email</th>
                     <th>Message</th>
                     <th>Created At</th>
-                    <th>Action</th>
+                    <th id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

@@ -83,7 +83,7 @@
                     <th>Phone Number</th>
                     <th>Role Name</th>
                     <th>Status</th>
-                    <th width="190px">Action</th>
+                    <th width="190px" id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -26,7 +26,7 @@
                               <th>Phone</th>
                               <th>Country</th>
                               <th>Submited</th>
-                              <th>Action</th>
+                              <th id="action-incompleted">Action</th>
                             </thead>
                             <tbody>
                             </tbody>

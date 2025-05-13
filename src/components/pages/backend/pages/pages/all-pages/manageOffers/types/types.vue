@@ -18,10 +18,9 @@
                 <thead class="border-top">
                   <tr>
                     <th></th>
-                    <th>SL</th>
                     <th>Type Name</th>
                     <th>ID</th>
-                    <th class="text-end">Action</th>
+                    <th class="text-end" id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -189,7 +188,6 @@ export default {
           $("#types-tables").DataTable({
             data: res.data.offerTypes,
             columns: [
-              { data: "id" },
               { data: "id" },
               { data: "type" },
               { data: "id" },

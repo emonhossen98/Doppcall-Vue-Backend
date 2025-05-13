@@ -26,7 +26,7 @@
                                   <th>Image</th>
                                   <th>Link</th>
                                   <th>status</th>
-                                  <th>Action</th>
+                                  <th id="action-incompleted">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

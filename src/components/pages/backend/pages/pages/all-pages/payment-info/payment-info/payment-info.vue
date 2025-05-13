@@ -27,7 +27,7 @@
                     <th>Company</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th style="width: 5%">Action</th>
+                    <th style="width: 5%"  id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody>

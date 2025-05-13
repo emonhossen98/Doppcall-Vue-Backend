@@ -27,7 +27,7 @@
                               <th>Role</th>
                               <th>Date</th>
                               <th>Status</th>
-                              <th>Actions</th>
+                              <th id="action-incompleted">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

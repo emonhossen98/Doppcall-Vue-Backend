@@ -13,7 +13,7 @@
             <div class="card-header">
               <h5 class="card-title mb-0 mt-2" style="display: inline-block"></h5>
               Smtp list
-              <RouterLink :to="'/admin-settings-smtp-create'" style="display: inline-block; float: right" class="btn btn-primary btn-sm"
+              <RouterLink :to="'/admin-settings-smtp-create'" style="display: inline-block; float: right" class="btn btn-primary"
                 ><i class="fa fa-plus fa-sm me-1"></i>Add new</RouterLink >
             </div>
             <div class="card-body pt-1 table-responsive table-overflow-hidden">

@@ -271,3 +271,10 @@ a {
 	font-family: unset !important;
 }
 </style>
+<style>
+.tag-input{
+	border: 1px solid #dbdade;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+</style>

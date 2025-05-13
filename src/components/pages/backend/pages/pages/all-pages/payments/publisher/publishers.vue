@@ -27,8 +27,8 @@
                   <th>Email</th>
                   <th>Phone</th>
                   <th width="15%">Balance</th>
-                  <th>Action</th>
-                  <th>History</th>
+                  <th  id="action-incompleted">Action</th>
+                  <th  id="action-incompleted">History</th>
                 </thead>
                 <tbody></tbody>
               </table>

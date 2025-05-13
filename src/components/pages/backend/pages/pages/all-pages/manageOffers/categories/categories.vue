@@ -24,7 +24,7 @@
                     <th>Id</th>
                     <th>Category Name</th>
                     <th>Category ID</th>
-                    <th class="text-end">Action</th>
+                    <th class="text-end"  id="action-incompleted">Action</th>
                   </tr>
                 </thead>
                 <tbody>

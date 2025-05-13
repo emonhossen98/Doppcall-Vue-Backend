@@ -961,8 +961,12 @@ export default {
               },
             })
             .then((res) => {
-              toastr.success(res.data.message);
-              this.$router.push("admin-offers-edit/" + res.data.id);
+              if(res?.data?.status == 'success'){
+                toastr.success(res.data.message);
+                this.$router.push("admin-offers-edit/" + res.data.id);
+              }else{
+                toastr.warning(res.data.message);
+              }
             })
             .catch((e) => {
               return e;

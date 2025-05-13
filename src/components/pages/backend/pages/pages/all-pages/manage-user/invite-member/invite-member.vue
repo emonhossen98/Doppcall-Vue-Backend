@@ -65,7 +65,7 @@
                               <th>Email</th>
                               <th>Expires at</th>
                               <th>Status</th>
-                              <th>Operation</th>
+                              <th id="action-incompleted">Operation</th>
                             </tr>
                             </thead>
                             <tbody>
