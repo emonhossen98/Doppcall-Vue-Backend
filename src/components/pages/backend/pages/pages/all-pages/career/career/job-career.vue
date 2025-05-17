@@ -122,7 +122,15 @@ export default {
             columns: [
               // { data: 'id' },
               { data: 'id' },
-              { data: 'company_name' },
+              {
+                data: 'company_name',
+                render: function (data, type, row) {
+                  if (row?.company_name != null) {
+                    return '<span title="'+row?.company_name+'">'+row?.company_name+'</span>';
+                  }
+                  return '----------';
+                },
+                },
               {
                 data: 'company_logo',
                 render: function (data, type, row) {
@@ -133,9 +141,33 @@ export default {
                   );
                 }
               },
-              { data: 'company_phone' },
-              { data: 'company_email' },
-              { data: 'salary_range' },
+              {
+                data: 'company_phone',
+                render: function (data, type, row) {
+                  if (row?.company_phone != null) {
+                    return '<span title="'+row?.company_phone+'">'+row?.company_phone+'</span>';
+                  }
+                  return '----------';
+                },
+              },
+              {
+                data: 'company_email',
+                render: function (data, type, row) {
+                  if (row?.company_email != null) {
+                    return '<span title="'+row?.company_email+'">'+row?.company_email+'</span>';
+                  }
+                  return '----------';
+                },
+               },
+              {
+                data: 'salary_range',
+                render: function (data, type, row) {
+                  if (row?.salary_range != null) {
+                    return '<span title="'+row?.salary_range+'">'+row?.salary_range+'</span>';
+                  }
+                  return '----------';
+                },
+               },
               { data: 'convart_status' },
               { data: '' }
             ],

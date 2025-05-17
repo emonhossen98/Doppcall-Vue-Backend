@@ -115,9 +115,30 @@ export default {
             // { data: 'id' },
             { data: 'id' },
             { data: 'id' },
-            { data: 'symbol' },
-            { data: 'title' },
-            { data: 'number' },
+            { data: 'symbol',
+              render: function (data, type, row) {
+                if (row?.symbol != null) {
+                  return '<span title="'+row?.symbol+'">'+row?.symbol+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { data: 'title',
+              render: function (data, type, row) {
+                if (row?.title != null) {
+                  return '<span title="'+row?.title+'">'+row?.title+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { data: 'number',
+              render: function (data, type, row) {
+                if (row?.number != null) {
+                  return '<span title="'+row?.number+'">'+row?.number+'</span>';
+                }
+                return '----------';
+              },
+             },
             { data: 'convart_created_at' },
             { data: '' }
           ],

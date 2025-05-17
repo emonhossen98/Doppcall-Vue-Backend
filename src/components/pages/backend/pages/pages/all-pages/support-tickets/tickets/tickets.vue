@@ -187,12 +187,54 @@ export default {
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'convart_ticket_no' },
-                { data: 'priority' },
-                { data: 'subject.name' },
-                { data: 'user.fname' },
-                { data: 'convart_role.name' },
-                { data: 'convart_date' },
+                { data: 'convart_ticket_no',
+                  
+                 },
+                { data: 'priority',
+                  render: function (data, type, row) {
+                    if (row?.priority != null) {
+                      return '<span title="'+row.priority+'">'+row.priority+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+                 },
+                { data: 'subject.name',
+                  render: function (data, type, row) {
+                    if (row?.subject?.name != null) {
+                      return '<span title="'+row?.subject?.name+'">'+row?.subject?.name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+                 },
+                { data: 'user.fname',
+                  render: function (data, type, row) {
+                    if (row?.user?.fname != null) {
+                      return '<span title="'+row?.user?.fname+'">'+row?.user?.fname+'</span>';
+                    } else {
+                      return '----';
+                    }
+                  }
+                 },
+                { data: 'convart_role.name',
+                  render: function (data, type, row) {
+                    if (row?.convart_role?.name != null) {
+                      return '<span title="'+row?.convart_role?.name+'">'+row?.convart_role?.name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                  }
+                 },
+                { data: 'convart_date',
+                  render: function (data, type, row) {
+                    if (row?.convart_date != null) {
+                      return '<span title="'+row?.convart_date+'">'+row?.convart_date+'</span>';
+                    } else {
+                      return '----';
+                    }
+                  }
+                 },
                 { data: 'convart_status' },
                 {
                    data: 'created_at',

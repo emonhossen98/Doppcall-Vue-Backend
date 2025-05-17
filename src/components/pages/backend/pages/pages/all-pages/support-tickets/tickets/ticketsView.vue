@@ -129,6 +129,7 @@
                       <label class="d-block mb-1">Images</label>
                       <div class="custom-file">
                           <input  type="file" class="form-control" ref="fileInput" accept=".jpg, .png, .pdf, .docx"  @change="handleImageUpload($event)" id="customFile"/>
+                          <span class="text-warning">Only accept jpg, png, pdf, docx</span>
                       </div>
                     </div>
                     <div class="col-sm-6">
@@ -159,7 +160,7 @@
                 </div>
                 <div class="text-end mt-3">
                   <button type="button" @click="commentReplay()"class="btn btn-sm btn-primary">
-                    Reply Comment
+                    Reply
                   </button>
                 </div>
               </form>

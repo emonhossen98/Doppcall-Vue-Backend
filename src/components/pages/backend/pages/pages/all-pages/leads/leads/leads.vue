@@ -225,11 +225,46 @@ export default {
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'company_name' },
-                { data: 'first_name' },
-                { data: 'email' },
-                { data: 'website' },
-                { data: 'country' },
+                { data: 'company_name',
+                  render: function (data, type, row) {
+                if (row?.company_name != null) {
+                  return '<span title="'+row?.company_name+'">'+row?.company_name+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'first_name',
+                  render: function (data, type, row) {
+                if (row?.first_name != null) {
+                  return '<span title="'+row?.first_name+'">'+row?.first_name+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'email',
+                  render: function (data, type, row) {
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'website',
+                  render: function (data, type, row) {
+                if (row?.website != null) {
+                  return '<span title="'+row?.website+'">'+row?.website+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'country',
+                  render: function (data, type, row) {
+                if (row?.country != null) {
+                  return '<span title="'+row?.country+'">'+row?.country+'</span>';
+                }
+                return '----------';
+              },
+                 },
                 {
                   data: null, 
                   title: 'Actions',

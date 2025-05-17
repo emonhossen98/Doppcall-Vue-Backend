@@ -117,8 +117,24 @@ export default {
                 { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_image' },
-                { data: 'convart_url' },
-                { data: 'convart_title' },
+                { data: 'convart_url',
+                  render: function (data, type, row) {
+                if (row?.convart_url != null) {
+                  return '<span title="'+row?.convart_url+'">'+row?.convart_url+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'convart_title',
+                  render: function (data, type, row) {
+                    if (row?.convart_title != null) {
+                      return row.convart_title.length > 20 
+                        ? '<span title="'+row.convart_title +'">'+row.convart_title.slice(0, 20) + '...' +'</span>' 
+                        : '<span title="'+row.convart_title +'">'+row.convart_title +'</span>'; 
+                    }
+                    return '----------';
+                },
+                 },
                 {
                   data: null, // Specify null for custom rendering
                   title: 'Actions',

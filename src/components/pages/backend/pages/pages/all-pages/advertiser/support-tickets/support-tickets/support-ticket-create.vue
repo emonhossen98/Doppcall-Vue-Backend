@@ -56,13 +56,14 @@
                                     <div class="col-md-6">
                                         <label class="d-block mb-1">Images</label>
                                         <div class="custom-file">
-                                            <input type="file" @change="handleImageUpload" class="form-control" id="customFile">
+                                            <input type="file" @change="handleImageUpload()" class="form-control" id="customFile" accept=".jpg, .png, .pdf, .docx">
+                                            <span class="text-warning">Only accept jpg, png, pdf, docx</span>
                                             <label for="customFile"></label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 ">
                                     <label class="d-block mb-3 required">Status</label>
-                                    <div class="radio-btn">
+                                    <div class="radio-btn ">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" @change="radioBtnValue('Open')" type="radio" name="exampleRadios" id="open">
                                             <label class="form-check-label" for="exampleRadios1">
@@ -87,7 +88,7 @@
                                     </div>
                                 </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-12">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" hidden="hidden" id="username" @change="changeStatus($event)">
@@ -148,7 +149,7 @@ export default {
       subjects : "",
       ticketCreate: {
         subject: "",
-        priority: "",
+        priority: "Low",
         video_link: "",
         description: "",
         is_active: null,

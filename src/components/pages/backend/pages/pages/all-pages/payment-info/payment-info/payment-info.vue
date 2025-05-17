@@ -1,4 +1,6 @@
-<template>
+
+
+  <template>
   <div v-if="getLoader">
     <Loader></Loader>
   </div>
@@ -294,11 +296,51 @@ computed: {
             { data: 'id' },
             { data: 'id' },
             { data: 'id' },
-            { data: 'fname' },
-            { data: 'lname' },
-            { data: 'email' },
-            { data: 'company_name' },
-            { data: 'convart_payment_type' },
+            { 
+              data: 'fname',
+              render: function (data, type, row) {
+                if (row?.fname != null) {
+                  return '<span title="'+row?.fname+'">'+row?.fname+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'lname',
+              render: function (data, type, row) {
+                if (row?.lname != null) {
+                  return '<span title="'+row?.lname+'">'+row?.lname+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'email',
+              render: function (data, type, row) {
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'company_name',
+              render: function (data, type, row) {
+                if (row?.company_name != null) {
+                  return '<span title="'+row?.company_name+'">'+row?.company_name+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'convart_payment_type',
+              render: function (data, type, row) {
+                if (row?.convart_payment_type != null) {
+                  return '<span title="'+row?.convart_payment_type+'">'+row?.convart_payment_type+'</span>';
+                }
+                return '----------';
+              },
+             },
             { data: 'convart_status' },
             { data: 'convart_action' },
           ],

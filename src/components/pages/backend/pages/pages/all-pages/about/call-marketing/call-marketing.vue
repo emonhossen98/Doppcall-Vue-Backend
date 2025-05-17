@@ -388,8 +388,24 @@ export default {
               // { data: 'id' },
               { data: "id" },
               { data: "convart_image" },
-              { data: "title" },
-              { data: "convart_dis" },
+              { 
+                data: "title",
+                render: function (data, type, row) {
+                  if (row?.title != null) {
+                    return '<span title="'+row?.title+'">'+row?.title+'</span>';
+                  }
+                  return '----------';
+                },
+               },
+              {
+                data: "convart_dis",
+                render: function (data, type, row) {
+                  if (row?.convart_dis != null) {
+                    return '<span title="'+row?.convart_dis+'">'+row?.convart_dis+'</span>';
+                  }
+                  return '----------';
+                },
+               },
               { data: "convart_status" },
               { data: "convart_date" },
               { data: "" },

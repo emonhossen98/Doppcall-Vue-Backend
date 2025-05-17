@@ -187,8 +187,22 @@ export default {
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'name' },
-                { data: 'url' },
+                { data: 'name',
+                  render: function (data, type, row) {
+                if (row?.name != null) {
+                  return '<span title="'+row?.name+'">'+row?.name+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'url',
+                  render: function (data, type, row) {
+                if (row?.url != null) {
+                  return '<span title="'+row?.url+'">'+row?.url+'</span>';
+                }
+                return '----------';
+              },
+                 },
                 { data: 'ordering' },
                 { data: 'convart_status' },
                 { data: 'convart_created_at' },

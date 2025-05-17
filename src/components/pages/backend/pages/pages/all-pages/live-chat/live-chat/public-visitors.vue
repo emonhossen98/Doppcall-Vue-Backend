@@ -178,8 +178,16 @@
                   // { data: 'id' },
                   { data: 'id' },
                   { data: 'id' },
-                  { data: 'fname' },
-                  { data: 'email' },
+                  { data: 'fname',
+                    render: function (data, type, full, meta) {
+                      return '<span title="'+full?.fname+'">'+full?.fname+'</span>';
+                    }
+                   },
+                  { data: 'email',
+                    render: function (data, type, full, meta) {
+                      return '<span title="'+full?.email+'">'+full?.email+'</span>';
+                    }
+                   },
                   { data: 'browser' },
                   { data: 'os' },
                   {
@@ -187,7 +195,7 @@
                     searchable: false,
                     orderable: false,
                     render: function (data, type, full, meta) {
-                      return '<span class="page_name">'+full.page_name+'</span>';
+                      return '<span title="'+full.page_name+'" class="page_name">'+full.page_name+'</span>';
                     }
                   },
                   {

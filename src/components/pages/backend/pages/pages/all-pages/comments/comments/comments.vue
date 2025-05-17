@@ -121,8 +121,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.name != null) {
                       return row.name.length > 8 
-                        ? row.name.slice(0, 8) + '...'  
-                        : row.name; 
+                        ? '<span title="'+row.name+'">'+row.name.slice(0, 8) + '...'+'</span>'  
+                        : '<span title="'+row.name+'">'+row.name+'</span>'; 
                     }
                     return '----------';
                   },
@@ -132,8 +132,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.comment != null) {
                       return row.comment.length > 40
-                        ? row.comment.slice(0, 40) + '...'  
-                        : row.comment; 
+                        ? '<span title="'+row.comment+'">'+row.comment.slice(0, 40) + '...'+'</span>'  
+                        : '<span title="'+row.comment+'">'+row.comment+'</span>'; 
                     }
                     return '----------';
                   },
@@ -143,8 +143,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.reply != null) {
                       return row.reply.length > 15 
-                        ? row.reply.slice(0, 15) + '...'  
-                        : row.reply; 
+                        ? '<span title="'+row.reply+'">'+row.reply.slice(0, 15) + '...'+'</>'  
+                        : '<span title="'+row.reply+'">'+row.reply+'</>'; 
                     }
                     return '----------';
                   },

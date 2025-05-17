@@ -249,7 +249,15 @@ export default {
               // { data: 'id' },
               { data: "id" },
               { data: "id" },
-              { data: "name" },
+              { data: "name",
+                render: function (data, type, row) {
+                    if (row?.name != null) {
+                      return '<span title="'+row.name+'">'+row.name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+               },
               { data: "convart_status" },
               {
                 data: "updated_at",

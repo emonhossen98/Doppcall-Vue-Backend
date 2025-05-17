@@ -826,13 +826,29 @@ export default {
           columns: [
             // { data: 'id' },
             { data: null},
-            { data: "full_name" },
-            { data: "email" },
+            { data: "full_name",
+              render: function (data, type, full, meta) {
+                   if(full?.full_name != null){
+                      return '<span title="'+full?.full_name+'">'+full?.full_name+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+             },
+            { data: "email",
+              render: function (data, type, full, meta) {
+                   if(full?.email != null){
+                      return '<span title="'+full?.email+'">'+full?.email+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+             },
             {
                 data: "phone_no",
                 render: function (data, type, row) {
                   if (row.phone_no != null) {
-                    return row.phone_no;
+                    return '<span title="'+row?.phone_no+'">'+row?.phone_no+'</span>';
                   }
                   return "--------";
                 },
@@ -840,7 +856,7 @@ export default {
             {
               data: "secondary_name",
               render: function (data, type, row) {
-                return `<span class="badge bg-success">${row.role.secondary_name}</span>`;
+                return `<span title="${row.role.secondary_name}" class="badge bg-success">${row.role.secondary_name}</span>`;
               },
             },
             { data: "convart_status" },

@@ -106,8 +106,24 @@ export default {
               // { data: 'id' },
               { data: "id" },
               { data: "id" },
-              { data: "sender.fname" },
-              { data: "sender.email" },
+              { data: "sender.fname",
+              render: function (data, type, full, meta) {
+                   if(full?.sender?.fname != null){
+                      return '<span title="'+full?.sender?.fname+'">'+full?.sender?.fname+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+               },
+              { data: "sender.email",
+                render: function (data, type, full, meta) {
+                   if(full?.sender?.email != null){
+                      return '<span title="'+full?.sender?.email+'">'+full?.sender?.email+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+               },
               {
                   data: "message",
                   render: function (data, type, row) {

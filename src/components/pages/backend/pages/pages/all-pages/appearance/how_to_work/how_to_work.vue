@@ -122,8 +122,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.title != null) {
                       return row.title.length > 15 
-                        ? row.title.slice(0, 15) + '...'  
-                        : row.title; 
+                        ? '<span title="'+row.title+'">'+row.title.slice(0, 15) + '...' +'</span>' 
+                        : '<span title="'+row.title+'">'+row.title+'</span>'; 
                     }
                     return '----------';
                   },
@@ -133,8 +133,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.short_title != null) {
                       return row.short_title.length > 15 
-                        ? row.short_title.slice(0, 15) + '...'  
-                        : row.short_title; 
+                        ? '<span title="'+row.short_title+'">'+row.short_title.slice(0, 15) + '...'+'</span>'  
+                        : '<span title="'+row.short_title+'">'+row.short_title+'</span>'; 
                     }
                     return '----------';
                   },

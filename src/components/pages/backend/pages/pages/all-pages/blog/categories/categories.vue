@@ -122,8 +122,22 @@ export default {
               // { data: 'id' },
               { data: 'id' },
               { data: 'id' },
-              { data: 'name' },
-              { data: 'slug' },
+              { data: 'name',
+                render: function (data, type, row) {
+                if (row?.name != null) {
+                  return '<span title="'+row?.name+'">'+row?.name+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: 'slug',
+                render: function (data, type, row) {
+                if (row?.slug != null) {
+                  return '<span title="'+row?.slug+'">'+row?.slug+'</span>';
+                }
+                return '----------';
+              },
+               },
               {
                 data: "updated_at",
                 render: function (data, type, row) {

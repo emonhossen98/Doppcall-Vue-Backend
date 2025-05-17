@@ -130,7 +130,7 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <label for="comment" class="required mb-1">Comment</label><span class="word_limit">(Word Count: {{ wordCount }} / 200) 
+                                        <label for="comment" class="required mb-1">Reply to Ticket</label><span class="word_limit">(Word Count: {{ wordCount }} / 200) 
                                           <span v-if="wordLimitReached" style="color: red;">(Word limit reached)</span></span>
                                         <textarea v-model="comment" ref="Comment" id="comment" class="form-control"  required="required" rows="4"></textarea>
                                         <div v-if="validationErrors && validationErrors.comment" class="text-danger">
@@ -143,6 +143,7 @@
                                               <label class="d-block mb-1">Images</label>
                                               <div class="custom-file">
                                                   <input  type="file" class="form-control" ref="fileInput" accept=".jpg, .png, .pdf, .docx"  @change="handleImageUpload($event)" id="customFile"/>
+                                                  <span class="text-warning">Only accept jpg, png, pdf, docx</span>
                                               </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -172,7 +173,7 @@
                                         </div>
                                     </div>
                                     <div class="text-end mt-3">
-                                        <button type="button" @click="replayComment()" class="btn btn-sm btn-primary">Reply Comment</button>
+                                        <button type="button" @click="replayComment()" class="btn btn-sm btn-primary">Reply</button>
                                     </div>
                                 </form>
                             </div>
@@ -263,7 +264,7 @@
               <div class="row mt-3">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="comment" class="required">Comment</label>
+                    <label for="comment" class="required">Reply to Ticket</label>
                     <textarea v-model="editComment.comment" rows="6" class="form-control"></textarea>
                     <div v-if="validationErrors && validationErrors.comment" class="text-danger">
                       {{ validationErrors.comment[0] }}
@@ -277,6 +278,7 @@
                   <div class="form-group">
                     <label for="image">Image</label>
                     <input type="file" @change="handleImageUploadEdit($event)"  class="form-control" accept=".jpg, .png, .pdf, .docx" id="customFile"/>
+                    <span class="text-warning">Only accept jpg, png, pdf, docx</span>
                   </div>
                 </div>
                 <div class="col-sm-6">

@@ -241,8 +241,46 @@
 #action-incompleted::before, #action-incompleted::after{
 	display:none !important;
 }
-@media only screen and (max-width:1201px) {
+@media only screen and (max-width:1830px) {
 	.table-responsive.table-overflow-hidden {
 		overflow: auto !important;
 	}
 }
+
+@media screen and (max-width : 3440px) {
+	#publisher_datatables td {
+		max-width: 250px !important;
+	}
+	#advertiser_datatables td {
+		max-width: 250px !important;
+	}
+	.mypublisher .table-responsive.table-overflow-hidden {
+		overflow: auto !important;
+		scrollbar-color: #7367f0 white;
+		scrollbar-width: thin;
+	}
+	.mypublisher .table-responsive.table-overflow-hidden .pagination-controls {
+		position: absolute !important;
+		right: 0 !important;
+	}
+	.myadvertiser .table-responsive.table-overflow-hidden {
+		overflow: auto !important;
+		scrollbar-color: #7367f0 white;
+		scrollbar-width: thin;
+	}
+	.myadvertiser .table-responsive.table-overflow-hidden .pagination-controls {
+		position: absolute !important;
+		right: 0 !important;
+	}
+}
+/* @media screen and (min-width : 1831px) and (max-width :  3440px) {
+	#publisher_datatables td {
+		max-width: 200px;
+	}
+	#advertiser_datatables td {
+		max-width: 200px;
+	}
+	.table-responsive.table-overflow-hidden {
+		overflow: auto !important;
+	}
+} */

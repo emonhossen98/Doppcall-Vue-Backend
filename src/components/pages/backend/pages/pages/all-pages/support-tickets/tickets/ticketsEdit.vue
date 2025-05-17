@@ -59,7 +59,8 @@
                                 <div class="col-md-6">
                                     <label class="d-block mb-1">Images</label>
                                     <div class="custom-file">
-                                        <input type="file" @change="handleImageUpload" class="form-control" multiple id="customFile">
+                                        <input type="file" @change="handleImageUpload" class="form-control" multiple id="customFile" accept=".jpg, .png, .pdf, .docx">
+                                        <span class="text-warning">Only accept jpg, png, pdf, docx</span>
                                         <label for="customFile"></label>
                                     </div>
                                 </div>

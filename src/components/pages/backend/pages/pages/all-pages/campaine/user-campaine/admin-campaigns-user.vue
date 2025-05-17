@@ -198,8 +198,8 @@ methods: {
                 render: function (data, type, row) {
                   if (row.name != null) {
                     return row.name.length > 25 
-                      ? row.name.slice(0, 25) + '...'  
-                      : row.name; 
+                     ? '<span title="'+row.name +'">'+row.name.slice(0, 25) + '...'+'</span>'   
+                      : '<span title="'+row.name +'">'+row.name +'</span>'; 
                   }
                   return '----------';
                 },
@@ -209,9 +209,9 @@ methods: {
                 render: function (data, type, row) {
                   if (row?.user?.company_name != null) {
                     if(row?.user?.role_id == 3){
-                      return '<a data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
+                      return '<a title="'+row?.user?.company_name+'" data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
                     }else{
-                      return '<a data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
+                      return '<a title="'+row?.user?.company_name+'" data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.company_name+'</a>';
                     }
                   }
                   return '----------';
@@ -222,9 +222,9 @@ methods: {
                 render: function (data, type, row) {
                   if (row?.user?.fname != null) {
                     if(row?.user?.role_id == 3){
-                      return '<a data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
+                      return '<a title="'+row?.user?.fname+'" data-vue-route href="/admin-manage-publishers-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
                     }else{
-                      return '<a data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
+                      return '<a title="'+row?.user?.fname+'" data-vue-route href="/admin-manage-advertiser-view/'+row?.user?.id+'">'+row?.user?.fname+'</a>';
                     }
                   }
                   return '----------';
@@ -234,9 +234,9 @@ methods: {
                 data: "trafic_source",
                 render: function (data, type, row) {
                   if (row?.trafic_source != null) {
-                    return row.name.length > 25 
-                      ? row.name.slice(0, 25) + '...'  
-                      : row.name; 
+                    return row.trafic_source.length > 25 
+                      ? '<span title="'+row.trafic_source +'">'+row.trafic_source.slice(0, 25) + '...' +'</span>' 
+                      : '<span title="'+row.trafic_source +'">'+row.trafic_source +'</span>'; 
                   }
                   return '----------';
                 },
@@ -245,7 +245,7 @@ methods: {
                 data: "offer",
                 render: function (data, type, row) {
                   if (row?.offer?.category?.name != null) {
-                    return row?.offer?.category?.name;
+                    return '<span title="'+row?.offer?.category?.name +'">'+row?.offer?.category?.name +'</span>';
                   }
                   return '----------';
                 },

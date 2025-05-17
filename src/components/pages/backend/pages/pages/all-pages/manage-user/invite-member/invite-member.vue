@@ -153,8 +153,22 @@ export default {
             // { data: 'id' },
             { data: 'id' },
             { data: 'id' },
-            { data: 'email' },
-            { data: 'expires_at' },
+            { data: 'email',
+              render: function (data, type, row) {
+                  if (row?.email != null) {
+                    return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                  }
+                  return '----------';
+                },
+             },
+            { data: 'expires_at',
+              render: function (data, type, row) {
+                  if (row?.expires_at != null) {
+                    return '<span title="'+row?.expires_at+'">'+row?.expires_at+'</span>';
+                  }
+                  return '----------';
+                },
+             },
             { data: 'status' },
             { data: 'updated_at',
                 render: function (data, type, row) {

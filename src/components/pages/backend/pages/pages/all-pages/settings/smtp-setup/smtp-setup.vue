@@ -30,12 +30,12 @@
                 </thead>
                 <tbody>
                   <tr v-for="(data, index) in SmtpsData" :key="index">
-                    <td>{{ data.name }}</td>
-                    <td>{{ data.host_name }}</td>
-                    <td>{{ data.user_name }}</td>
-                    <td>{{ data.password }}</td>
-                    <td>{{ data.port }}</td>
-                    <td>{{ data.encryption }}</td>
+                    <td><span :title="data.name">{{ data.name }}</span></td>
+                    <td><span :title="data.host_name">{{ data.host_name }}</span></td>
+                    <td><span :title="data.user_name">{{ data.user_name }}</span></td>
+                    <td><span :title="data.password">{{ data.password }}</span></td>
+                    <td><span :title="data.port">{{ data.port }}</span></td>
+                    <td><span :title="data.encryption">{{ data.encryption }}</span></td>
                   </tr>
                 </tbody>
               </table>

@@ -108,7 +108,15 @@ export default {
               { data: null }, // First column (checkbox or other data)
               { data: null }, // Second column (Serial number)
               { data: 'id' },
-              { data: 'email' },
+              {
+                data: 'email',
+                render: function (data, type, row) {
+                if (row?.email != null) {
+                    return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                  }
+                  return '----------';
+                },
+              },
               { data: 'convart_action' },
             ],
             initComplete: () => {

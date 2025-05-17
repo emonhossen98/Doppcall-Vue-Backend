@@ -179,8 +179,22 @@ export default {
                 // { data: 'id' },
                 // { data: 'id' },
                 { data: 'id' },
-                { data: 'convart_template_name' },
-                { data: 'subject' },
+                { data: 'convart_template_name',
+                  render: function (data, type, row) {
+                if (row?.convart_template_name != null) {
+                  return '<span title="'+row?.convart_template_name+'">'+row?.convart_template_name+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'subject',
+                  render: function (data, type, row) {
+                if (row?.subject != null) {
+                  return '<span title="'+row?.subject+'">'+row?.subject+'</span>';
+                }
+                return '----------';
+              },
+                 },
                 // { data: 'content' },
                 {
                   data: null, // Specify null for custom rendering

@@ -116,7 +116,14 @@ export default {
                 // { data: 'id' },
                 { data: 'id' },
                 { data: 'id' },
-                { data: 'service_name' },
+                { data: 'service_name',
+                  render: function (data, type, row) {
+                    if (row?.service_name != null) {
+                      return '<span title="'+row?.service_name+'">'+row?.service_name+'</span>';
+                    }
+                    return '----------';
+                  },
+                 },
                 { data: 'convart_created_at' },
                 {
                   data: "updated_at", 

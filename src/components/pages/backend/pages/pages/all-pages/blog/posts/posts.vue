@@ -263,7 +263,14 @@ export default {
               // { data: 'id' },
               { data: "id" },
               { data: "id" },
-              { data: "title" },
+              { data: "title",
+                render: function (data, type, row) {
+                if (row?.title != null) {
+                  return '<span title="'+row?.title+'">'+row?.title+'</span>';
+                }
+                return '----------';
+              },
+               },
               { data: "canvart_image" },
               { data: "convat_status" },
               { data: "views" },

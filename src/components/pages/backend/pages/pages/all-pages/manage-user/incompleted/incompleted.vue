@@ -328,27 +328,27 @@ export default {
                   data: "updated_at",
                   render: function (data, type, row) {
                     if (row.user_type == "publisher-register") {
-                      return '<span class="badge bg-success text-white">Publisher</span>';
+                      return '<span title="Publisher" class="badge bg-success text-white">Publisher</span>';
                     } else {
-                      return '<span class="badge bg-warning text-white">Advertiser</span>';
+                      return '<span title="Advertiser" class="badge bg-warning text-white">Advertiser</span>';
                     }
                   },
                 },
-                { data: "fname", render: function(data) { return data ? data : '-----'; } },
-                { data: "lname", render: function(data) { return data ? data : '-----'; } },
-                { data: "email", render: function(data) { return data ? data : '-----'; } },
-                { data: "phone_no", render: function(data) { return data ? data : '-----'; } },
-                { data: "country", render: function(data) { return data ? data : '-----'; } },
-                { data: "company_name", render: function(data) { return data ? data : '-----'; } },
-                { data: "company_website", render: function(data) { return data ? data : '-----'; } },
-                { data: "created_at", render: function(data) { return data ? data : '-----'; } },
-                { data: "address", render: function(data) { return data ? data : '-----'; } },
-                { data: "city", render: function(data) { return data ? data : '-----'; } },
-                { data: "state", render: function(data) { return data ? data : '-----'; } },
-                { data: "zip_code", render: function(data) { return data ? data : '-----'; } },
-                { data: "country", render: function(data) { return data ? data : '-----'; } },
-                { data: "skype_id", render: function(data) { return data ? data : '-----'; } },
-                { data: "linkedin_id", render: function(data) { return data ? data : '-----'; } },
+                { data: "fname", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "lname", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "email", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "phone_no", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "country", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "company_name", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "company_website", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "created_at", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "address", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "city", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "state", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "zip_code", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "country", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "skype_id", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
+                { data: "linkedin_id", render: function(data) { return data ? '<span title="'+data+'">'+data+'</span>' : '-----'; } },
                 {
                   data: "updated_at",
                   render: function (data, type, row) {

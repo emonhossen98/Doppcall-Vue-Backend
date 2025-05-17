@@ -339,12 +339,54 @@ export default {
           columns: [
               // { data: "0" },
               { data: "0" },
-              { data: "1" }, 
-              { data: "2" },
-              { data: "3" }, 
-              { data: "4" }, 
-              { data: "5" },  
-              { data: "6" },  
+              { data: "1",
+                render: function (data, type, row) {
+                  if (row['1'] != null) {
+                    return '<span title="'+row['1']+'">'+row['1']+'</span>';
+                  }
+                  return '----------';
+                },
+               }, 
+              { data: "2",
+                render: function (data, type, row) {
+                  if (row['2'] != null) {
+                    return '<span title="'+row['2']+'">'+row['2']+'</span>';
+                  }
+                  return '----------';
+                },
+               },
+              { data: "3",
+                render: function (data, type, row) {
+                  if (row['3'] != null) {
+                    return '<span title="'+row['3']+'">'+row['3']+'</span>';
+                  }
+                  return '----------';
+                },
+               }, 
+              { data: "4",
+                render: function (data, type, row) {
+                  if (row['4'] != null) {
+                    return '<span title="'+row['4']+'">'+row['4']+'</span>';
+                  }
+                  return '----------';
+                },
+               }, 
+              { data: "5",
+                render: function (data, type, row) {
+                  if (row['5'] != null) {
+                    return '<span title="'+row['5']+'">'+row['5']+'</span>';
+                  }
+                  return '----------';
+                },
+               },  
+              { data: "6",
+                render: function (data, type, row) {
+                  if (row['6'] != null) {
+                    return '<span title="'+row['6']+'">'+row['6']+'</span>';
+                  }
+                  return '----------';
+                },
+               },  
               { data: "10" },  
               { data: "15" }, 
               { data: "11" }, 

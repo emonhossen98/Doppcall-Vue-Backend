@@ -396,28 +396,34 @@ methods: {
             { data: 'id' },
             // { data: 'id' },
           {
-              data: "company_name",
+                data: "company_name",
+                render: function (data, type, row) {
+                  if (row.company_name != null) {
+                    return row.company_name.length > 10 
+                      ? '<span title="'+row.company_name+'">'+row.company_name.slice(0, 10) + '...'+'</span>'  
+                      : '<span title="'+row.company_name+'">'+row.company_name+'</span>'; 
+                  }
+                  return '----------';
+                },
+              },
+            { 
+              data: 'fname',
               render: function (data, type, row) {
-                if (row.company_name != null) {
-                  return row.company_name.length > 30 
-                    ? row.company_name.slice(0, 30) + '...'  
-                    : row.company_name; 
+                if (row?.fname != null) {
+                  return '<span title="'+row?.fname+'">'+row?.fname+'</span>';
                 }
                 return '----------';
               },
-            },
-            {
-              data: "fname",
+             },
+            { 
+              data: 'email',
               render: function (data, type, row) {
-                if (row.fname != null) {
-                  return row.fname.length > 8 
-                    ? row.fname.slice(0, 8) + '...'  
-                    : row.fname; 
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
                 }
                 return '----------';
               },
-            },
-            { data: 'email' },
+             },
             { data: 'convart_phone' },
             { data: 'total_balance' },
             {

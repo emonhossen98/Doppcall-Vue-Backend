@@ -59,6 +59,7 @@
                                         <label class="d-block mb-1">Images</label>
                                         <div class="custom-file">
                                             <input type="file" ref="myFile" @change="handleImageUpload($event)" class="form-control" id="customFile" accept=".jpg, .png, .pdf, .docx">
+                                            <span class="text-warning ">Only accept jpg, png, pdf, docx</span>
                                             <label for="customFile"></label>
                                         </div>
                                     </div>
@@ -66,8 +67,8 @@
                                         <img style="width: 200px;" v-if="themeShowImage.theme_logo" :src="themeShowImage.theme_logo" class="imgpreview">
                                       </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
+                                <div class="row mt-2">
+                                    <div class="col-12 ">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" hidden="hidden" id="username" @change="changeStatus($event)">
                                             <label class="switch"  for="username" ></label><span class="required">Ticket Active Status</span>

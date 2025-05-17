@@ -188,9 +188,30 @@ async mounted() {
               // { data: 'id' },
               { data: 'id' },
               { data: 'id' },
-              { data: "faq_service.service_name" },
-              { data: "faq_qustion" },
-              { data: "faq_ans" },
+              { data: "faq_service.service_name",
+                render: function (data, type, row) {
+                if (row?.faq_service?.service_name != null) {
+                  return '<span title="'+row?.faq_service?.service_name+'">'+row?.faq_service?.service_name+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "faq_qustion" ,
+                render: function (data, type, row) {
+                if (row?.faq_qustion != null) {
+                  return '<span title="'+row?.faq_qustion+'">'+row?.faq_qustion+'</span>';
+                }
+                return '----------';
+              },
+              },
+              { data: "faq_ans",
+                render: function (data, type, row) {
+                if (row?.faq_ans != null) {
+                  return '<span title="'+row?.faq_ans+'">'+row?.faq_ans+'</span>';
+                }
+                return '----------';
+              },
+               },
               { data: "convart_status" },
               { data: "convart_date" },
               { data: '' }

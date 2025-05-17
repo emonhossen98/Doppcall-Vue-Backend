@@ -7,10 +7,10 @@
       <!-- Content -->
       <div class="container-fluid flex-grow-1 container-p-y">
         <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
-        <div class="row mt-4">
+        <div class="row mt-4 ">
             <div class="col-12">
 
-            <div class="card mt-3">
+            <div class="card mt-3 myadvertiser">
               <div class="card-header pt-3">
                     <h5 class="card-title mb-0">Filter By</h5>
                 </div>
@@ -61,16 +61,16 @@
                               <!-- <th></th> -->
                               <th></th>
                               <th>SL</th>
-                              <!-- <th>User Type</th> -->
+                              <th>User Type</th>
                               <th>Company</th>
                               <th>Name</th>
                               <th>Email</th>
                               <th>Phone</th>
                               <th>Balance</th>
                               <th>Manager</th>
-                              <!-- <th>Traffic Source</th>
+                              <th>Traffic Source</th>
                               <th>City</th>
-                              <th>Country</th> -->
+                              <th>Country</th>
                               <th>Status</th>
                               <th class="text-center" style="width: 35%;">Action</th>
                             </tr>
@@ -471,29 +471,59 @@ export default {
             columns: [
               // { data: "1" }, 
               { data: "1" }, 
-              { data: "1" }, 
+              { data: "1" },
+              {
+                data: "12",
+                render: function (data, type, row) {
+                  return '<span class="badge bg-success">'+row['12']+'</span>';
+                },
+              },  
               {
                 data: "2",
                 render: function (data, type, row) {
-                  return '<a data-vue-route title="View" href="/admin-manage-advertiser-view/'+row['3']+'">'+row['2']+'</a>';
+                  return '<a data-vue-route title="'+row['2']+'" href="/admin-manage-advertiser-view/'+row['3']+'">'+row['2']+'</a>';
                 },
               },
             {
                 data: "4",
                 render: function (data, type, row) {
-                  return '<a data-vue-route title="View" href="/admin-manage-advertiser-view/'+row['3']+'">'+row['4']+'</a>';
+                  return '<a data-vue-route title="'+row['4']+'" href="/admin-manage-advertiser-view/'+row['3']+'">'+row['4']+'</a>';
                 },
               },
 
               // { data: "2" }, 
               // { data: "4" }, 
-              { data: "5" }, 
+              { data: "5",
+                render: function (data, type, row) {
+                  if (row['5'] != null) {
+                    return '<span title="'+row['5']+'">'+row['5']+'</span>';
+                  }
+                  return '----------';
+                },
+               }, 
               { data: "6" }, 
               { data: "7" }, 
-              { data: "8" }, 
+              { data: "8" },
+              { data: "11",
+              render: function (data, type, row) {
+                 if(row['11'] != null){
+                    return '<span  title="'+row['11']+'">'+row['11'] ?? '----'+'</span>';
+                 }
+                  return '------';
+                },
+             }, 
+            { data: "14",
+              render: function (data, type, row) {
+                  return '<span  title="'+row['14']+'">'+row['14']+'</span>';
+                },
+             }, 
+            { data: "13",
+              render: function (data, type, row) {
+                  return '<span  title="'+row['13']+'">'+row['13']+'</span>';
+                },
+             },  
               { data: "9" }, 
               { data: "10" }, 
-              // { data: "11" }, 
             ],
           initComplete: () => { // Using an arrow function here
             this.attachEventListeners();

@@ -196,8 +196,24 @@ export default {
                 // { data: 'id' },
                 //  { data: 'id' },
                  { data: 'id' },
-                 { data: 'user' },
-                 { data: 'subject' },
+                 { data: 'user',
+                  render: function (data, type, full, meta) {
+                   if(full?.user != null){
+                      return '<span title="'+full?.user+'">'+full?.user+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+                  },
+                 { data: 'subject',
+                  render: function (data, type, full, meta) {
+                   if(full?.subject != null){
+                      return '<span title="'+full?.subject+'">'+full?.subject+'</span>';
+                   }else{
+                    return '----';
+                   }
+                    }
+                  },
                 //  { data: 'body' },
                 {
                  data : "updated_at",

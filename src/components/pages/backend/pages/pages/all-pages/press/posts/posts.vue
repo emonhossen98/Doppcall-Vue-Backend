@@ -204,8 +204,8 @@ export default {
                   render: function (data, type, row) {
                     if (row.title != null) {
                       return row.title.length > 30 
-                        ? row.title.slice(0, 30) + '...'  
-                        : row.title; 
+                        ? '<span title="'+row.title+'">'+row.title.slice(0, 30) + '...'+'</span>'  
+                        : '<span title="'+row.title+'">'+row.title+'</span>'; 
                     }
                     return '----------';
                   },

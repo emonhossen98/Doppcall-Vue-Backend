@@ -169,7 +169,6 @@
           if ($.fn.DataTable.isDataTable("#admin_activities_datatables")) {
             $("#admin_activities_datatables").DataTable().destroy();
           }
-          console.log(data)
           var table = $("#admin_activities_datatables").DataTable({
             data: data,
             columns: [
@@ -180,33 +179,33 @@
                   const dt = new Date(data);
                   const date = dt.toISOString().slice(0, 10);
                   const time = dt.toTimeString().slice(0, 8);
-                  return `${date}<br>${time}`;
+                  return '<span title="'+ `${date}<br>${time}`+'">'+ `${date}<br>${time}`+'</span>';
                 }
               },
               { 
                 data: "user",
                 render: function (data, type, row) {
                   if (!data.role.name) return "------";
-                  return data.role.name;
+                  return '<span title="'+data.role.name+'">'+data.role.name+'</span>';
                 }
                },
               { 
                 data: "user",
                 render: function (data, type, row) {
                   if (data?.fname != null && data?.lname != null && data?.company_name != null) {
-                    return data.fname + ' ' + data.lname + ' (' + data.company_name + ')';
+                    return '<span title="'+data.fname + ' ' + data.lname + ' (' + data.company_name + ')'+'">'+data.fname + ' ' + data.lname + ' (' + data.company_name + ')'+'</span>';
                   } else if (data?.fname != null && data?.lname != null) {
-                    return data.fname + ' ' + data.lname;
+                    return '<span title="'+data.fname + ' ' + data.lname+'">'+data.fname + ' ' + data.lname+'</span>';
                   } else if (data?.fname != null && data?.company_name != null) {
-                    return data.fname + ' (' + data.company_name + ')';
+                    return '<span title="'+data.fname + ' (' + data.company_name + ')'+'">'+data.fname + ' (' + data.company_name + ')'+'</span>';
                   } else if (data?.lname != null && data?.company_name != null) {
-                    return data.lname + ' (' + data.company_name + ')';
+                    return '<span title="'+data.lname + ' (' + data.company_name + ')'+'">'+data.lname + ' (' + data.company_name + ')'+'</span>';
                   } else if (data?.fname != null) {
-                    return data.fname;
+                    return '<span title="'+data.fname+'">'+data.fname+'</span>';
                   } else if (data?.lname != null) {
-                    return data.lname;
+                    return '<span title="'+data.lname+'">'+data.lname+'</span>';
                   } else if (data?.company_name != null) {
-                    return data.company_name;
+                    return '<span title="'+data.company_name+'">'+data.company_name+'</span>';
                   } else {
                     return '----';
                   }
@@ -217,16 +216,52 @@
                  data: "user",
                   render: function (data, type, row) {
                     if (data?.email != null) {
-                      return data.email;
+                      return '<span title="'+data.email+'">'+data.email+'</span>';
                     } else {
                       return '----';
                     }
                   } 
                },
-              { data: "ip_address" ?? '------' },
-              { data: "action_type" },
-              { data: "module_affected" ?? '------' },
-              { data: "description" ?? '------' },
+              { 
+                data: "ip_address",
+                render: function (data, type, row) {
+                    if (row?.ip_address != null) {
+                      return '<span title="'+row.ip_address+'">'+row.ip_address+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+               },
+              { 
+                data: "action_type",
+              render: function (data, type, row) {
+                    if (row?.action_type != null) {
+                      return '<span title="'+row.action_type+'">'+row.action_type+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+              },
+              { 
+                data: "module_affected",
+                render: function (data, type, row) {
+                    if (row?.module_affected != null) {
+                      return '<span title="'+row.module_affected+'">'+row.module_affected+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+               },
+              { 
+                data: "description",
+                render: function (data, type, row) {
+                    if (row?.description != null) {
+                      return '<span title="'+row.description+'">'+row.description+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+               },
               
             ],
             initComplete: () => {

@@ -229,13 +229,69 @@ export default {
             // { data: 'id' },
             // { data: 'id' },
             { data: 'id' },
-            { data: "company_name" }, 
-            { data: "first_name" },
-            { data: "last_name" },
-            { data: "email" },
-            { data: "phone" },
-            { data: "country" },
-            { data: "submited_data" },
+            { data: "company_name",
+              render: function (data, type, row) {
+                    if (row?.company_name != null) {
+                      return '<span title="'+row.company_name+'">'+row.company_name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             }, 
+            { data: "first_name",
+              render: function (data, type, row) {
+                    if (row?.company_name != null) {
+                      return '<span title="'+row.first_name+'">'+row.first_name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "last_name",
+              render: function (data, type, row) {
+                    if (row?.last_name != null) {
+                      return '<span title="'+row.last_name+'">'+row.last_name+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "email",
+              render: function (data, type, row) {
+                    if (row?.email != null) {
+                      return '<span title="'+row.email+'">'+row.email+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "phone",
+              render: function (data, type, row) {
+                    if (row?.phone != null) {
+                      return '<span title="'+row.phone+'">'+row.phone+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "country",
+              render: function (data, type, row) {
+                    if (row?.country != null) {
+                      return '<span title="'+row.country+'">'+row.country+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "submited_data",
+              render: function (data, type, row) {
+                    if (row?.submited_data != null) {
+                      return '<span title="'+row.submited_data+'">'+row.submited_data+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
                    {
                  data : "updated_at",
                  render: function (data, type, row) {

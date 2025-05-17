@@ -350,14 +350,30 @@ export default {
                 render: function (data, type, row) {
                   if (row.company_name != null) {
                     return row.company_name.length > 10 
-                      ? row.company_name.slice(0, 10) + '...'  
-                      : row.company_name; 
+                      ? '<span title="'+row.company_name+'">'+row.company_name.slice(0, 10) + '...'+'</span>'  
+                      : '<span title="'+row.company_name+'">'+row.company_name+'</span>'; 
                   }
                   return '----------';
                 },
               },
-            { data: 'fname' },
-            { data: 'email' },
+            { 
+              data: 'fname',
+              render: function (data, type, row) {
+                if (row?.fname != null) {
+                  return '<span title="'+row?.fname+'">'+row?.fname+'</span>';
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'email',
+              render: function (data, type, row) {
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                }
+                return '----------';
+              },
+             },
             { data: 'convart_phone' },
             { data: 'total_balance' },
             {

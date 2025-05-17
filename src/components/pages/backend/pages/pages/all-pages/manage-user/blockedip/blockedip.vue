@@ -128,7 +128,7 @@
                     hours = hours % 12;
                     hours = hours ? hours : 12;
                     
-                    return `${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+                    return '<span title="'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'">'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'</span>';
                   } else {
                     return '';
                   }
@@ -137,32 +137,32 @@
               { 
                 data: 'user_country',
                 render: function(data, type, row) {
-                  return data ? data : '------';
+                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
                 }
               },
               { 
                 data: 'user_address',
                 render: function(data, type, row) {
-                  return data ? data : '------';
+                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
                 }
               },
               { 
                 data: 'user_name',
                 render: function(data, type, row) {
-                  return data ? data : '------';
+                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
                 }
               },
               { 
                 data: 'attempts',
                 render: function(data, type, row) {
-                  return data ? data : '------';
+                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
                 }
               },
               {
                 data: "user_agent",
                 render: function (data, type, row) {
                   if (data != null) {
-                    return data.slice(0, 20);
+                    return '<span title="'+data+'">'+ data.slice(0, 20)+'</span>';
                   }
                   return "--------";
                 },
@@ -171,9 +171,9 @@
                   data: "action",
                   render: function (data, type, row) {
                     if(row.blocked_until != null){
-                      return '<span class="badge bg-danger">Block</span>'
+                      return '<span title="Block" class="badge bg-danger">Block</span>'
                     }else{
-                      return '<span class="badge bg-success">Unblock</span>'
+                      return '<span title="Unblock" class="badge bg-success">Unblock</span>'
                     }
                   }
                 },

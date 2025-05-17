@@ -251,12 +251,54 @@ export default {
               // { data: 'id' },
               { data: "id" },
               { data: "id" },
-              { data: "full_name" },
-              { data: "company_name" },
-              { data: "buy_sell" },
-              { data: "email" },
-              { data: "phone_number" },
-              { data: "country" },
+              { data: "full_name",
+                render: function (data, type, row) {
+                if (row?.full_name != null) {
+                  return '<span title="'+row?.full_name+'">'+row?.full_name+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "company_name",
+                render: function (data, type, row) {
+                if (row?.company_name != null) {
+                  return '<span title="'+row?.company_name+'">'+row?.company_name+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "buy_sell",
+                render: function (data, type, row) {
+                if (row?.buy_sell != null) {
+                  return '<span title="'+row?.buy_sell+'">'+row?.buy_sell+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "email",
+                render: function (data, type, row) {
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "phone_number",
+                render: function (data, type, row) {
+                if (row?.phone_number != null) {
+                  return '<span title="'+row?.phone_number+'">'+row?.phone_number+'</span>';
+                }
+                return '----------';
+              },
+               },
+              { data: "country",
+                render: function (data, type, row) {
+                if (row?.country != null) {
+                  return '<span title="'+row?.country+'">'+row?.country+'</span>';
+                }
+                return '----------';
+              },
+               },
               {
                 data: null, 
                 title: "Actions",

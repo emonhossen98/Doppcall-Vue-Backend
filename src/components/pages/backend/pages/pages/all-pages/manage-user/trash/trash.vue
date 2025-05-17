@@ -121,21 +121,20 @@ export default {
             {
               data: "role_id",
               render: function (data, type, row) {
-                console.log(row)
                 if(row.role_id == 1){
-                  return '<span class="badge bg-success">Super Administrator</span>';
+                  return '<span title="Super Administrator" class="badge bg-success">Super Administrator</span>';
                 }else if(row.role_id == 2){
-                  return '<span class="badge bg-warning">Advertiser</span>';
+                  return '<span title="Advertiser" class="badge bg-warning">Advertiser</span>';
                 }else if(row.role_id == 3){
-                  return '<span class="badge bg-primary">Publisher</span>';
+                  return '<span title="Publisher" class="badge bg-primary">Publisher</span>';
                 }else if(row.role_id == 4){
-                  return '<span class="badge bg-info">Account Manager</span>';
+                  return '<span title="Account Manager" class="badge bg-info">Account Manager</span>';
                 }else if(row.role_id == 5){
-                  return '<span class="badge bg-success">System Administrator</span>';
+                  return '<span title="System Administrator" class="badge bg-success">System Administrator</span>';
                 }else if(row.role_id == 6){
-                  return '<span class="badge bg-info">Support Representative (Live Chat)</span>';
+                  return '<span title="Support Representative (Live Chat)" class="badge bg-info">Support Representative (Live Chat)</span>';
                 }else{
-                  return '<span class="badge bg-secondary">Author </span>';
+                  return '<span title="Author" class="badge bg-secondary">Author </span>';
                 }
               },
             },
@@ -143,32 +142,38 @@ export default {
               data: "fname",
               render: function (data, type, row) {
                 if(row.role_id == 1){
-                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else if(row.role_id == 2){
-                  return '<a data-vue-route href="/admin-manage-advertiser-view/'+row.id+'" title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route href="/admin-manage-advertiser-view/'+row.id+'" title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else if(row.role_id == 3){
-                  return '<a data-vue-route href="/admin-manage-publishers-view/'+row.id+'" title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route href="/admin-manage-publishers-view/'+row.id+'" title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else if(row.role_id == 4){
-                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else if(row.role_id == 5){
-                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else if(row.role_id == 6){
-                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route title="'+row?.fname+'">'+row?.fname+'</a>';
                 }else{
-                  return '<a data-vue-route title="Go To Profile">'+row?.fname+'</a>';
+                  return '<a data-vue-route title="'+row?.fname+'">'+row?.fname+'</a>';
                 }
 
               },
             },
-            { data: "email" },
+            { data: "email",
+              render: function (data, type, row) {
+                if (row?.email != null) {
+                  return '<span title="'+row?.email+'">'+row?.email+'</span>';
+                }
+                return '----------';
+              },
+             },
             {
               data: "user_location",
               render: function (data, type, row) {
-                if(row?.user_location?.country){
-                  return row?.user_location?.country;
-                }else{
-                  return '-----';
+                if (row?.user_location?.country != null) {
+                  return '<span title="'+row?.user_location?.country+'">'+row?.user_location?.country+'</span>';
                 }
+                return '----------';
               },
             },
             {
@@ -194,8 +199,8 @@ export default {
             {
               data: "created_at",
               render: function (data, type, row) {
-                if (row.created_at!= null) {
-                  return formateDate(row.created_at);
+                if (row.created_at != null) {
+                  return '<span title="'+row.created_at+'">'+row.created_at+'</span>';
                 }
                 return '----------';
               },
@@ -203,8 +208,8 @@ export default {
             {
               data: "deleted_at",
               render: function (data, type, row) {
-                if (row.deleted_at!= null) {
-                  return formateDate(row.deleted_at);
+                if (row.deleted_at != null) {
+                  return '<span title="'+row.deleted_at+'">'+row.deleted_at+'</span>';
                 }
                 return '----------';
               },

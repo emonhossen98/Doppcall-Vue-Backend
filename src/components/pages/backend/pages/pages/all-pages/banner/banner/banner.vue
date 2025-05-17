@@ -118,7 +118,15 @@ export default {
                 { data: 'id' },
                 { data: 'id' },
                 { data: 'convart_image' },
-                { data: 'link' },
+                { data: 'link',
+                  render: function (data, type, row) {
+                    if (row?.link != null) {
+                      return '<span title="'+row.link+'">'+row.link+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+                 },
                 { data: 'convart_status' },
                 {
                   data: "updated_at",

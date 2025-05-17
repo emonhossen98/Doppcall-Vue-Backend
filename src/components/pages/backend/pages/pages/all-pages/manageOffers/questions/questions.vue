@@ -220,7 +220,7 @@
                   data: "title",
                   render: function (data, type, row) {
                     if(row?.title != null){
-                      return row?.title;
+                      return '<span title="'+row?.title+'">'+row?.title+'</span>';
                     }else{
                       return '-----';
                     }
@@ -230,7 +230,7 @@
                   data: "question",
                   render: function (data, type, row) {
                     if(row?.question != null){
-                      return row?.question;
+                      return '<span title="'+row?.question+'">'+row?.question+'</span>';
                     }else{
                       return '-----';
                     }
@@ -240,7 +240,7 @@
                   data: "user_id",
                   render: function (data, type, row) {
                     if(row?.user?.fname != null){
-                      return row?.user?.fname;
+                      return  '<span title="'+row?.user?.fname+'">'+row?.user?.fname+'</span>';
                     }else{
                       return '-----';
                     }
