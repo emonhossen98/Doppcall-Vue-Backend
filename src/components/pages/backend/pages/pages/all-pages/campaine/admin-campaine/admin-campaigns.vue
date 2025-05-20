@@ -130,7 +130,7 @@ export default {
                 data: "convart_offer",
                 render: function (data, type, row) {
                   if (row.convart_offer != null) {
-                    return row.convart_offer.length > 150 
+                    return row.convart_offer.length > 100 
                       ? row.convart_offer.slice(0, 150) + '...'  
                       : row.convart_offer; 
                   }

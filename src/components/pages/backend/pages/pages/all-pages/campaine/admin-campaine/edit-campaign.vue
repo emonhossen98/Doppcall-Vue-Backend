@@ -75,8 +75,15 @@
                                   <div class="col-md-2">
                                     <label for="phone_number">Phone Number</label>
                                   </div>
-                                  <div class="col-md-10">
-                                    <input type="number" v-model="campaineUpdate.phone_number" id="phone_number" class="form-control" placeholder="Enter Your Phone Number">
+                                  <div class="col-md-10" id="phone-number-tag">
+                                    <div class="tag-input">
+                                      <div v-for="(tag, index) in tags" :key="tag" class="tag-input__tag form-class font-class">
+                                        {{ tag }}
+                                        <span @click="removeTag(index)">x</span>
+                                      </div>
+                                      <input type="text" placeholder="Type your number & press enter or comma" class="tag-input__text form-control" @keydown.enter="addTag($event)" @keydown.188="addTag($event)" @keydown.delete="removeLastTag"  @keydown="checkComma($event)"/>
+                                    </div>
+                                    <!-- <input type="number" v-model="campaineUpdate.phone_number" id="phone_number" class="form-control" placeholder="Enter Your Phone Number"> -->
                                   </div>
                                 </div>
 
@@ -94,7 +101,7 @@
                                     <label for="rules">Rules</label>
                                   </div>
                                   <div class="col-md-10">
-                                    <textarea  ref="summernoteRules" rows="4" v-model="campaineUpdate.rules" required id="rules" class="form-control"></textarea>
+                                    <textarea  ref="summernoteRulesEdit" rows="4" required id="rules" class="form-control"></textarea>
                                   </div>
                                 </div>
 
@@ -103,7 +110,7 @@
                                     <label for="note">Note</label>
                                   </div>
                                   <div class="col-md-10">
-                                    <textarea  ref="summernoteNote" rows="4" v-model="campaineUpdate.note" required id="note" class="form-control"></textarea>
+                                    <textarea  ref="summernoteNoteEdit" rows="4" required id="note" class="form-control"></textarea>
                                   </div>
                                 </div>
 
@@ -206,23 +213,23 @@
         validationErrors: null,
         offerTags: [],
         offerTagString : "",
+        tags: [],
       };
     },
     async mounted() { 
       try {
         const { role, isAuthorized } = await fetchUserRole();
         if (role == 'Super' || role == 'Admin') {
-          this.offersCampaigenEditData();
-          $(this.$refs.summernoteRules).summernote({
+          $(this.$refs.summernoteRulesEdit).summernote({
             placeholder: 'Type your text here...',
             height: 100,
             callbacks: {
               onChange: contents => {
-              this.campaineUpdate.rules = contents;
-              }
+                this.campaineUpdate.rules = contents;
+              },
             }
           });
-          $(this.$refs.summernoteNote).summernote({
+          $(this.$refs.summernoteNoteEdit).summernote({
             placeholder: 'Type your text here...',
             height: 100,
             callbacks: {
@@ -241,6 +248,7 @@
               }
             }
           });
+          this.offersCampaigenEditData();
         }
       } catch (error) {
         console.error("Error fetching user role:", error);
@@ -256,6 +264,7 @@
             },
           })
           .then((res) => {
+            console.log(res?.data?.campaign);
             this.getAllData                   = res?.data;
             this.campaign                     = res?.data?.campaign;
             this.getOffers                    = res?.data?.offer;
@@ -269,9 +278,9 @@
             this.campaineUpdate.note          = res?.data?.campaign?.note;
             this.campaineUpdate.rules         = res?.data?.campaign?.rules;
             this.campaineUpdate.phone_number  = res?.data?.campaign?.phone_number;
-            $(this.$refs.summernoteRules).summernote('code', res?.data?.offer?.rules);
-            $(this.$refs.summernoteNote).summernote('code', res?.data?.offer?.note);
-            console.log(res.data);
+            this.tags                         = res?.data?.campaign?.phone_number.split(/\s*,\s*/);
+            $(this.$refs.summernoteRulesEdit).summernote('code', res.data.campaign.rules ?? '');
+            $(this.$refs.summernoteNoteEdit).summernote('code', res?.data?.campaign?.note);
           })
           .catch((error) => {
             return error;
@@ -284,6 +293,8 @@
       offersCampaigenUpdate(value) {
         this.getLoader = true;
         this.campaineUpdate.submit_btn = value;
+        var allTags                       = this.tags.join(",");
+        this.campaineUpdate.phone_number  = allTags;
         axios
           .put(this.globalVariables.apiUrl+`admin/campaigns/${this.$route.params.id}/update`, this.campaineUpdate, {
             headers: {
@@ -292,7 +303,7 @@
           })
           .then((res) => {
               toastr.success(res.data.message);
-              this.offersCampaigenEditData();
+              this.$router.push("/admin-campaigns-user");
           })
           .catch((error) => {
             if (error.response && error.response.data && error.response.data.errors) {
@@ -311,12 +322,105 @@
       addQuestionId(id){
         this.campaineUpdate.question_ids.push(id);
       },
+      addTag(event) {
+        event.preventDefault();
+        let val = event.target.value.trim();
+        if (val.length > 0) {
+          if (this.tags.length >= 1) {
+            for (let i = 0; i < this.tags.length; i++) {
+              if (this.tags[i] === val) {
+                return false;
+              }
+            }
+          }
+          this.tags.push(val);
+          event.target.value = "";
+        }
+      },
+      removeTag(index) {
+        this.tags.splice(index, 1);
+      },
+      removeLastTag(event) {
+        if (event.target.value.length === 0) {
+          this.removeTag(this.tags.length - 1);
+        }
+      },
+      checkComma(event) {
+        if (event.key === ',') {
+          event.preventDefault();
+          this.addTag(event);
+        }
+      },
     },
   };
   </script>
   <style>
 #edit-campaign-offer .country-flag {
 	width: 3%;
+}
+#phone-number-tag .tag-input {
+	border: 1px solid #d9dfe7;
+	background: #fff;
+	border-radius: 4px;
+	font-size: 0.9em;
+	box-sizing: border-box;
+	margin-bottom: 10px;
+}
+
+#phone-number-tag .tag-input__tag {
+  height: 24px;
+  color: white;
+  float: left;
+  font-size: 14px;
+  margin-right: 10px;
+  background-color: #667eea;
+  border-radius: 15px;
+  margin-top: 10px;
+  line-height: 24px;
+  padding: 0 8px;
+  font-family: "Roboto";
+}
+
+#phone-number-tag .tag-input__tag > span {
+  cursor: pointer;
+  opacity: 0.75;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+#phone-number-tag .tag-input__text {
+  border: none;
+  outline: none;
+  font-size: 1em;
+  background: none;
+}
+#phone-number-tag .quslist {
+	padding: 0;
+	padding: 3px;
+	border: 1px solid lavender;
+	position: absolute;
+	background: white;
+	width: 60%;
+	z-index: 1;
+	/* display: none; */
+	max-height: 200px;
+	overflow: scroll;
+}
+#phone-number-tag .quslist li{
+    padding: 2px;
+    cursor: pointer;
+}
+#phone-number-tag .tag-input__tag {
+	font-family: unset !important;
+}
+
+#phone-number-tag .tag-input{
+	border: 1px solid #dbdade;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+#phone-number-tag .form-control:focus {
+	box-shadow: none !important;
 }
 </style>
   

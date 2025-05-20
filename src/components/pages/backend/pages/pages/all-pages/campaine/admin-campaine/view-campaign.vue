@@ -60,7 +60,7 @@
                         </tr>
                         <tr  v-if="campaignData && campaignData.note">
                           <th style="width: 25%">Note</th>
-                          <td>{{ campaignData.note }}</td>
+                          <td><p v-html="campaignData.note"></p></td>
                         </tr>
                         
                         <tr v-if="materials != ''">

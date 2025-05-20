@@ -177,6 +177,7 @@ methods: {
         })
       .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
+          console.log(data);
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -251,10 +252,12 @@ methods: {
                 },
               },
               {
-                data: "note",
+                data: "phone_number",
                 render: function (data, type, row) {
-                  if (row?.user?.phone_no != null) {
-                    return row?.user?.phone_no;
+                  if (row?.phone_number != null) {
+                    return row.phone_number.length > 15 
+                      ? '<span title="'+row.phone_number +'">'+row.phone_number.slice(0, 15) + '...' +'</span>' 
+                      : '<span title="'+row.phone_number +'">'+row.phone_number +'</span>'; 
                   }
                   return '----------';
                 },

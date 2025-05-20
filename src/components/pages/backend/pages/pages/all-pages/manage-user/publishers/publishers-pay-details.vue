@@ -107,7 +107,7 @@
                           <button v-if="value.status === 'Paid'" @click="changePaymentStatus(value.id, 'Pending')" class="align-items-center bg-transparent border-0" data-placement="top" title="Payment Status (Pending)"
                           > <i class="fa-solid fa-hourglass-half me-2 text-warning"></i></button>
 
-                          <button  v-else @click="changePaymentStatus(value.id, 'Paid')" class="align-items-center" data-placement="top" title="Payment Status (Paid)" >
+                          <button  v-else @click="changePaymentStatus(value.id, 'Paid')" class="align-items-center bg-transparent border-0" data-placement="top" title="Payment Status (Paid)" >
                             <i class="fas fa-check fa-sm text-success"></i>
                           </button>
                         </div>

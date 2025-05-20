@@ -662,6 +662,11 @@ export default {
       .then((res) => {  
         if(res.data.status == 'success'){
           toastr.success(res.data.message);
+          const modal = document.getElementById("addPaymentModal");
+          const bootstrapModal = bootstrap.Modal.getInstance(modal);
+          if (bootstrapModal) {
+            bootstrapModal.hide();
+          }
           this.$router.push('/admin-manage-publishers-pay-details/'+this.publiserDepositeData.user_name);
         }else if (res.data.status == 'error'){
           toastr.error(res.data.message);
