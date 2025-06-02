@@ -170,6 +170,42 @@ export default {
               { data: '' }
             ],
             initComplete: () => { 
+              const table = $("#admin_campaign_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
               this.attachEventListeners();
               this.attachEventListenersBlulkAction();
               this.attachEventListenersBlulkActionSubmit();
@@ -271,9 +307,13 @@ export default {
                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                   className: 'dropdown-item',
                   exportOptions: { columns: [2, 3, 4, 5, 6] }
-                }
-              ]
+                },
+              ],
             },
+            {
+                  className: "btn btn-primary ms-2",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Offer</a></li><li><a class="dropdown-item" href="#" data-column="2">Campaign Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Type</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                },
             ],
           });
         })

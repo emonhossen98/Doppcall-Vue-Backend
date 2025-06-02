@@ -488,6 +488,42 @@ export default {
               },
             ],
             initComplete: () => {
+              const table = $("#offer_datatables").DataTable();
+              const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+              dropdownItems.forEach((item) => {
+                const columnAttr = item.getAttribute("data-column"); 
+                if (columnAttr === "all") {
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    table.columns().visible(true);
+                    dropdownItems.forEach((el) => {
+                      if (el.getAttribute("data-column") !== "all") {
+                        el.classList.add("active");
+                      }
+                    });
+                  });
+                } else {
+                  const columnIndex = parseInt(columnAttr);
+                  const column = table.column(columnIndex);
+                  if (column.visible()) {
+                    item.classList.add("active");
+                  }
+
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    const currentVisible = column.visible();
+                    column.visible(!currentVisible);
+
+                    if (!currentVisible) {
+                      item.classList.add("active");
+                    } else {
+                      item.classList.remove("active");
+                    }
+                  });
+                }
+              });
               this.attachEventListeners();
               this.attachEventListenersOfButton();
               this.attachEventListenersForMenu();
@@ -626,8 +662,12 @@ export default {
               {
                 text:
                   '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
-                className: "create-new btn btn-primary",
+                className: "create-new btn btn-primary me-3",
                 attr: { id: "create" },
+              },
+              {
+                className: "create-new btn btn-primary me-3",
+                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
               },
             ],
           });
@@ -672,7 +712,6 @@ export default {
             }
           )
           .then((res) => {
-            // this.countendData = res.data.data;
             const { data, current_page, last_page,recordsTotal } = res.data;
             this.currentPage = current_page;
             this.lastPage = last_page;
@@ -680,7 +719,6 @@ export default {
 
             this.startPage = (current_page - 1) * perPage + 1;
             this.endPage = Math.min(current_page * perPage, recordsTotal);
-            console.log(res.data);
             if ($.fn.DataTable.isDataTable("#offer_datatables")) {
               $("#offer_datatables").DataTable().destroy();
             }
@@ -733,6 +771,42 @@ export default {
                 },
               ],
               initComplete: () => {
+              const table = $("#offer_datatables").DataTable();
+              const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+              dropdownItems.forEach((item) => {
+                const columnAttr = item.getAttribute("data-column"); 
+                if (columnAttr === "all") {
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    table.columns().visible(true);
+                    dropdownItems.forEach((el) => {
+                      if (el.getAttribute("data-column") !== "all") {
+                        el.classList.add("active");
+                      }
+                    });
+                  });
+                } else {
+                  const columnIndex = parseInt(columnAttr);
+                  const column = table.column(columnIndex);
+                  if (column.visible()) {
+                    item.classList.add("active");
+                  }
+
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    const currentVisible = column.visible();
+                    column.visible(!currentVisible);
+
+                    if (!currentVisible) {
+                      item.classList.add("active");
+                    } else {
+                      item.classList.remove("active");
+                    }
+                  });
+                }
+              });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
                 
@@ -872,8 +946,12 @@ export default {
                 {
                   text:
                     '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
-                  className: "create-new btn btn-primary",
+                  className: "create-new btn btn-primary me-3",
                   attr: { id: "create" },
+                },
+                {
+                  className: "create-new btn btn-primary me-3",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
                 },
               ],
             });

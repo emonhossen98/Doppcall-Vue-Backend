@@ -401,7 +401,43 @@ export default {
                 },
               },
           ],
-          initComplete: () => { // Using an arrow function here
+          initComplete: () => { 
+            const table = $("#publisher_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
             this.addEventListenerDeposite();
             this.addEventListenerPublissher();
             this.attachEventListenersOfButton();
@@ -509,13 +545,17 @@ export default {
             },
             {
               text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Payment</span>',
-              className: 'create-new btn btn-primary',
+              className: 'create-new btn btn-primary me-2',
               attr: {
                 id: 'create',
                 'data-bs-toggle': 'modal',
                 'data-bs-target': '#addPaymentModal'
               }
-            }
+            },
+            {
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Company</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone</a></li><li><a class="dropdown-item" href="#" data-column="5">Balance</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li><li><a class="dropdown-item" href="#" data-column="7">History</a></li></ul></div>',
+                },
           ],
         });
         this.getLoader = false;

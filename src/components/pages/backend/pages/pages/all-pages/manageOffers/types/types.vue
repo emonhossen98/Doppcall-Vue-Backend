@@ -270,9 +270,6 @@ export default {
               },
               buttons: [
                 {
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Type Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
-                },
-                {
                   text: `
                     <div id="bulk-action-wrapper">
                       <select id="bulk-action-select" class="form-select form-select-sm">
@@ -281,13 +278,17 @@ export default {
                       </select>
                     </div>
                   `,
-                  className: "ms-2 p-0 btn-primary d-none",
+                  className: "me-2 p-0 btn-primary d-none",
                   attr: { id: "bulk-action-container" },
                 },
                 {
                   text:
                     '<span data-bs-toggle="modal" data-bs-target="#TypeInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Type</span>',
-                  className: "create-new btn btn-primary ms-2",
+                  className: "create-new btn btn-primary me-2",
+                },
+                {
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Type Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
                 },
               ],
             });

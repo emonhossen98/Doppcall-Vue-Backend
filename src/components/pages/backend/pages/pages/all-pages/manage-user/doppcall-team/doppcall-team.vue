@@ -863,6 +863,42 @@ export default {
             { data: "convart_action" },
           ],
           initComplete: () => { 
+            const table = $("#super_admin_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
             this.attachEventDoppCallTeam();
             this.attachEventListenersDoppCallTeamBlulkAction();
             this.attachEventListenersDoppCallTeamBlulkActionSubmit();
@@ -964,13 +1000,17 @@ export default {
               {
                 text:
                   '<span><i class="ti ti-plus me-1 ti-xs"></i>Add Invite Member</span>',
-                className: "btn btn-primary",
+                className: "btn btn-primary me-2",
                 action: function () {
                   const modalElement = document.getElementById("inviteMemberModal");
                   const modalInstance = new bootstrap.Modal(modalElement);
                   modalInstance.show();
                 },
               },
+              {
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Email</a></li><li><a class="dropdown-item" href="#" data-column="3">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="4">Role Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                },
           ],
         });
         this.getLoader = false;
