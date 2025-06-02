@@ -282,6 +282,55 @@
         </div>
       </div>
     </div>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel" class="mb-0">Apply Filters</h5>
+        <a>Clear All</a>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body pt-0">
+        <div class="row">
+          <div class="col-md-5">
+            <ul class="px-0" id="offer-extra-filter">
+              <li><a :class="checkfilter.column == 'Name' ? 'check-active' : ''" @click="clickFilters('Name')">Name</a></li>
+              <li><a :class="checkfilter.column == 'Featured' ? 'check-active' : ''" @click="clickFilters('Featured')">Featured</a></li>
+              <li><a :class="checkfilter.column == 'Country' ? 'check-active' : ''" @click="clickFilters('Country')">Country</a></li>
+              <li><a :class="checkfilter.column == 'Assign' ? 'check-active' : ''" @click="clickFilters('Assign')">Assign</a></li>
+              <li><a :class="checkfilter.column == 'Pay' ? 'check-active' : ''" @click="clickFilters('Pay')">Pay</a></li>
+              <li><a :class="checkfilter.column == 'Phone' ? 'check-active' : ''" @click="clickFilters('Phone')">Phone</a></li>
+              <li><a :class="checkfilter.column == 'Owner' ? 'check-active' : ''" @click="clickFilters('Owner')">Owner</a></li>
+            </ul>
+          </div>
+          <div class="col-md-7">
+            <div v-if="checkfilter.column != null && checkfilter.column != ''">
+              <p>{{ checkfilter.column ?? '' }}</p>
+              <div class="form-check">
+                {{ checkfilter.empty }}
+                <input class="form-check-input"  @change="clickCheckboxFilters()" v-model="checkfilter.empty" type="checkbox" value="1" id="isemptyvalue">
+                <label class="form-check-label" for="isemptyvalue">
+                  is Empty
+                </label>
+              </div>
+               {{ checkfilter.notempty }}
+              <div class="form-check">
+                <input class="form-check-input" @change="clickCheckboxFilters()"  v-model="checkfilter.notempty" type="checkbox" value="0" id="isnotemptyvalue">
+                <label class="form-check-label" for="isnotemptyvalue">
+                  is not Empty
+                </label>
+              </div>
+              <hr>
+              <div>
+                <p>Have value</p>
+                <div>
+                  <label for="filtertext">Contains</label>
+                  <input type="text" @keyup="clickCheckboxFilters()" v-model="checkfilter.text" class="form-control" id="filtertext">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- / Content -->
     <div class="content-backdrop fade"></div>
   </div>
@@ -346,6 +395,12 @@ export default {
       startPage : 0,
       endPage : 0,
       searchInputValue : "",
+      checkfilter : {
+        column : "",
+        empty : "",
+        notempty : "",
+        text : "",
+      }
     };
   },
   async mounted() {
@@ -417,7 +472,7 @@ export default {
     },
   },
   methods: {
-    getOfferData(page = 1, perPage = 10, searchValue = '') {
+    getOfferData(page = 1, perPage = 20, searchValue = '') {
       this.getLoader = true;
       axios
         .get(this.globalVariables.apiUrl + "admin/offers/get-data", {
@@ -550,7 +605,7 @@ export default {
               '<"col-md-5 d-none"i>' +
               '<"col-md-7 d-none"p>>',
             displayLength: perPage,
-            lengthMenu: [10, 20, 50, 100, 200],
+            lengthMenu: [20, 50, 100, 200],
             language: {
               sLengthMenu: "_MENU_",
               search: "",
@@ -626,8 +681,19 @@ export default {
               {
                 text:
                   '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
-                className: "create-new btn btn-primary",
+                className: "create-new btn btn-primary me-3",
                 attr: { id: "create" },
+              },
+              {
+                text:
+                  '<span><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                className: "btn btn-primary",
+                attr: { 
+                  id: "all_filters",
+                  "data-bs-toggle": "offcanvas",
+                  "aria-controls": "offcanvasRight",
+                  "data-bs-target": "#offcanvasRight"
+                },
               },
             ],
           });
@@ -638,6 +704,7 @@ export default {
           this.getLoader = false;
         });
     },
+
     attachEventListenersForMenu() {
       $("#offer_datatables_wrapper [name='offer_datatables_length']").on("change", (event) => {
         this.getLoader = true;
@@ -646,6 +713,7 @@ export default {
         this.getOfferData(1,getSelectedValue);
       });
     },
+
     attachEventListenersForSearch() {
       $("#offer_datatables_wrapper #offer_datatables_filter input").on("keyup", (event) => {
         const target = $(event.target);
@@ -654,7 +722,16 @@ export default {
       });
     },
 
-    getFiltarOffers(page = 1, perPage = 10,searchValue = '') {
+    clickFilters(value){
+      this.checkfilter.column = value;
+      this.getFiltarOfExtranalFilter(1 ,20 ,'' ,this.checkfilter.column, this.checkfilter.empty,this.checkfilter.notempty,this.checkfilter.text);
+    },
+
+    clickCheckboxFilters(){
+      this.getFiltarOfExtranalFilter(1 ,20 ,'' ,this.checkfilter.column, this.checkfilter.empty,this.checkfilter.notempty,this.checkfilter.text);
+    },
+
+    getFiltarOffers(page = 1, perPage = 20,searchValue = '') {
       if (
         this.filtarData.country === "" &&
         this.filtarData.category === "" &&
@@ -672,7 +749,6 @@ export default {
             }
           )
           .then((res) => {
-            // this.countendData = res.data.data;
             const { data, current_page, last_page,recordsTotal } = res.data;
             this.currentPage = current_page;
             this.lastPage = last_page;
@@ -680,7 +756,6 @@ export default {
 
             this.startPage = (current_page - 1) * perPage + 1;
             this.endPage = Math.min(current_page * perPage, recordsTotal);
-            console.log(res.data);
             if ($.fn.DataTable.isDataTable("#offer_datatables")) {
               $("#offer_datatables").DataTable().destroy();
             }
@@ -796,7 +871,7 @@ export default {
                 '<"col-md-5 d-none"i>' +
                 '<"col-md-7 d-none"p>>',
               displayLength: perPage,
-              lengthMenu: [10, 20, 50, 100, 200],
+              lengthMenu: [20, 50, 100, 200],
               language: {
                 sLengthMenu: "_MENU_",
                 search: "",
@@ -875,6 +950,17 @@ export default {
                   className: "create-new btn btn-primary",
                   attr: { id: "create" },
                 },
+                {
+                  text:
+                    '<span><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                    className: "btn btn-primary",
+                    attr: { 
+                      id: "all_filters",
+                      "data-bs-toggle": "offcanvas",
+                      "aria-controls": "offcanvasRight",
+                      "data-bs-target": "#offcanvasRight"
+                    },
+                  },
               ],
             });
             // this.getSkeletonLoader = false;
@@ -888,6 +974,243 @@ export default {
             this.getLoader = false;
           });
       }
+    },
+
+    getFiltarOfExtranalFilter(page = 1, perPage = 20,searchValue = '',column = '',empty='',notempty='',text='') {
+        axios
+          .post(
+            this.globalVariables.apiUrl + "admin/offers/search-get-data",
+            this.filtarData,
+            {
+              headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+              params: { page: page, perPage: perPage,search: searchValue,column : column,empty : empty,notempty : notempty,text : text},
+            }
+          )
+          .then((res) => {
+            const { data, current_page, last_page,recordsTotal } = res.data;
+            this.currentPage = current_page;
+            this.lastPage = last_page;
+            this.recordsTotal = recordsTotal;
+
+            this.startPage = (current_page - 1) * perPage + 1;
+            this.endPage = Math.min(current_page * perPage, recordsTotal);
+            if ($.fn.DataTable.isDataTable("#offer_datatables")) {
+              $("#offer_datatables").DataTable().destroy();
+            }
+            var table = $("#offer_datatables").DataTable({
+              data: res.data.getDatas,
+              columns: [
+                  { 
+                    data: "id",
+                    className: 'dt-center select-checkbox',
+                    orderable: false
+                  },
+                { data: "id" },
+                { data: "convart_offer_name" },
+                { data: "convart_featured" },
+                { data: "convart_primary_contry" },
+                { data: "convart_assign_user" },
+                {
+                  data: "pay_out",
+                  render: function (data, type, row) {
+                    if (row.pay_out != null) {
+                      return row.pay_out.slice(0, 5);
+                    }
+                    return "";
+                  },
+                },
+                {
+                  data: "phone_no",
+                  render: function (data, type, row) {
+                    if (row.phone_no != null) {
+                      return row.owner;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "owner",
+                  render: function (data, type, row) {
+                    if (row.owner != null) {
+                      return row.owner.slice(0, 5);
+                    }
+                    return "--------";
+                  },
+                },
+                { data: "convart_status" },
+                {
+                  data: "updated_at",
+                  render: function (data, type, row) {
+                    return row.convart_action;
+                  },
+                },
+              ],
+              initComplete: () => {
+                this.attachEventListeners();
+                this.attachEventListenersOfButton();
+                
+                this.attachEventListenersForMenu();
+                this.attachEventListenersForSearch();
+
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
+
+                const searchInput = $("#offer_datatables_filter input");
+                searchInput.val(this.searchInputValue);
+                if(this.searchInputValue != ''){
+                    searchInput.focus();
+                }
+
+                searchInput.off().on("keyup", (e) => {
+                  const searchTerm = e.target.value;
+                  this.searchInputValue = searchTerm;
+                  this.getOfferData(1, perPage, searchTerm);
+                });
+                $('<style>')
+                .prop('type', 'text/css')
+                .html(`
+                  .select-checkbox .sorting_asc,
+                  .select-checkbox .sorting_desc,
+                  .select-checkbox .sorting {
+                    display: none !important;
+                  }
+                `)
+                .appendTo('head');
+              },
+              // createdRow: function (row, data, dataIndex) {
+              //   const perPage = 10; 
+              //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
+              //   $('td:eq(1)', row).html(rowNumber);
+              // },
+              columnDefs: [
+              {
+                  targets: 0,
+                  orderable: false,
+                  className: 'select-checkbox',
+                  checkboxes: {
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                  },
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                  },
+                  searchable: false,
+                },
+                { targets: 9, orderable: false, className: 'dt-center' }
+              ],
+              orderCellsTop: true,
+              order: [[1, "asc"]], 
+              dom:
+                '<"row mx-2"' +
+                '<"col-md-4"f>' +
+                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-3 d-none"p>>' +
+                "t" +
+                '<"row mx-2"' +
+                '<"col-md-5 d-none"i>' +
+                '<"col-md-7 d-none"p>>',
+              displayLength: perPage,
+              lengthMenu: [20, 50, 100, 200],
+              language: {
+                sLengthMenu: "_MENU_",
+                search: "",
+                searchPlaceholder: "Search Offer",
+                paginate: {
+                  previous: '<i class="fa-solid fa-chevron-left"></i>',
+                  next: '<i class="fa-solid fa-chevron-right"></i>',
+                },
+              },
+              buttons: [
+                {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                        <option value="0">Bulk Pending</option>
+                        <option value="1">Bulk Active</option>
+                        <option value="2">Bulk Paused</option>
+                        <option value="3">Bulk Resume</option>
+                        <option value="4">Bulk Reject</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container-second" },
+                },
+                {
+                  extend: "collection",
+                  className: "btn btn-label-primary dropdown-toggle me-3",
+                  text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+                  buttons: [
+                    {
+                      extend: "print",
+                      text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    },
+                    {
+                      extend: "csv",
+                      text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    },
+                    {
+                      extend: "excel",
+                      text:
+                        '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    },
+                    {
+                      extend: "pdf",
+                      text:
+                        '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    },
+                    {
+                      extend: "copy",
+                      text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                    },
+                  ],
+                },
+                {
+                  text:
+                    '<span id="import"><i class="fa-solid fa-upload me-1"></i>Import</span>',
+                  className: "create-new btn btn-primary me-3",
+                  attr: { id: "import" },
+                },
+                {
+                  text:
+                    '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
+                  className: "create-new btn btn-primary",
+                  attr: { id: "create" },
+                },
+                {
+                text:
+                  '<span><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                className: "btn btn-primary",
+                attr: { 
+                  id: "all_filters",
+                  "data-bs-toggle": "offcanvas",
+                  "aria-controls": "offcanvasRight",
+                  "data-bs-target": "#offcanvasRight"
+                },
+              },
+              ],
+            });
+            // this.getSkeletonLoader = false;
+            this.getLoader = false;
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+          .finally(() => {
+            // this.getSkeletonLoader = false;
+            this.getLoader = false;
+          });
     },
 
     attachEventListeners() {

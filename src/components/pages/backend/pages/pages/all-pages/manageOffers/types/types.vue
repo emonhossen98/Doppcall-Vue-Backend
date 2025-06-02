@@ -37,28 +37,15 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel1">New offer Type</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="row">
               <div class="col mb-3">
                 <label for="nameBasic" class="form-label">Name</label>
-                <input
-                  type="text"
-                  id="type_name"
-                  class="form-control"
-                  v-model="offerType.type_name"
-                  placeholder="Enter Type Name"
-                />
-                <div
-                  v-if="validationErrors && validationErrors.type_name"
-                  class="text-danger"
-                >
+                <input type="text" id="type_name" class="form-control" v-model="offerType.type_name"
+                  placeholder="Enter Type Name" />
+                <div v-if="validationErrors && validationErrors.type_name" class="text-danger">
                   {{ validationErrors.type_name[0] }}
                 </div>
               </div>
@@ -81,24 +68,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel1">Edit offer Type</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="row">
               <div class="col mb-3">
                 <label for="nameBasic" class="form-label">Name</label>
-                <input
-                  type="text"
-                  id="type_name"
-                  class="form-control"
-                  v-model="offerType.type_name"
-                  placeholder="Enter Type Name"
-                />
+                <input type="text" id="type_name" class="form-control" v-model="offerType.type_name"
+                  placeholder="Enter Type Name" />
               </div>
             </div>
           </div>
@@ -149,31 +126,31 @@ export default {
         id: null, // Added `id` to store the current offer type's id
         type_name: "",
       },
-      bulkactionids : {
+      bulkactionids: {
         selectedIds: [],
       },
       validationErrors: null,
     };
   },
-  async mounted() { 
-      try {
-        const { role, isAuthorized } = await fetchUserRole();
-        if (role == 'Super' || role == 'Admin') {
-          this.getOffersTypes();
-          this.$nextTick(() => {
-            const dataTableWrapper = document.querySelectorAll(
-              "#types-tables_wrapper .row.mx-2"
-            );
-            if (dataTableWrapper.length > 0) {
-              dataTableWrapper[0].style.display = "none";
-              dataTableWrapper[1].style.display = "none";
-            }
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching user role:", error);
+  async mounted() {
+    try {
+      const { role, isAuthorized } = await fetchUserRole();
+      if (role == 'Super' || role == 'Admin') {
+        this.getOffersTypes();
+        this.$nextTick(() => {
+          const dataTableWrapper = document.querySelectorAll(
+            "#types-tables_wrapper .row.mx-2"
+          );
+          if (dataTableWrapper.length > 0) {
+            dataTableWrapper[0].style.display = "none";
+            dataTableWrapper[1].style.display = "none";
+          }
+        });
       }
-    },
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+    }
+  },
   methods: {
     getOffersTypes() {
       this.getLoader = true;
@@ -182,95 +159,138 @@ export default {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         })
         .then((res) => {
-          if ($.fn.DataTable.isDataTable("#types-tables")) {
-            $("#types-tables").DataTable().destroy();
-          }
-          $("#types-tables").DataTable({
-            data: res.data.offerTypes,
-            columns: [
-              { data: "id" },
-              { data: "type" },
-              { data: "id" },
-              {
-                data: "pay_out",
-                render: function (data, type, row) {
-                  return (
-                    '<div class="text-end type-datatables-action">' +
-                    '<button title="Edit" data-id=' +
-                    row.id +
-                    ' class="rounded-circle bg-transparent border-0 text-primary me-2" data-bs-toggle="modal" data-bs-target="#TypeInfoEdit">' +
-                    '<i class="far fa-edit fa-sm" data-id=' +
-                    row.id +
-                    '></i></button>' +
-                    '<button title="Delete" type="button"  data-id=' +
-                    row.id +
-                    ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger">' +
-                    '<i  data-id="' +
-                    row.id +
-                    '" class="far fa-trash-alt fa-sm"></i></button></div>'
-                  );
+          this.$nextTick(() => {
+            if ($.fn.DataTable.isDataTable("#types-tables")) {
+              $('#types-tables').DataTable().destroy();
+              $('#types-tables').empty();
+            }
+            $("#types-tables").DataTable({
+              data: res.data.offerTypes,
+              columns: [
+                { data: "id" },
+                { data: "type" },
+                { data: "id" },
+                {
+                  data: "pay_out",
+                  render: function (data, type, row) {
+                    return (
+                      '<div class="text-end type-datatables-action">' +
+                      '<button title="Edit" data-id=' +
+                      row.id +
+                      ' class="rounded-circle bg-transparent border-0 text-primary me-2" data-bs-toggle="modal" data-bs-target="#TypeInfoEdit">' +
+                      '<i class="far fa-edit fa-sm" data-id=' +
+                      row.id +
+                      '></i></button>' +
+                      '<button title="Delete" type="button"  data-id=' +
+                      row.id +
+                      ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger">' +
+                      '<i  data-id="' +
+                      row.id +
+                      '" class="far fa-trash-alt fa-sm"></i></button></div>'
+                    );
+                  },
+                },
+              ],
+              initComplete: () => {
+                const table = $("#types-tables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
+
+                this.attachEventListeners();
+                this.attachEventListenersOfButton();
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
+              },
+              columnDefs: [
+                {
+                  targets: 0,
+                  orderable: false,
+                  checkboxes: {
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                  },
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                  },
+                  searchable: false,
+                },
+              ],
+              order: [[1, "desc"]],
+              dom:
+                '<"row mx-2"' +
+                '<"col-md-4"f>' +
+                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-3 d-none"p>>' +
+                "t" +
+                '<"row mx-2"' +
+                '<"col-md-5"i>' +
+                '<"col-md-7"p>>',
+              displayLength: 10,
+              lengthMenu: [10, 20, 50, 100, 200],
+              language: {
+                sLengthMenu: "_MENU_",
+                search: "",
+                searchPlaceholder: "Search Type",
+                paginate: {
+                  previous: '<i class="fa-solid fa-chevron-left"></i>',
+                  next: '<i class="fa-solid fa-chevron-right"></i>',
                 },
               },
-            ],
-            initComplete: () => {
-              this.attachEventListeners();
-              this.attachEventListenersOfButton();
-              this.attachEventListenersBlulkAction();
-              this.attachEventListenersBlulkActionSubmit();
-            },
-            columnDefs: [
-              {
-                targets: 0,
-                orderable: false,
-                checkboxes: {
-                  selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+              buttons: [
+                {
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Type Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
                 },
-                render: function (data, type, row) {
-                  return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "ms-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
                 },
-                searchable: false,
-              },
-            ],
-            order: [[1, "desc"]],
-            dom:
-              '<"row mx-2"' +
-              '<"col-md-4"f>' +
-              '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
-              '<"col-md-3 d-none"p>>' +
-              "t" +
-              '<"row mx-2"' +
-              '<"col-md-5"i>' +
-              '<"col-md-7"p>>',
-            displayLength: 10,
-            lengthMenu: [10, 20, 50, 100, 200],
-            language: {
-              sLengthMenu: "_MENU_",
-              search: "",
-              searchPlaceholder: "Search Type",
-              paginate: {
-                previous: '<i class="fa-solid fa-chevron-left"></i>',
-                next: '<i class="fa-solid fa-chevron-right"></i>',
-              },
-            },
-            buttons: [
-            {
-                text: `
-                  <div id="bulk-action-wrapper">
-                    <select id="bulk-action-select" class="form-select form-select-sm">
-                      <option value=""> ✓ Bulk Actions</option>
-                      <option value="delete">Bulk Delete</option>
-                    </select>
-                  </div>
-                `,
-                className: "me-2 p-0 btn-primary d-none",
-                attr: { id: "bulk-action-container" },
-              },
-              {
-                text:
-                  '<span data-bs-toggle="modal" data-bs-target="#TypeInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Type</span>',
-                className: "create-new btn btn-primary",
-              },
-            ],
+                {
+                  text:
+                    '<span data-bs-toggle="modal" data-bs-target="#TypeInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Type</span>',
+                  className: "create-new btn btn-primary ms-2",
+                },
+              ],
+            });
           });
           this.getLoader = false;
         })

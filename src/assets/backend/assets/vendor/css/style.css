@@ -6,7 +6,9 @@
 	border: none !important;
 	margin-right: 5px;
 }
-
+li{
+	list-style: none !important;
+}
 .btn-style-danger {
 	background: rgba(239, 72, 106, .15);
 	color: #ff5370;
@@ -14,7 +16,11 @@
 	border-radius: 50% !important;
 	border: none !important;
 }
-
+#offer-extra-filter li a {
+	color: #464646;
+	line-height: 28px;
+	cursor: pointer;
+}
 .card.card-primary {
 	border-top: 2px solid #0162e8 !important;
 }
@@ -45,7 +51,9 @@
 .fw-bloder {
 	font-weight: bold !important;
 }
-
+.check-active {
+	color: #6251fd !important;
+}
 .padding_top {
 	padding-top: 17rem;
 }
@@ -171,7 +179,17 @@
 	padding-bottom: 0.645rem;
 	padding: 12px 0 !important;
 }
-
+.select-colunm-position .dropdown-item:not(.disabled).active, .dropdown-item:not(.disabled):active {
+	background-color: transparent !important;
+	position: relative;
+	color: #7e7a8a !important;
+}
+.select-colunm-position a.dropdown-item.active::after {
+	content: "✓ ";
+	color: #2d2d2d;
+	position: absolute;
+	right: 7px;
+}
 .layout-content-navbar {
 	overflow: hidden !important;
 }
@@ -241,6 +259,9 @@
 #action-incompleted::before, #action-incompleted::after{
 	display:none !important;
 }
+.select-colunm-position{
+	transform :translate(-19px, 27px) !important;
+}
 @media only screen and (max-width:1830px) {
 	.table-responsive.table-overflow-hidden {
 		overflow: auto !important;
@@ -273,6 +294,7 @@
 		right: 0 !important;
 	}
 }
+
 /* @media screen and (min-width : 1831px) and (max-width :  3440px) {
 	#publisher_datatables td {
 		max-width: 200px;

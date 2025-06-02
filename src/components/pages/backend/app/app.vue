@@ -68,6 +68,7 @@ export default {
     import("../../../../assets/backend/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js");
     import("../../../../assets/backend/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css");
     import("../../../../assets/backend/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css");
+    import("https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js");
 
     import("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/intlTelInput.min.js");
     // Import summernote WYSIWYG editor
