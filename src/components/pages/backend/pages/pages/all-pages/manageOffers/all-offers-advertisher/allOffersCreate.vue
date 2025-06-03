@@ -179,7 +179,7 @@
                   </div>
                   <div class="row mt-5">
                     <div class="col-12 text-end">
-                      <button @click="addRow" type="button" id="add_field" class="border-1 py-1 px-2  bg-transparent btn-primary">
+                      <button @click="addRow" type="button" id="add_field" class="border-1 py-1 px-2  btn-primary">
                         <i data-feather="plus" class="me-25"></i>
                         <span>Add New</span>
                       </button>

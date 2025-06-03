@@ -182,13 +182,20 @@ li{
 .select-colunm-position .dropdown-item:not(.disabled).active, .dropdown-item:not(.disabled):active {
 	background-color: transparent !important;
 	position: relative;
-	color: #7e7a8a !important;
+	color: #0078d7  !important;
 }
-.select-colunm-position a.dropdown-item.active::after {
-	content: "✓ ";
-	color: #2d2d2d;
-	position: absolute;
-	right: 7px;
+.select-colunm-position a.dropdown-item.active::before {
+	content: "⋮⋮  ☑️";
+	margin-right: 7px;
+	font-size: 16px !important;
+}
+.select-colunm-position a.dropdown-item::before {
+	content: "⋮⋮  ⬜";
+	margin-right: 7px;
+	font-size: 16px !important;
+}
+.commonDataTablesClass {
+	overflow-x: auto !important;
 }
 .layout-content-navbar {
 	overflow: hidden !important;
@@ -261,6 +268,14 @@ li{
 }
 .select-colunm-position{
 	transform :translate(-19px, 27px) !important;
+	min-width: 200px !important;
+}
+.display-prefarnce-class {
+	padding: 10px;
+	border-bottom: 1px solid #dbdade;
+	font-size: 17px;
+	text-align: center;
+	font-weight: 600;
 }
 @media only screen and (max-width:1830px) {
 	.table-responsive.table-overflow-hidden {

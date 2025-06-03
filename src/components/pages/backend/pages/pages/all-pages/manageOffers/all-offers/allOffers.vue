@@ -224,28 +224,28 @@
               </div>
             </div>
           </div>
-          <div class="card-datatable table-responsive table-overflow-hidden">
+          <div class="card-body ">
             <!-- <template v-if="!getSkeletonLoader">
               <SkeletonDataTables></SkeletonDataTables>
             </template>
             <template v-else> -->
-              <table class="datatables-products table" id="offer_datatables">
-                <thead class="border-top">
-                  <tr>
-                    <th></th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Featured</th>
-                    <th>Country</th>
-                    <th>Assign</th>
-                    <th>Pay</th>
-                    <th>Phone</th>
-                    <th>Owner</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-              </table>
+                <table class="datatables-products table" id="offer_datatables">
+                  <thead class="border-top">
+                    <tr>
+                      <th></th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Featured</th>
+                      <th>Country</th>
+                      <th>Assign</th>
+                      <th>Pay</th>
+                      <th>Phone</th>
+                      <th>Owner</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                </table>
               <div class="row justify-content-between align-items-center">
                 <div class="col-md-3">
                   Showing {{ startPage }} to {{ endPage }} of {{ recordsTotal }} entries
@@ -285,33 +285,31 @@
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
       <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel" class="mb-0">Apply Filters</h5>
-        <a>Clear All</a>
+        <button class="bg-transparent border-0"  @click="getOfferData()">Clear All</button>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body pt-0">
         <div class="row">
           <div class="col-md-5">
             <ul class="px-0" id="offer-extra-filter">
-              <li><a :class="checkfilter.column == 'Name' ? 'check-active' : ''" @click="clickFilters('Name')">Name</a></li>
-              <li><a :class="checkfilter.column == 'Featured' ? 'check-active' : ''" @click="clickFilters('Featured')">Featured</a></li>
-              <li><a :class="checkfilter.column == 'Country' ? 'check-active' : ''" @click="clickFilters('Country')">Country</a></li>
-              <li><a :class="checkfilter.column == 'Assign' ? 'check-active' : ''" @click="clickFilters('Assign')">Assign</a></li>
-              <li><a :class="checkfilter.column == 'Pay' ? 'check-active' : ''" @click="clickFilters('Pay')">Pay</a></li>
-              <li><a :class="checkfilter.column == 'Phone' ? 'check-active' : ''" @click="clickFilters('Phone')">Phone</a></li>
-              <li><a :class="checkfilter.column == 'Owner' ? 'check-active' : ''" @click="clickFilters('Owner')">Owner</a></li>
+              <li><a :class="checkfilter.column == 'name' ? 'check-active' : ''" @click="clickFilters('name','Name')">Name</a></li>
+              <li><a :class="checkfilter.column == 'featured' ? 'check-active' : ''" @click="clickFilters('featured','Featured')">Featured</a></li>
+              <li><a :class="checkfilter.column == 'primary_country' ? 'check-active' : ''" @click="clickFilters('primary_country','Country')">Country</a></li>
+              <li><a :class="checkfilter.column == 'assign_user_id' ? 'check-active' : ''" @click="clickFilters('assign_user_id','Assign')">Assign</a></li>
+              <li><a :class="checkfilter.column == 'pay_out' ? 'check-active' : ''" @click="clickFilters('pay_out','Pay')">Pay</a></li>
+              <li><a :class="checkfilter.column == 'phone_no' ? 'check-active' : ''" @click="clickFilters('phone_no','Phone')">Phone</a></li>
+              <li><a :class="checkfilter.column == 'owner' ? 'check-active' : ''" @click="clickFilters('owner','Owner')">Owner</a></li>
             </ul>
           </div>
           <div class="col-md-7">
-            <div v-if="checkfilter.column != null && checkfilter.column != ''">
-              <p>{{ checkfilter.column ?? '' }}</p>
+            <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+              <p>{{ checkfilter.showcolumn ?? '' }}</p>
               <div class="form-check">
-                {{ checkfilter.empty }}
                 <input class="form-check-input"  @change="clickCheckboxFilters()" v-model="checkfilter.empty" type="checkbox" value="1" id="isemptyvalue">
                 <label class="form-check-label" for="isemptyvalue">
                   is Empty
                 </label>
               </div>
-               {{ checkfilter.notempty }}
               <div class="form-check">
                 <input class="form-check-input" @change="clickCheckboxFilters()"  v-model="checkfilter.notempty" type="checkbox" value="0" id="isnotemptyvalue">
                 <label class="form-check-label" for="isnotemptyvalue">
@@ -400,6 +398,7 @@ export default {
         empty : "",
         notempty : "",
         text : "",
+        showcolumn : "",
       }
     };
   },
@@ -543,6 +542,7 @@ export default {
               },
             ],
             initComplete: () => {
+              $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#offer_datatables").DataTable();
               const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -578,6 +578,13 @@ export default {
                     }
                   });
                 }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
               });
               this.attachEventListeners();
               this.attachEventListenersOfButton();
@@ -722,7 +729,7 @@ export default {
               },
               {
                 className: "create-new btn btn-primary me-3",
-                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
+                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></div></ul></div>',
               },
               {
                 text:
@@ -762,8 +769,9 @@ export default {
       });
     },
 
-    clickFilters(value){
+    clickFilters(value,key){
       this.checkfilter.column = value;
+      this.checkfilter.showcolumn = key;
       this.getFiltarOfExtranalFilter(1 ,20 ,'' ,this.checkfilter.column, this.checkfilter.empty,this.checkfilter.notempty,this.checkfilter.text);
     },
 
@@ -848,7 +856,7 @@ export default {
                 },
               ],
               initComplete: () => {
-                const table = $("#offer_datatables").DataTable();
+              const table = $("#offer_datatables").DataTable();
               const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
               dropdownItems.forEach((item) => {
@@ -883,6 +891,13 @@ export default {
                     }
                   });
                 }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
               });
 
                 this.attachEventListeners();
@@ -1029,7 +1044,7 @@ export default {
                 },
                 {
                 className: "create-new btn btn-primary me-3",
-                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
+                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></div></ul></div>'
               },
                 {
                   text:
@@ -1060,7 +1075,7 @@ export default {
     getFiltarOfExtranalFilter(page = 1, perPage = 20,searchValue = '',column = '',empty='',notempty='',text='') {
         axios
           .post(
-            this.globalVariables.apiUrl + "admin/offers/search-get-data",
+            this.globalVariables.apiUrl + "admin/offers/search-get-data/all-filter",
             this.filtarData,
             {
               headers: { Authorization: "Bearer " + localStorage.getItem("token") },
@@ -1165,6 +1180,13 @@ export default {
                 }
               });
 
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
+              });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
                 
@@ -1309,7 +1331,7 @@ export default {
                 },
                 {
                 className: "create-new btn btn-primary me-3",
-                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
+                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></div></ul></div>'
               },
                 {
                 text:

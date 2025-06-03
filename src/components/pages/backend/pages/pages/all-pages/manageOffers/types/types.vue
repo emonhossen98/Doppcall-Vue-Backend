@@ -13,7 +13,7 @@
             <div class="card-header pt-2 pb-0">
               <h5 class="card-title mt-2 mb-0">Types</h5>
             </div>
-            <div class="card-datatable table-responsive table-overflow-hidden">
+            <div class="card-body table-responsive table-overflow-hidden">
               <table class="align-middle mb-0 table table-hover" id="types-tables">
                 <thead class="border-top">
                   <tr>
@@ -227,6 +227,14 @@ export default {
                       }
                     });
                   }
+                });
+
+                 $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
 
                 this.attachEventListeners();
