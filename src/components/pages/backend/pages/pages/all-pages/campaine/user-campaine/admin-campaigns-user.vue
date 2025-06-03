@@ -427,7 +427,7 @@ methods: {
               ]
             },
             {
-                  className: "btn btn-primary ms-2",
+                  className: "btn btn-primary",
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Campaign Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Person Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="5">Offer Category</a></li><li><a class="dropdown-item" href="#" data-column="6">DID Number</a></li><li><a class="dropdown-item" href="#" data-column="7">Status</a></li><li><a class="dropdown-item" href="#" data-column="8">Date</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></ul></div>',
                 },
             ],

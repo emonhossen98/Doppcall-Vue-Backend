@@ -633,8 +633,8 @@ export default {
             order: [[1, "asc"]], 
             dom:
               '<"row mx-2"' +
-              '<"col-md-4"f>' +
-              '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+              '<"col-md-2"f>' +
+              '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
               '<"col-md-3 d-none"p>>' +
               "t" +
               '<"row mx-2"' +
@@ -940,8 +940,8 @@ export default {
               order: [[1, "asc"]], 
               dom:
                 '<"row mx-2"' +
-                '<"col-md-4"f>' +
-                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-2"f>' +
+                '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
                 '<"col-md-3 d-none"p>>' +
                 "t" +
                 '<"row mx-2"' +
@@ -1220,8 +1220,8 @@ export default {
               order: [[1, "asc"]], 
               dom:
                 '<"row mx-2"' +
-                '<"col-md-4"f>' +
-                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-2"f>' +
+                '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
                 '<"col-md-3 d-none"p>>' +
                 "t" +
                 '<"row mx-2"' +

@@ -192,6 +192,42 @@ export default {
                 },
               ],
               initComplete: () => {
+                const table = $("#publisher_offers_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
                 this.attachEventListeners();
               },
               order: [[6, 'asc']],
@@ -215,8 +251,12 @@ export default {
                 }
               },
               buttons: [
-                
+                {
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">ID</a></li><li><a class="dropdown-item" href="#" data-column="1">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="4">Payout</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Apply</a></li><li><a class="dropdown-item" href="#" data-column="7">View</a></li></ul></div>',
+                },
               ],
+              
           });
           })
         .catch((error) => {
@@ -281,6 +321,42 @@ export default {
                 },
               ],
               initComplete: () => {
+                const table = $("#publisher_offers_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
                 this.attachEventListeners();
               },
               createdRow: function (row, data, dataIndex) {
@@ -308,41 +384,8 @@ export default {
               },
               buttons: [
                 {
-                  extend: 'collection',
-                  className: 'btn btn-label-primary dropdown-toggle me-3',
-                  text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
-                  buttons: [
-                    {
-                      extend: 'print',
-                      text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
-                      className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
-                    },
-                    {
-                      extend: 'csv',
-                      text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
-                      className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
-                    },
-                    {
-                      extend: 'excel',
-                      text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
-                      className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
-                    },
-                    {
-                      extend: 'pdf',
-                      text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
-                      className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
-                    },
-                    {
-                      extend: 'copy',
-                      text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
-                      className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
-                    }
-                  ]
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">ID</a></li><li><a class="dropdown-item" href="#" data-column="1">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="4">Payout</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Apply</a></li><li><a class="dropdown-item" href="#" data-column="7">View</a></li></ul></div>',
                 },
               ],
           });

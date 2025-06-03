@@ -107,10 +107,10 @@
                                             <h6 class="notification-label mb-1 font-weight-bold" >{{ notifi.data.name }} - {{ notifi.data.company }}</h6>
                                             <div class="notification-subtext d-flex align-items-center">
                                             <template v-if="notifi.data.role_id == 3">
-                                                <span class="badge badge-pill badge-info mr-2">Publisher</span>
+                                                <span class="badge badge-pill badge-info mx-2">Publisher</span>
                                             </template>
                                             <template v-else>
-                                                <span class="badge badge-pill badge-info mr-2">Advertiser</span>
+                                                <span class="badge badge-pill badge-info mx-2">Advertiser</span>
                                             </template>
                                                 <span class="font-weight-bold">{{  formatTime(notifi.created_at)  }}</span>
                                             </div>

@@ -200,7 +200,7 @@ export default {
               data: "created_at",
               render: function (data, type, row) {
                 if (row.created_at != null) {
-                  return '<span title="'+row.created_at+'">'+row.created_at+'</span>';
+                  return '<span title="'+formateDate(row.created_at)+'">'+formateDate(row.created_at)+'</span>';
                 }
                 return '----------';
               },
@@ -209,7 +209,7 @@ export default {
               data: "deleted_at",
               render: function (data, type, row) {
                 if (row.deleted_at != null) {
-                  return '<span title="'+row.deleted_at+'">'+row.deleted_at+'</span>';
+                  return '<span title="'+formateDate(row.deleted_at)+'">'+formateDate(row.deleted_at)+'</span>';
                 }
                 return '----------';
               },
@@ -224,6 +224,42 @@ export default {
               },
           ],
           initComplete: () => { 
+            const table = $("#trashs_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
             this.attachEventListeners();
             this.attachEventListenersBlulkAction();
             this.attachEventListenersBlulkActionSubmit();
@@ -311,6 +347,10 @@ export default {
                   exportOptions: { columns: [2, 3, 4, 5] }
                 }
               ]
+            },
+             {
+              className: "btn btn-primary",
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Sl</a></li><li><a class="dropdown-item" href="#" data-column="1">User Type</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Deleted By</a></li><li><a class="dropdown-item" href="#" data-column="6">Reason for Deletion</a></li><li><a class="dropdown-item" href="#" data-column="7">Original Created Date</a></li><li><a class="dropdown-item" href="#" data-column="8">Deleted Time</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></ul></div>',
             },
           ],
         });

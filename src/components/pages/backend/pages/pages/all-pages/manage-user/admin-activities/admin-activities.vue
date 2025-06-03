@@ -265,6 +265,42 @@
               
             ],
             initComplete: () => {
+              const table = $("#admin_activities_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
               const searchInput = $("#admin_activities_datatables_filter input");
               searchInput.val(this.searchInputValue);
               if (this.searchInputValue != '') {
@@ -357,6 +393,10 @@
                   },
                 ],
               },
+              {
+                  className: "btn btn-primary",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Date/Time</a></li><li><a class="dropdown-item" href="#" data-column="1">User Role</a></li><li><a class="dropdown-item" href="#" data-column="2">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Ip Address</a></li><li><a class="dropdown-item" href="#" data-column="5">Action Type</a></li><li><a class="dropdown-item" href="#" data-column="6">Module Affected</a></li><li><a class="dropdown-item" href="#" data-column="7">Details</a></li></ul></div>',
+                },
             ],
           });
           this.getLoader = false;

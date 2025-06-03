@@ -525,7 +525,43 @@ export default {
               { data: "9" }, 
               { data: "10" }, 
             ],
-          initComplete: () => { // Using an arrow function here
+          initComplete: () => { 
+            const table = $("#advertiser_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
             this.attachEventListeners();
             this.attachEventListenersAssigModal();
             this.attachEventListenersForMenu();
@@ -639,6 +675,10 @@ export default {
                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
                 }
               ]
+            },
+             {
+              className: "btn btn-primary",
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">User Type</a></li><li><a class="dropdown-item" href="#" data-column="3">Company</a></li><li><a class="dropdown-item" href="#" data-column="4">Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Phone</a></li><li><a class="dropdown-item" href="#" data-column="7">Balance</a></li><li><a class="dropdown-item" href="#" data-column="8">Manager</a></li><li><a class="dropdown-item" href="#" data-column="9">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="10">City</a></li><li><a class="dropdown-item" href="#" data-column="11">Country</a></li><li><a class="dropdown-item" href="#" data-column="12">Status</a></li><li><a class="dropdown-item" href="#" data-column="13">Action</a></li></ul></div>',
             },
           ],
         });

@@ -393,11 +393,11 @@ button.list-group-item-primary.active {
   border-color: #e30b5c;
 }
 
-.dropdown-item:not(.disabled).active,
+/* .dropdown-item:not(.disabled).active,
 .dropdown-item:not(.disabled):active {
   background-color: #e30b5c;
   color: #fff !important;
-}
+} */
 
 .dropdown-menu > li:not(.disabled) > a:not(.dropdown-item):active,
 .dropdown-menu > li.active:not(.disabled) > a:not(.dropdown-item) {
