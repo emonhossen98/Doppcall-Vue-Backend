@@ -14,7 +14,7 @@
             <div class="card-header pt-2 pb-0">
               <h5 class="card-title mb mt-2">Allow Traffic</h5>
             </div> 
-            <div class="card-datatable table-responsive table-overflow-hidden" >
+            <div class="card-body" >
               <table class="align-middle mb-0 table table-hover" id="allow_tables">
                 <thead class="border-top">
                   <tr>
@@ -22,6 +22,7 @@
                     <th></th>
                     <th>Name</th>
                     <th>ID</th>
+                    <th>Created At</th>
                     <th class="text-end"  id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -129,6 +130,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -186,6 +188,7 @@ export default {
             if ($.fn.DataTable.isDataTable("#allow_tables")) {
               $("#allow_tables").DataTable().destroy();
             }
+            var formateDate = this.formatDates;
             var table = $("#allow_tables").DataTable({
               data: res.data.getData,
               columns: [
@@ -194,9 +197,19 @@ export default {
                 { data: "id" },
                 { data: "title" },
                 { data: "id" },
+                {
+                  data: "created_at",
+                  render: function (data, type, row) {
+                    if (row.created_at != null) {
+                      return formateDate(row.created_at);
+                    }
+                    return "--------";
+                  },
+                },
                 { data: "" },
               ],
               initComplete: () => {
+                $('#allow_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#allow_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -232,6 +245,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersBlulkAction();
@@ -313,7 +333,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Created At</a></li><li><a class="dropdown-item" href="#" data-column="4">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -326,6 +346,10 @@ export default {
           .finally(() => {
             this.getLoader = false;
           });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListeners() {
@@ -578,3 +602,5 @@ export default {
   margin-right: 5px;
 }
 </style>
+
+

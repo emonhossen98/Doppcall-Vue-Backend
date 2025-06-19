@@ -442,20 +442,20 @@
                   <div class="row align-items-center">
                     <div class="col-6">
                       <label class="switch">
-                        <input type="checkbox" @change="getToFactionStatus($event)" :checked="userTofactor.two_factor_status == 1"  id="togBtn"/>
+                        <input type="checkbox" @change="getToFactionStatus($event)" :checked="userTofactor.two_factor_status == 1 || userTofactorGoogle.two_factor_status_google == 1"  id="togBtn"/>
                         <div class="slider round">
                           <span class="on">ON</span>
                           <span class="off">OFF</span>
                         </div> </label
                       >Two Factor Authentication
                     </div>
-                    <template v-if="userTofactor.two_factor_status == 1">
+                    <template v-if="userTofactor.two_factor_status == 1 || userTofactorGoogle.two_factor_status_google == 1">
                       <div class="col-6">
                         <label for="">Type Two Factor Authentication</label>
                         <select class="form-select" @change="twoFactorAuthType($event)">
-                        <option value="">Select Two Factor Authentication</option>
-                        <option value="google_authentication">Google Two Factor Authentication</option>
-                        <option value="gmail_authentication">Gmail Two Factor Authentication</option>
+                          <option value="">Select Two Factor Authentication</option>
+                          <option value="google_authentication" :selected="userTofactorGoogle.two_factor_status_google == 1" >Google Two Factor Authentication</option>
+                          <option value="gmail_authentication" :selected="userTofactor.two_factor_status == 1">Gmail Two Factor Authentication</option>
                         </select>
                       </div>
                     </template>
@@ -1169,6 +1169,9 @@ export default {
       userTofactor: {
         two_factor_status: "",
       },
+      userTofactorGoogle: {
+        two_factor_status_google: "",
+      },
       validationErrors: null,
       pvalidationErrors: null,
       accountvalidationErrors: null,
@@ -1277,6 +1280,7 @@ export default {
             this.userUpdate.communication = res.data.user.user_address.facebook_id;
           }
           this.userTofactor.two_factor_status = res.data.user.two_factor_status;
+          this.userTofactorGoogle.two_factor_status_google = res.data.user.google2fa_enabled;
         })
         .catch((error) => {
           console.log(error);
@@ -1469,7 +1473,6 @@ export default {
         )
         .then((res) => {
           if (res.data.status == "success") {
-            console.log(res);
             toastr.success(res.data.message);
             this.getPublisherAccountData();
           }
@@ -1523,7 +1526,7 @@ export default {
           .then((res) => {
             if(res.data.status == 'success'){
               this.enablegoogle.code = '';
-              toastr.sucess(res.data.message);
+              toastr.success(res.data.message);
             }else{
               toastr.error(res.data.message);
             }

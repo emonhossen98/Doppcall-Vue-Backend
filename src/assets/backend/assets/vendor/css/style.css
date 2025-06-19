@@ -196,6 +196,31 @@ li{
 }
 .commonDataTablesClass {
 	overflow-x: auto !important;
+	scroll-behavior: smooth;
+	scrollbar-color: #7367f0 #fff;
+	scrollbar-width: thin;
+}
+.commonDataTablesClassScrollbar {
+	height: 400px;
+	overflow: auto;
+	scrollbar-color: #7367f0 white;
+	scrollbar-width: thin;
+}
+#externalFilters {
+	position: absolute;
+	top: 92px;
+	right: 36px;
+	width: 350px;
+	background: white;
+	padding: 20px 25px;
+	border-radius: 4px;
+	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+	min-height: 450px;
+	transition: all 0.5s;
+}
+.clearallexternalfilter {
+	cursor: pointer;
+	color: #7367f0 !important;
 }
 .layout-content-navbar {
 	overflow: hidden !important;

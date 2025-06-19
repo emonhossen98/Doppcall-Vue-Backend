@@ -15,7 +15,7 @@
                 Categories
               </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="categories-tables">
                 <thead class="border-top">
                   <tr>
@@ -24,6 +24,7 @@
                     <th>Id</th>
                     <th>Category Name</th>
                     <th>Category ID</th>
+                    <th>Created At</th>
                     <th class="text-end"  id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -121,6 +122,7 @@ import Loader from '../../../../../include/loader.vue';
 import Breadcrumb from '../../../../../include/breadcrumb.vue';
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -175,6 +177,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#categories-tables")) {
           $('#categories-tables').DataTable().destroy();
         }
+        var formateDate = this.formatDates;
         var table = $('#categories-tables').DataTable({
           data: res.data.categoryOffers,
           columns: [
@@ -184,6 +187,15 @@ export default {
             { data: 'name' },
             { data: 'id' },
             {
+              data: "created_at",
+              render: function (data, type, row) {
+                if (row.created_at != null) {
+                  return formateDate(row.created_at);
+                }
+                return "--------";
+              },
+            },
+            {
                 data: "pay_out",
                 render: function (data, type, full, meta) {
                   return '<div class="text-end categorie-action-btn"><button title="Edit" data-id='+ full.id + ' data-bs-toggle="modal" data-bs-target="#CategoryInfoEdit" class="rounded-circle bg-transparent border-0 me-2 text-primary"><i class="far fa-edit fa-sm" data-id='+ full.id + '></i></button><button title="Delete" type="button"  data-id='+ full.id + ' class="category-delete border-0 rounded-circle text-danger bg-transparent"><i  data-id="' + full.id + ' " class="far fa-trash-alt fa-sm"></i></button></div>'; ;
@@ -191,6 +203,7 @@ export default {
               },
           ],
           initComplete: () => { 
+           $('#categories-tables').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#categories-tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
                 dropdownItems.forEach((item) => {
@@ -225,6 +238,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
             this.attachEventListeners();
             this.attachEventListenersBlulkAction();
@@ -283,7 +303,7 @@ export default {
             },
             {
               className: "btn btn-primary",
-              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Sl</a></li><li><a class="dropdown-item" href="#" data-column="1">Id</a></li><li><a class="dropdown-item" href="#" data-column="2">Category Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Category ID</a></li><li><a class="dropdown-item" href="#" data-column="4">Action</a></li></ul></div>',
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Category Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Category ID</a></li><li><a class="dropdown-item" href="#" data-column="4">Created At</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></div></ul></div>',
             },
           ],
         });
@@ -295,6 +315,9 @@ export default {
         .finally(() => {
             this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListeners() {

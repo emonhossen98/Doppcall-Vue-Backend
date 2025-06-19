@@ -13,13 +13,14 @@
             <div class="card-header pt-2 pb-0">
               <h5 class="card-title mt-2 mb-0">Types</h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="types-tables">
                 <thead class="border-top">
                   <tr>
                     <th></th>
                     <th>Type Name</th>
                     <th>ID</th>
+                    <th>Created At</th>
                     <th class="text-end" id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -106,6 +107,8 @@ import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
 
+import moment from "moment";
+
 export default {
   setup() {
     const globalVariables = inject("globalVariables");
@@ -123,7 +126,7 @@ export default {
         { label: "Types", url: "" },
       ],
       offerType: {
-        id: null, // Added `id` to store the current offer type's id
+        id: null, 
         type_name: "",
       },
       bulkactionids: {
@@ -164,12 +167,22 @@ export default {
               $('#types-tables').DataTable().destroy();
               $('#types-tables').empty();
             }
+            var formateDate = this.formatDates;
             $("#types-tables").DataTable({
               data: res.data.offerTypes,
               columns: [
                 { data: "id" },
                 { data: "type" },
                 { data: "id" },
+                {
+                  data: "created_at",
+                  render: function (data, type, row) {
+                    if (row.created_at != null) {
+                      return formateDate(row.created_at);
+                    }
+                    return "--------";
+                  },
+                },
                 {
                   data: "pay_out",
                   render: function (data, type, row) {
@@ -192,6 +205,8 @@ export default {
                 },
               ],
               initComplete: () => {
+                
+                $('#types-tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#types-tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -296,7 +311,7 @@ export default {
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Type Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
+                  text : '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Type Name</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Created At</a></li><li><a class="dropdown-item" href="#" data-column="4">Action</a></li></div></ul></div>'
                 },
               ],
             });
@@ -309,6 +324,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
     attachEventListeners() {
       $("#types-tables").on("click", ".type-datatables-action", (event) => {

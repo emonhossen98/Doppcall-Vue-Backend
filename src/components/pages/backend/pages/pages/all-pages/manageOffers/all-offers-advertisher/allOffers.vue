@@ -153,22 +153,22 @@
       <div class="row mt-4">
         <div class="col-12">
           <div class="card px-0">
-          <div class="card-header border-bottom">
-            <!-- <template v-if="!getSkeletonLoader">
+          <!-- <div class="card-header border-bottom">
+            <template v-if="!getSkeletonLoader">
               <SkeletonShape
                 type="text" animation="wave" :width="'130px'"  :height="'30px'" :radius="5"/>
             </template>
-            <template v-else> -->
+            <template v-else> 
               <h5 class="card-title mb-0">Filter</h5>
-            <!-- </template> -->
+            </template> 
             <div
               class="d-flex justify-content-between align-items-center row py-3 gap-3 gap-md-0"
             >
               <div class="col-md-4">
-                <!-- <template v-if="!getSkeletonLoader">
+                 <template v-if="!getSkeletonLoader">
                   <SkeletonShape type="text"  animation="wave"  :width="'100%'" :height="'38px'" :radius="5" />
                 </template>
-                <template v-else> -->
+                <template v-else> 
                   <select v-model="filtarData.country" class="select2 form-select"  @change="getFiltarOffers()">
                     <option value="">Select Country</option>
                     <template v-for="(countryOffer,index) in OfferIndex.countryOffers" :key="index">
@@ -177,14 +177,14 @@
                       </template>
                     </template>
                   </select>
-                <!-- </template> -->
+                 </template> 
               </div>
 
               <div class="col-md-4">
-                <!-- <template v-if="!getSkeletonLoader">
+                 <template v-if="!getSkeletonLoader">
                   <SkeletonShape type="text" animation="wave" :width="'100%'" :height="'38px'" :radius="5"/>
                 </template>
-                <template v-else> -->
+                <template v-else> 
                   <select
                     v-model="filtarData.category"
                     class="select2 form-select"
@@ -199,13 +199,13 @@
                       {{ category.name }}
                     </option>
                   </select>
-                <!-- </template> -->
+                 </template>
               </div>
               <div class="col-md-4">
-                <!-- <template v-if="!getSkeletonLoader">
+                <template v-if="!getSkeletonLoader">
                   <SkeletonShape  type="text"  animation="wave"  :width="'100%'"  :height="'38px'" :radius="5" />
                 </template>
-                <template v-else> -->
+                <template v-else>
                   <select
                     v-model="filtarData.type"
                     class="select2 form-select"
@@ -220,11 +220,11 @@
                       {{ offerType.type }}
                     </option>
                   </select>
-                <!-- </template> -->
+                 </template> 
               </div>
             </div>
-          </div>
-          <div class="card-datatable table-responsive table-overflow-hidden">
+          </div> -->
+          <div class="card-body">
             <!-- <template v-if="!getSkeletonLoader">
               <SkeletonDataTables></SkeletonDataTables>
             </template>
@@ -242,6 +242,18 @@
                     <th>Phone</th>
                     <th>Owner</th>
                     <th>Status</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Created at</th>
+                    <th>Call Type</th>
+                    <th>Call Limit</th>
+                    <th>Allow Trafic</th>
+                    <th>Appeal Period</th>
+                    <th>Offer Price</th>
+                    <th>Promotion Types</th>
+                    <th>Tools</th>
+                    <th>Traffic Source</th>
+                    <th>Trafics</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -280,7 +292,7 @@
           </div>
         </div>
         </div>
-      </div>
+      </div> 
     </div>
     <!-- / Content -->
     <div class="content-backdrop fade"></div>
@@ -478,6 +490,114 @@ export default {
                 },
               },
               { data: "convart_status" },
+               {
+                data: "category",
+                render: function (data, type, row) {
+                  if (row.category != null) {
+                    return row.category.name;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "type",
+                render: function (data, type, row) {
+                  if (row.type != null) {
+                    return row.type.type;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "convart_create_at",
+                render: function (data, type, row) {
+                  if (row.convart_create_at != null) {
+                    return row.convart_create_at;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "call_type",
+                render: function (data, type, row) {
+                  if (row.call_type != null) {
+                    return row.call_type;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "call_limit",
+                render: function (data, type, row) {
+                  if (row.call_limit != null) {
+                    return row.call_limit;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "allow_trafic",
+                render: function (data, type, row) {
+                  if (row.allow_trafic != null) {
+                    return row.allow_trafic;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "appeal_period",
+                render: function (data, type, row) {
+                  if (row.appeal_period != null) {
+                    return row.appeal_period;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "offer_price",
+                render: function (data, type, row) {
+                  if (row.offer_price != null) {
+                    return row.offer_price;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "promotion_types",
+                render: function (data, type, row) {
+                  if (row.promotion_types != null) {
+                    return row.promotion_types;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "tools",
+                render: function (data, type, row) {
+                  if (row.tools != null) {
+                    return row.tools;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "traffic_source",
+                render: function (data, type, row) {
+                  if (row.traffic_source != null) {
+                    return row.traffic_source;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "trafics",
+                render: function (data, type, row) {
+                  if (row.trafics != null) {
+                    return row.trafics;
+                  }
+                  return "--------";
+                },
+              },
               {
                 data: "updated_at",
                 className: 'dt-center',
@@ -488,6 +608,7 @@ export default {
               },
             ],
             initComplete: () => {
+              $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#offer_datatables").DataTable();
               const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -523,6 +644,13 @@ export default {
                     }
                   });
                 }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
               });
               this.attachEventListeners();
               this.attachEventListenersOfButton();
@@ -572,7 +700,55 @@ export default {
                 },
                 searchable: false,
               },
-              { targets: 9, orderable: false, className: 'dt-center' }
+               {
+                targets: 10, 
+                visible: false,
+              },
+              {
+                targets: 11, 
+                visible: false,
+              },
+              {
+                targets: 12, 
+                visible: false,
+              },
+              {
+                targets: 13, 
+                visible: false,
+              },
+              {
+                targets: 14, 
+                visible: false,
+              },
+              {
+                targets: 15, 
+                visible: false,
+              },
+              {
+                targets: 16, 
+                visible: false,
+              },
+              {
+                targets: 17, 
+                visible: false,
+              },
+              {
+                targets: 18, 
+                visible: false,
+              },
+              {
+                targets: 19, 
+                visible: false,
+              },
+              {
+                targets: 20, 
+                visible: false,
+              },
+              {
+                targets: 21, 
+                visible: false,
+              },
+              { targets: 22, orderable: false, className: 'dt-center' }
             ],
             orderCellsTop: true,
             order: [[1, "asc"]], 
@@ -623,33 +799,33 @@ export default {
                     extend: "print",
                     text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                   },
                   {
                     extend: "csv",
                     text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                   },
                   {
                     extend: "excel",
                     text:
                       '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                   },
                   {
                     extend: "pdf",
                     text:
                       '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                   },
                   {
                     extend: "copy",
                     text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8] },
+                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                   },
                 ],
               },
@@ -667,7 +843,7 @@ export default {
               },
               {
                 className: "create-new btn btn-primary me-3",
-                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
+                 text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Category</a></li><li><a class="dropdown-item" href="#" data-column="11">Type</a></li><li><a class="dropdown-item" href="#" data-column="12">Created at</a></li><li><a class="dropdown-item" href="#" data-column="13">Call Type</a></li><li><a class="dropdown-item" href="#" data-column="14">Call Limit</a></li><li><a class="dropdown-item" href="#" data-column="15">Allow Trafic</a></li><li><a class="dropdown-item" href="#" data-column="16">Appeal Period</a></li><li><a class="dropdown-item" href="#" data-column="17">Offer Price</a></li><li><a class="dropdown-item" href="#" data-column="18">Promotion Types</a></li><li><a class="dropdown-item" href="#" data-column="19">Tools</a></li><li><a class="dropdown-item" href="#" data-column="20">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="21">Trafics</a></li><li><a class="dropdown-item" href="#" data-column="22">Actions</a></li></div></ul></div>',
               },
             ],
           });
@@ -763,14 +939,125 @@ export default {
                   },
                 },
                 { data: "convart_status" },
-                {
-                  data: "updated_at",
-                  render: function (data, type, row) {
-                    return row.convart_action;
-                  },
+                 {
+                data: "category",
+                render: function (data, type, row) {
+                  if (row.category != null) {
+                    return row.category.name;
+                  }
+                  return "--------";
                 },
+              },
+              {
+                data: "type",
+                render: function (data, type, row) {
+                  if (row.type != null) {
+                    return row.type.type;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "convart_create_at",
+                render: function (data, type, row) {
+                  if (row.convart_create_at != null) {
+                    return row.convart_create_at;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "call_type",
+                render: function (data, type, row) {
+                  if (row.call_type != null) {
+                    return row.call_type;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "call_limit",
+                render: function (data, type, row) {
+                  if (row.call_limit != null) {
+                    return row.call_limit;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "allow_trafic",
+                render: function (data, type, row) {
+                  if (row.allow_trafic != null) {
+                    return row.allow_trafic;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "appeal_period",
+                render: function (data, type, row) {
+                  if (row.appeal_period != null) {
+                    return row.appeal_period;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "offer_price",
+                render: function (data, type, row) {
+                  if (row.offer_price != null) {
+                    return row.offer_price;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "promotion_types",
+                render: function (data, type, row) {
+                  if (row.promotion_types != null) {
+                    return row.promotion_types;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "tools",
+                render: function (data, type, row) {
+                  if (row.tools != null) {
+                    return row.tools;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "traffic_source",
+                render: function (data, type, row) {
+                  if (row.traffic_source != null) {
+                    return row.traffic_source;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "trafics",
+                render: function (data, type, row) {
+                  if (row.trafics != null) {
+                    return row.trafics;
+                  }
+                  return "--------";
+                },
+              },
+              {
+                data: "updated_at",
+                className: 'dt-center',
+                orderable: false,
+                render: function (data, type, row) {
+                  return row.convart_action;
+                },
+              },
               ],
               initComplete: () => {
+              $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#offer_datatables").DataTable();
               const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -806,6 +1093,13 @@ export default {
                     }
                   });
                 }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
               });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
@@ -856,7 +1150,55 @@ export default {
                   },
                   searchable: false,
                 },
-                { targets: 9, orderable: false, className: 'dt-center' }
+                 {
+                targets: 10, 
+                visible: false,
+              },
+              {
+                targets: 11, 
+                visible: false,
+              },
+              {
+                targets: 12, 
+                visible: false,
+              },
+              {
+                targets: 13, 
+                visible: false,
+              },
+              {
+                targets: 14, 
+                visible: false,
+              },
+              {
+                targets: 15, 
+                visible: false,
+              },
+              {
+                targets: 16, 
+                visible: false,
+              },
+              {
+                targets: 17, 
+                visible: false,
+              },
+              {
+                targets: 18, 
+                visible: false,
+              },
+              {
+                targets: 19, 
+                visible: false,
+              },
+              {
+                targets: 20, 
+                visible: false,
+              },
+              {
+                targets: 21, 
+                visible: false,
+              },
+              { targets: 22, orderable: false, className: 'dt-center' }
               ],
               orderCellsTop: true,
               order: [[1, "asc"]], 
@@ -907,33 +1249,33 @@ export default {
                       extend: "print",
                       text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                     },
                     {
                       extend: "csv",
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                     },
                     {
                       extend: "excel",
                       text:
                         '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                     },
                     {
                       extend: "pdf",
                       text:
                         '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                     },
                     {
                       extend: "copy",
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: "dropdown-item",
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] },
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
                     },
                   ],
                 },
@@ -951,7 +1293,7 @@ export default {
                 },
                 {
                   className: "create-new btn btn-primary me-3",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></ul></div>',
+                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Category</a></li><li><a class="dropdown-item" href="#" data-column="11">Type</a></li><li><a class="dropdown-item" href="#" data-column="12">Created at</a></li><li><a class="dropdown-item" href="#" data-column="13">Call Type</a></li><li><a class="dropdown-item" href="#" data-column="14">Call Limit</a></li><li><a class="dropdown-item" href="#" data-column="15">Allow Trafic</a></li><li><a class="dropdown-item" href="#" data-column="16">Appeal Period</a></li><li><a class="dropdown-item" href="#" data-column="17">Offer Price</a></li><li><a class="dropdown-item" href="#" data-column="18">Promotion Types</a></li><li><a class="dropdown-item" href="#" data-column="19">Tools</a></li><li><a class="dropdown-item" href="#" data-column="20">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="21">Trafics</a></li><li><a class="dropdown-item" href="#" data-column="22">Actions</a></li></div></ul></div>',
                 },
               ],
             });
