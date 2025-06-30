@@ -52,7 +52,7 @@
             <div class="card-header pt-3 pb-0">
               <h5 class="card-title ms-2">Invitations</h5>
             </div>
-            <div class="card-body px-4 table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="invitations_tables">
                 <thead>
                   <tr>
@@ -72,7 +72,7 @@
             <div class="card-header pt-3 pb-0">
               <h5 class="card-title mb-0 ms-2">Manage Doppcall Team </h5>
             </div>
-            <div class="card-body px-4 table-responsive table-overflow-hidden" >
+            <div class="card-body" >
               <table class="align-middle mb-0 table table-hover" id="super_admin_datatables">
                 <thead>
                   <tr>
@@ -83,6 +83,7 @@
                     <th>Phone Number</th>
                     <th>Role Name</th>
                     <th>Status</th>
+                    <th>Created At</th>
                     <th width="190px" id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -821,6 +822,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#super_admin_datatables")) {
             $('#super_admin_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
         var table = $('#super_admin_datatables').DataTable({
           data: res.data,
           columns: [
@@ -860,9 +862,20 @@ export default {
               },
             },
             { data: "convart_status" },
+            {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
+            
             { data: "convart_action" },
           ],
           initComplete: () => { 
+            $('#super_admin_datatables').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#super_admin_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -898,6 +911,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
             this.attachEventDoppCallTeam();
             this.attachEventListenersDoppCallTeamBlulkAction();
@@ -967,33 +987,33 @@ export default {
                     extend: "print",
                     text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6] },
                   },
                   {
                     extend: "csv",
                     text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6] },
                   },
                   {
                     extend: "excel",
                     text:
                       '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6] },
                   },
                   {
                     extend: "pdf",
                     text:
                       '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6] },
                   },
                   {
                     extend: "copy",
                     text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                     className: "dropdown-item",
-                    exportOptions: { columns: [1, 2, 3, 4] },
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6] },
                   },
                 ],
               },
@@ -1009,7 +1029,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Email</a></li><li><a class="dropdown-item" href="#" data-column="3">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="4">Role Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Email</a></li><li><a class="dropdown-item" href="#" data-column="3">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="4">Role Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
           ],
         });
@@ -1021,6 +1041,10 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersDoppCallTeamBlulkAction() {

@@ -13,7 +13,7 @@
                 <div class="card-header py-3">
                     <h5 class="card-title mb-0">Industrial Contact</h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                         <table class="aalign-middle mb-0 table table-hover" id="industrial_datatables">
                             <thead>
                               <!-- <th></th> -->
@@ -25,7 +25,12 @@
                               <th>Email</th>
                               <th>Phone</th>
                               <th>Country</th>
+                              <th>Buy Call</th>
+                              <th>Page URL</th>
+                              <th>Vertical Calls</th>
+                              <th>Website</th>
                               <th>Submited</th>
+                              <th>Created At</th>
                               <th id="action-incompleted">Action</th>
                             </thead>
                             <tbody>
@@ -137,6 +142,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -223,6 +229,7 @@ export default {
             if ($.fn.DataTable.isDataTable("#industrial_datatables")) {
             $('#industrial_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
         var table = $('#industrial_datatables').DataTable({
           data: data,
           columns: [
@@ -283,6 +290,42 @@ export default {
                     }
                 } 
              },
+            { data: "buy_call",
+              render: function (data, type, row) {
+                    if (row?.buy_call != null) {
+                      return '<span title="'+row.buy_call+'">'+row.buy_call+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "page_url",
+              render: function (data, type, row) {
+                    if (row?.page_url != null) {
+                      return '<span title="'+row.page_url+'">'+row.page_url+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "vertical_calls",
+              render: function (data, type, row) {
+                    if (row?.vertical_calls != null) {
+                      return '<span title="'+row.vertical_calls+'">'+row.vertical_calls+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
+            { data: "website",
+              render: function (data, type, row) {
+                    if (row?.website != null) {
+                      return '<span title="'+row.website+'">'+row.website+'</span>';
+                    } else {
+                      return '----';
+                    }
+                } 
+             },
             { data: "submited_data",
               render: function (data, type, row) {
                     if (row?.submited_data != null) {
@@ -292,6 +335,15 @@ export default {
                     }
                 } 
              },
+             {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
                    {
                  data : "updated_at",
                  render: function (data, type, row) {
@@ -300,6 +352,7 @@ export default {
               }
           ],
           initComplete: () => { 
+            $('#industrial_datatables').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#industrial_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -336,6 +389,13 @@ export default {
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
             this.attachEventListeners();
 
             this.attachEventListenersForMenu();
@@ -358,6 +418,24 @@ export default {
               const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
               $('td:eq(0)', row).html(rowNumber);
             },
+            columnDefs: [
+              {
+                targets: 7, 
+                visible: false,
+              },
+              {
+                targets: 8, 
+                visible: false,
+              },
+              {
+                targets: 9, 
+                visible: false,
+              },
+              {
+                targets: 10, 
+                visible: false,
+              },
+              ],
           order: [[0, 'desc']],
           dom: '<"row mx-2"' +
             '<"col-md-4 px-0"f>' + 
@@ -418,7 +496,7 @@ export default {
             },
             {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Country</a></li><li><a class="dropdown-item" href="#" data-column="7">Submited</a></li><li><a class="dropdown-item" href="#" data-column="8">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Country</a></li><li><a class="dropdown-item" href="#" data-column="7">Buy Call</a></li><li><a class="dropdown-item" href="#" data-column="8">Page URL</a></li><li><a class="dropdown-item" href="#" data-column="9">Vertical Calls</a></li><li><a class="dropdown-item" href="#" data-column="10">Website</a></li><li><a class="dropdown-item" href="#" data-column="11">Submited</a></li><li><a class="dropdown-item" href="#" data-column="12">Created At</a></li><li><a class="dropdown-item" href="#" data-column="13">Action</a></li></div></ul></div>',
                 },
           ],
         });
@@ -430,6 +508,10 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListeners() {

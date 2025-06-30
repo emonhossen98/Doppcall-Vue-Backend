@@ -15,7 +15,7 @@
                         Media List 
                     </h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover margin-0" id="media_tables">
                         <thead>
                             <tr>
@@ -25,6 +25,7 @@
                                 <th>File</th>
                                 <th>URL</th>
                                 <th style="width: 15%">Title</th>
+                                <th>Created At</th>
                                 <th style="width: 15%">Action</th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -110,6 +112,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#media_tables")) {
           $('#media_tables').DataTable().destroy();
         }
+        var formateDate = this.formatDates;
             var table = $('#media_tables').DataTable({
               data: res.data.getDatas,
               columns: [
@@ -135,6 +138,15 @@ export default {
                     return '----------';
                 },
                  },
+                 {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
                 {
                   data: null, // Specify null for custom rendering
                   title: 'Actions',
@@ -146,6 +158,7 @@ export default {
                 }
               ],
               initComplete: () => { 
+                $('#media_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#media_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -181,6 +194,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
@@ -246,31 +266,31 @@ export default {
                       extend: 'print',
                       text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5] }
                     },
                     {
                       extend: 'csv',
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5] }
                     },
                     {
                       extend: 'excel',
                       text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5] }
                     },
                     {
                       extend: 'pdf',
                       text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5] }
                     },
                     {
                       extend: 'copy',
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5] }
                     }
                   ]
                 },
@@ -281,7 +301,7 @@ export default {
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">File</a></li><li><a class="dropdown-item" href="#" data-column="3">Image</a></li><li><a class="dropdown-item" href="#" data-column="4">Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">File</a></li><li><a class="dropdown-item" href="#" data-column="3">Image</a></li><li><a class="dropdown-item" href="#" data-column="4">Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -296,6 +316,9 @@ export default {
         });
     },
 
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
     attachEventListenersBlulkAction() {
       $('#media_tables').on('change', '.row-checkbox', (event) => {
         const id = parseInt(event.target.dataset.id);

@@ -333,24 +333,77 @@
                 </div>
               </form>
               <form>
-                <div class="row-mb card padding-standart3 p-5  mt-4">
-                  <div class="row">
+                <div class="row-mb card padding-standart3 p-5 mt-4">
+                  <div class="row align-items-center">
                     <div class="col-6">
                       <label class="switch">
-                        <input
-                          type="checkbox"
-                          @change="getToFactionStatus($event)"
-                          :checked="userTofactor.two_factor_status == 1"
-                          id="togBtn"
-                        />
+                        <input type="checkbox" @change="getToFactionStatus($event)" :checked="userTofactor.two_factor_status == 1 || userTofactorGoogle.two_factor_status_google == 1"  id="togBtn"/>
                         <div class="slider round">
                           <span class="on">ON</span>
                           <span class="off">OFF</span>
                         </div> </label
                       >Two Factor Authentication
                     </div>
+                    <template v-if="showhidetypeoftwofactor">
+                      <div class="col-6">
+                        <label for="">Type Two Factor Authentication</label>
+                        <select class="form-select" @change="twoFactorAuthType($event)">
+                          <option :selected="userTofactorGoogle.two_factor_status_google == 0 && userTofactor.two_factor_status == 0">Select Two Factor Authentication</option>
+                          <option value="google_authentication" :selected="userTofactorGoogle.two_factor_status_google == 1" >Google Two Factor Authentication</option>
+                          <option value="gmail_authentication" :selected="userTofactor.two_factor_status == 1">Gmail Two Factor Authentication</option>
+                        </select>
+                      </div>
+                    </template>
                   </div>
-                  <div class="form-group mt-3 text-end">
+                  <template v-if="twoFactorType != '' && twoFactorType == 'google_authentication'">
+                    <div class="row  align-items-center">
+                      <div class="col-12 text-center mb-3">
+                        <div>
+                          <img :src="qrCodeImage" alt="" > <br>
+                          <p class="mb-0">Scan the QR To Get The Code</p>
+                          <div class="d-flex justify-content-center align-items-center mt-2">
+                            <div>
+                              <input type="text" v-model="enablegoogle.code" placeholder="Input Code Here To Enable The Option..." class="form-control w-40">
+                              <p v-if="validationErrors && validationErrors.code" class="text-danger"> 
+                                    {{ validationErrors.code[0] }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-else-if="twoFactorType != '' && twoFactorType == 'gmail_authentication'">
+                    <div class="row  align-items-center">
+                      <div class="col-12 text-center my-3">
+                        <div>
+                          <div class="d-flex justify-content-center align-items-center mt-2">
+                            <div class="w-100 d-flex justify-content-center align-items-center">
+                              <input type="text" v-model="enablegmail.code" placeholder="Input Code Here To Enable The Option..." class="form-control w-50">
+                              <p v-if="validationErrorsOfGmail && validationErrorsOfGmail.code" class="text-danger"> 
+                                    {{ validationErrorsOfGmail.code[0] }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-if="twoFactorType != '' && twoFactorType == 'google_authentication'">
+                    <div class="form-group text-end mt-3">
+                      <button type="button" @click="saveGoogleTwoFactor()" class="btn btn-sm btn-primary py-2">
+                        <i class="fas fa-check fa-sm me-1"></i> Save Google
+                      </button>
+                    </div>
+                  </template>
+                  <template v-else-if="twoFactorType != '' && twoFactorType == 'gmail_authentication'">
+                    <div class="form-group text-end mt-3">
+                      <button type="button" @click="saveGmailTwoFactor()" class="btn btn-sm btn-primary py-2">
+                        <i class="fas fa-check fa-sm me-1"></i> Save Gmail
+                      </button>
+                    </div>
+                  </template>
+                  <!-- <div class="form-group text-end mt-3">
                     <button
                       type="button"
                       @click="updateToFatorData()"
@@ -358,7 +411,7 @@
                     >
                       <i class="fas fa-check fa-sm me-1"></i> Save Change
                     </button>
-                  </div>
+                  </div> -->
                 </div>
               </form>
             </template>
@@ -670,6 +723,7 @@
 </template>
 
 <script>
+import QRCode from 'qrcode';
 import axios from "axios";
 import toastr from "toastr";
 import Swal from "sweetalert2";
@@ -705,6 +759,7 @@ export default {
       showModal: false,
       showPaymentModal: false,
       showRingbaModal: false,
+      showhidetypeoftwofactor: false,
       userData: "",
       rules: "",
       tabid: "my_profile",
@@ -727,14 +782,27 @@ export default {
         new_password: "",
         confirm_password: "",
       },
+      enablegoogle: {
+        code: "",
+      },
+      enablegmail: {
+        code: "",
+      },
       userTofactor: {
         two_factor_status: "",
       },
+      userTofactorGoogle: {
+        two_factor_status_google: "",
+      },
       validationErrors: null,
+      validationErrorsOfGmail: null,
       accountManager: "",
       paymentHistory: "",
       totalPaidAmount: 0,
       totalPendingAmount: 0,
+      qrCodeUrl: '' ,
+      qrCodeImage : '',
+      twoFactorType : "",
     };
   },
   async mounted() { 
@@ -798,7 +866,11 @@ export default {
             this.userUpdate.communication_type = "facbook";
             this.userUpdate.communication = res.data.user.user_address.facebook_id;
           }
+          if(res.data.user.two_factor_status == 1 || res.data.user.google2fa_enabled == 1){
+            this.showhidetypeoftwofactor = true;
+          }
           this.userTofactor.two_factor_status = res.data.user.two_factor_status;
+          this.userTofactorGoogle.two_factor_status_google = res.data.user.google2fa_enabled;
         })
         .catch((error) => {
           console.log(error);
@@ -980,6 +1052,156 @@ export default {
 
     getToFactionStatus(event) {
       this.userTofactor.two_factor_status = event.target.checked;
+    },
+
+    twoFactorAuthType(event){
+      var getValue = event.target.value;
+      if(getValue != null && getValue != ''){
+        if(getValue == 'google_authentication'){
+          this.getLoader = true;
+          this.twoFactorType = 'google_authentication';
+          axios
+            .get(
+              this.globalVariables.apiUrl + "google/twofactor/resend",
+              {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+              }
+            )
+            .then((res) => {
+              if (res.status == 200) {
+                this.qrCodeUrl = res.data.qr_code_url;
+                this.getQrCode()
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            .finally(() => {
+              this.getLoader = false;
+            });
+        }else{
+          this.getLoader = true;
+          this.twoFactorType = 'gmail_authentication';
+          axios
+            .get(
+              this.globalVariables.apiUrl + "twofactor/resend",
+              {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+              }
+            )
+            .then((res) => {
+              if (res.status == 200) {
+                toastr.success(res.data.message);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+            .finally(() => {
+              this.getLoader = false;
+            });
+        }
+      }
+    },
+    
+    saveGoogleTwoFactor(){
+      if(this.enablegoogle.code != ''){
+        axios
+          .post(
+            this.globalVariables.apiUrl + "google/twofactor/store",this.enablegoogle,
+            {
+              headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+            }
+          )
+          .then((res) => {
+            if(res.data.status == 'success'){
+              this.enablegoogle.code = '';
+              toastr.success(res.data.message);
+            }else{
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data && error.response.data.errors) {
+             this.validationErrors = error.response.data.errors;
+            }
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+      }else{
+        toastr.error("This Code Field is Required !");
+      }
+    },
+
+    saveGmailTwoFactor(){
+      if(this.enablegmail.code != ''){
+        axios
+          .post(
+            this.globalVariables.apiUrl + "twofactor/store",this.enablegmail,
+            {
+              headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+            }
+          )
+          .then((res) => {
+            if(res.data.status == 'success'){
+              this.enablegmail.code = '';
+              toastr.success(res.data.message);
+            }else{
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data && error.response.data.errors) {
+             this.validationErrorsOfGmail = error.response.data.errors;
+            }
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+      }else{
+        toastr.error("This Code Field is Required !");
+      }
+    },
+
+    getQrCode(){
+      QRCode.toDataURL(this.qrCodeUrl)
+      .then((url) => {
+        this.qrCodeImage = url;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    },
+    getToFactionStatus(event) {
+      if(event.target.checked == false){
+        this.showhidetypeoftwofactor = false;
+        this.getLoader = true;
+        axios
+          .get(
+            this.globalVariables.apiUrl + "twofactor/off",
+            {
+              headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+            }
+          )
+          .then((res) => {
+            if(res.data.status == 'success'){
+              toastr.success(res.data.message);
+            }else{
+              toastr.error(res.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error.response && error.response.data && error.response.data.errors) {
+            this.validationErrorsOfGmail = error.response.data.errors;
+            }
+          })
+          .finally(() => {
+            this.getLoader = false;
+          });
+      }else{
+        this.showhidetypeoftwofactor = true;
+      }
     },
   },
 };

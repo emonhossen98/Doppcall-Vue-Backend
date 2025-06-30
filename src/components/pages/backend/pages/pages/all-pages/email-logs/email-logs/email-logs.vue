@@ -15,7 +15,7 @@
                             Email Logs
                         </h5>
                     </div>
-                    <div class="card-body table-responsive table-overflow-hidden">
+                    <div class="card-body">
                         <table class="align-middle mb-0 table table-hover" id="emails_tables">
                             <thead>
                             <tr>
@@ -24,6 +24,7 @@
                               <th>SL</th> 
                               <th>To</th>
                               <th>Subject</th>
+                              <th>Created At</th>
                               <th class="text-center" id="action-incompleted">Action</th>
                               <!-- <th>Body</th> -->
                             </tr>
@@ -104,6 +105,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -190,6 +192,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#emails_tables")) {
             $('#emails_tables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
             var table = $('#emails_tables').DataTable({
               data: data,
               columns: [
@@ -214,6 +217,15 @@ export default {
                    }
                     }
                   },
+                  {
+                  data: "created_at",
+                  render: function (data, type, row) {
+                    if (row.created_at != null) {
+                      return formateDate(row.created_at);
+                    }
+                    return "--------";
+                  },
+                },
                 //  { data: 'body' },
                 {
                  data : "updated_at",
@@ -224,6 +236,7 @@ export default {
                 
               ],
               initComplete: () => {
+                $('#emails_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#emails_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -259,6 +272,14 @@ export default {
                       }
                     });
                   }
+                });
+
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersForMenu();
@@ -324,37 +345,37 @@ export default {
                       extend: 'print',
                       text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4] }
+                      exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                       extend: 'csv',
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4] }
+                      exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                       extend: 'excel',
                       text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4] }
+                      exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                       extend: 'pdf',
                       text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4] }
+                      exportOptions: { columns: [1, 2, 3] }
                     },
                     {
                       extend: 'copy',
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4] }
+                      exportOptions: { columns: [1, 2, 3] }
                     }
                   ]
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">To</a></li><li><a class="dropdown-item" href="#" data-column="2">Subject</a></li><li><a class="dropdown-item" href="#" data-column="3">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">To</a></li><li><a class="dropdown-item" href="#" data-column="2">Subject</a></li><li><a class="dropdown-item" href="#" data-column="3">Created At</a></li><li><a class="dropdown-item" href="#" data-column="4">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -367,6 +388,10 @@ export default {
         .finally(() => {
           this.getLoader =  false;
         });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
     
     attachEventListeners() {

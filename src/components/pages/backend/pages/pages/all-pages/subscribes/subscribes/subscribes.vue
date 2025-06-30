@@ -16,7 +16,7 @@
                 Subscriber
               </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle table-sm mb-0 table table-hover" id="subscribe_datatables" >
                 <thead>
                   <tr>
@@ -25,6 +25,7 @@
                     <th>Sl</th>
                     <th>ID</th>
                     <th>Email</th>
+                    <th>Created At</th>
                     <th id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -48,6 +49,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -102,6 +104,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#subscribe_datatables")) {
             $('#subscribe_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
           var table = $('#subscribe_datatables').DataTable({
             data: res.data,
             columns: [
@@ -117,9 +120,19 @@ export default {
                   return '----------';
                 },
               },
+              {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
               { data: 'convart_action' },
             ],
             initComplete: () => {
+              $('#subscribe_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#subscribe_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -155,6 +168,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListeners();
               this.attachEventListenersBlulkAction();
@@ -255,7 +275,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Created At</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -267,6 +287,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
     attachEventListenersBlulkAction() {
       $('#subscribe_datatables').on('change', '.row-checkbox', (event) => {

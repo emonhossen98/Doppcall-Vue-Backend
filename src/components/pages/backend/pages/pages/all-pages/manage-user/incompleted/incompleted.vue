@@ -13,7 +13,7 @@
             <div class="card-header pt-3 pb-1">
               <h5 class="card-title mb-0">Incomplete Register Users</h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" :class="dataSteps == 1 ? 'dataTables_steps1' : 'dataTables_steps2'" id="incompletedusers">
                 <thead>
                   <tr>
@@ -368,6 +368,7 @@ export default {
               ],
               
               initComplete: () => {
+                $('#incompletedusers').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#incompletedusers").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -403,6 +404,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
 
@@ -554,7 +562,7 @@ export default {
                 },
                  {
                   className: "btn btn-primary ms-2",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Sl</a></li><li><a class="dropdown-item" href="#" data-column="1">User Type</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Country</a></li><li><a class="dropdown-item" href="#" data-column="7">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="8">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="9">Created At</a></li><li><a class="dropdown-item" href="#" data-column="10">Address</a></li><li><a class="dropdown-item" href="#" data-column="11">City</a></li><li><a class="dropdown-item" href="#" data-column="12">State</a></li><li><a class="dropdown-item" href="#" data-column="13">Zip Code</a></li><li><a class="dropdown-item" href="#" data-column="14">Skype Id</a></li><li><a class="dropdown-item" href="#" data-column="15">Linkedin Id</a></li><li><a class="dropdown-item" href="#" data-column="16">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">User Type</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Country</a></li><li><a class="dropdown-item" href="#" data-column="7">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="8">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="9">Created At</a></li><li><a class="dropdown-item" href="#" data-column="10">Address</a></li><li><a class="dropdown-item" href="#" data-column="11">City</a></li><li><a class="dropdown-item" href="#" data-column="12">State</a></li><li><a class="dropdown-item" href="#" data-column="13">Zip Code</a></li><li><a class="dropdown-item" href="#" data-column="14">Skype Id</a></li><li><a class="dropdown-item" href="#" data-column="15">Linkedin Id</a></li><li><a class="dropdown-item" href="#" data-column="16">Action</a></li></div></ul></div>',
                 },
               ],
             });

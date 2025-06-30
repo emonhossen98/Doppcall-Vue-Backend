@@ -15,7 +15,7 @@
                 Campaigns
               </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="table mb-0" id="campaign_datatables">
                 <thead>
                   <tr>
@@ -137,7 +137,8 @@ export default {
             { data: 'approve_or_reject_date' },
             { data: 'convert_action' },
           ],
-          initComplete: () => { 
+          initComplete: () => {
+            $('#campaign_datatables').wrap('<div class="commonDataTablesClass"></div>'); 
             const table = $("#campaign_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -173,6 +174,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
             this.attachEventListeners();
             this.attachEventListenersBlulkAction();
@@ -266,7 +274,7 @@ export default {
             },
             {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Campaign</a></li><li><a class="dropdown-item" href="#" data-column="4">Number</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Approve date</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Campaign</a></li><li><a class="dropdown-item" href="#" data-column="4">Number</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Approve date</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
           ],
         });

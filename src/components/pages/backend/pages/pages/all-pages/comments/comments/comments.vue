@@ -15,7 +15,7 @@
                 Comments
               </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="comments_tables">
                 <thead>
                   <tr>
@@ -26,6 +26,7 @@
                     <th>Comment</th>
                     <th>Reply</th>
                     <th>Status</th>
+                    <th>Created At</th>
                     <th id="action-incompleted">Action</th>
                   </tr>
                 </thead>
@@ -51,6 +52,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -110,6 +112,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#comments_tables")) {
           $('#comments_tables').DataTable().destroy();
         }
+        var formateDate = this.formatDates;
             var table = $('#comments_tables').DataTable({
               data: res.data.comments,
               columns: [
@@ -153,9 +156,19 @@ export default {
                 // { data: 'comment' },
                 // { data: 'reply' },
                 { data: 'convart_status' },
+                {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
                 { data: 'convart_action' },
               ],
               initComplete: () => { 
+                $('#comments_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#comments_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -191,6 +204,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
 
@@ -287,7 +307,7 @@ export default {
                 },
                 {
                   className: "btn btn-primary ms-2",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Comment</a></li><li><a class="dropdown-item" href="#" data-column="4">Replay</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Comment</a></li><li><a class="dropdown-item" href="#" data-column="4">Replay</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -300,6 +320,10 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersBlulkAction() {

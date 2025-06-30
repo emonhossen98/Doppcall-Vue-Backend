@@ -15,7 +15,7 @@
                     Public Visitors
                 </h5>
               </div>
-              <div class="card-body table-responsive table-overflow-hidden">
+              <div class="card-body">
                 <table class="align-middle mb-0 table table-hover" id="menus_tables">
                   <thead>
                     <tr>
@@ -27,6 +27,14 @@
                     <th>Browser</th>
                     <th>Operating System</th>
                     <th>Page Name</th>
+                    <th>Country Code</th>
+                    <th>Monthly Visitors</th>
+                    <th>User Agent</th>
+                    <th>Phone No</th>
+                    <th>Telegram</th>
+                    <th>Facebook</th>
+                    <th>Skype</th>
+                    <th>Created At</th>
                     <th>Action</th>
                     </tr>
                   </thead>
@@ -86,6 +94,7 @@
   import Breadcrumb from "../../../../../include/breadcrumb.vue";
   import { inject } from "vue";
   import { fetchUserRole } from "@/services/userService";
+  import moment from "moment";
   
   export default {
     setup() {
@@ -162,6 +171,7 @@
           })
           .then((res) => {
             const { data, current_page, last_page,recordsTotal } = res.data;
+            console.log(data);
             this.currentPage = current_page;
             this.lastPage = last_page;
             this.recordsTotal = recordsTotal;
@@ -172,6 +182,7 @@
             if ($.fn.DataTable.isDataTable("#menus_tables")) {
               $('#menus_tables').DataTable().destroy();
             }
+            var formateDate = this.formatDates;
               var table = $('#menus_tables').DataTable({
                 data: data,
                 columns: [
@@ -198,6 +209,78 @@
                       return '<span title="'+full.page_name+'" class="page_name">'+full.page_name+'</span>';
                     }
                   },
+                   {
+                    data: "country_code",
+                    render: function (data, type, row) {
+                      if (row.country_code != null) {
+                        return row.country_code;
+                      }
+                      return "--------";
+                    },
+                  },
+                   {
+                    data: "monthly_visitors",
+                    render: function (data, type, row) {
+                      if (row.monthly_visitors != null) {
+                        return row.monthly_visitors;
+                      }
+                      return "--------";
+                    },
+                  },
+                   {
+                    data: "user_agent",
+                    render: function (data, type, row) {
+                      if (row.user_agent != null) {
+                        return '<span title="'+row?.user_agent+'">'+row?.user_agent+'</span>';
+                      }
+                      return "--------";
+                    },
+                  },
+                  {
+                    data: "phone_no",
+                    render: function (data, type, row) {
+                      if (row.phone_no != null) {
+                        return row.phone_no;
+                      }
+                      return "--------";
+                    },
+                  },
+                  {
+                    data: "telegram",
+                    render: function (data, type, row) {
+                      if (row.telegram != null) {
+                        return '<span title="'+row?.telegram+'">'+row?.telegram+'</span>';
+                      }
+                      return "--------";
+                    },
+                  },
+                  {
+                    data: "facebook",
+                    render: function (data, type, row) {
+                      if (row.facebook != null) {
+                        return '<span title="'+row?.facebook+'">'+row?.facebook+'</span>';
+                      }
+                      return "--------";
+                    },
+                  },
+                  {
+                    data: "skype",
+                    render: function (data, type, row) {
+                      if (row.skype != null) {
+                        return '<span title="'+row?.skype+'">'+row?.skype+'</span>';
+                      }
+                      return "--------";
+                    },
+                  },
+                   {
+                    data: "created_at",
+                    render: function (data, type, row) {
+                      if (row.created_at != null) {
+                        return formateDate(row.created_at);
+                      }
+                      return "--------";
+                    },
+                  },
                   {
                     data: null, 
                     searchable: false,
@@ -208,6 +291,7 @@
                   }
                 ],
                 initComplete: () => { 
+                  $('#menus_tables').wrap('<div class="commonDataTablesClass"></div>');
                   const table = $("#menus_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -244,6 +328,13 @@
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
                   this.attachEventListeners();
                   this.attachEventListenersForMenu();
                   this.attachEventListenersForSearch();
@@ -278,6 +369,30 @@
                       return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                     },
                     searchable: false
+                  },
+                  {
+                    targets: 8, 
+                    visible: false,
+                  },
+                  {
+                    targets: 9, 
+                    visible: false,
+                  },
+                  {
+                    targets: 10, 
+                    visible: false,
+                  },
+                  {
+                    targets: 11, 
+                    visible: false,
+                  },
+                  {
+                    targets: 12, 
+                    visible: false,
+                  },
+                  {
+                    targets: 13, 
+                    visible: false,
                   },
                 ],
                 order: [[1, 'desc']],
@@ -322,37 +437,37 @@
                         extend: 'print',
                         text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                       },
                       {
                         extend: 'csv',
                         text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                       },
                       {
                         extend: 'excel',
                         text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                       },
                       {
                         extend: 'pdf',
                         text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                       },
                       {
                         extend: 'copy',
                         text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                       }
                     ]
                   },
                   {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Browser</a></li><li><a class="dropdown-item" href="#" data-column="5">Operating System</a></li><li><a class="dropdown-item" href="#" data-column="6">Page Name</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Browser</a></li><li><a class="dropdown-item" href="#" data-column="5">Operating System</a></li><li><a class="dropdown-item" href="#" data-column="6">Page Name</a></li><li><a class="dropdown-item" href="#" data-column="7">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="8">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="9">User Agent</a></li><li><a class="dropdown-item" href="#" data-column="10">Phone No</a></li><li><a class="dropdown-item" href="#" data-column="11">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="12">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="13">Skype</a></li><li><a class="dropdown-item" href="#" data-column="14">Created At</a></li><li><a class="dropdown-item" href="#" data-column="15">Action</a></li></div></ul></div>',
                 },
                 ],
               });
@@ -365,6 +480,9 @@
             this.getLoader = false;
           });
       },
+      formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
     attachEventListenersBlulkAction() {
         $('#menus_tables').on('change', '.row-checkbox', (event) => {
           const id = parseInt(event.target.dataset.id);

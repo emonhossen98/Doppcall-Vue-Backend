@@ -15,7 +15,7 @@
                         Index How To Work 
                     </h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-hover" id="how_to_work_tables">
                         <thead>
                             <tr>
@@ -53,6 +53,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+
 
 export default {
   setup() {
@@ -152,6 +153,7 @@ export default {
                 }
               ],
               initComplete: () => { 
+                $('#how_to_work_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#how_to_work_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -187,6 +189,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
@@ -287,7 +296,7 @@ export default {
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Image</a></li><li><a class="dropdown-item" href="#" data-column="3">Title</a></li><li><a class="dropdown-item" href="#" data-column="4">Sub Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Image</a></li><li><a class="dropdown-item" href="#" data-column="3">Title</a></li><li><a class="dropdown-item" href="#" data-column="4">Sub Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
               ],
             });

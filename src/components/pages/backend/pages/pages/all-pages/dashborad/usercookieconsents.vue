@@ -14,7 +14,7 @@
                 <h5 class="card-title mt-2 mb-0">Cookie Consents</h5>
               </div>
   
-              <div class="user-activities-table">
+              <div class="user-activities-table card-body">
                 <table class="table table-sm" id="cookie_consents_tables">
                   <thead>
                     <tr>	 	 	 	 	
@@ -76,6 +76,7 @@
   import Breadcrumb from "../../../../include/breadcrumb.vue";
   import { inject } from "vue";
   import { fetchUserRole } from "@/services/userService";
+  import moment from "moment";
   
   
   export default {
@@ -160,6 +161,7 @@
             if ($.fn.DataTable.isDataTable("#cookie_consents_tables")) {
               $('#cookie_consents_tables').DataTable().destroy();
             }
+            var formateDate = this.formatDates;
         var table = $('#cookie_consents_tables').DataTable({
             data:data,
             columns: [
@@ -172,6 +174,7 @@
               { data: 'convart_allow' }
             ],
             initComplete: () => {
+              $('#cookie_consents_tables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#cookie_consents_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -207,6 +210,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListenersForMenu();
               this.attachEventListenersForSearch();
@@ -264,7 +274,7 @@
             buttons: [
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Domain</a></li><li><a class="dropdown-item" href="#" data-column="3">IP Address</a></li><li><a class="dropdown-item" href="#" data-column="4">User Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Content Date</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Domain</a></li><li><a class="dropdown-item" href="#" data-column="3">IP Address</a></li><li><a class="dropdown-item" href="#" data-column="4">User Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Content Date</a></li></div></ul></div>',
                 },
             ],
           });
@@ -277,6 +287,9 @@
             this.getLoader = false;
           });
       },
+      formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
       attachEventListenersForMenu() {
         $("#cookie_consents_tables_wrapper [name='cookie_consents_tables_length']").on("change", (event) => {
           this.getLoader = true;

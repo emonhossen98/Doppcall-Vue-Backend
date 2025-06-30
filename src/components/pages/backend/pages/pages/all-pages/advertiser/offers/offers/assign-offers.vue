@@ -44,7 +44,7 @@
               <div class="card-header py-2 d-flex justify-content-between align-items-center">
                 <h5 class="card-title d-flex align-items-center">Offers</h5>
               </div>
-              <div class="card-body table-responsive table-overflow-hidden">
+              <div class="card-body">
                 <table class="align-middle mb-0 table table-hover"  id="advertiser_offers_datatables">
                   <thead>
                     <tr>
@@ -184,6 +184,7 @@
                 { data: "convert_action" },
               ],
               initComplete: () => {
+                $('#advertiser_offers_datatables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#advertiser_offers_datatables").DataTable();
                     const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -220,6 +221,13 @@
                         });
                       }
                     });
+                    $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
               },
               createdRow: function (row, data, dataIndex) {
                   $('td:eq(0)', row).html(dataIndex + 1);
@@ -247,7 +255,7 @@
               buttons: [
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Sl </a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer</a></li><li><a class="dropdown-item" href="#" data-column="4">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="5">Payout</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Sl </a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer</a></li><li><a class="dropdown-item" href="#" data-column="4">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="5">Payout</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -289,6 +297,7 @@
                 { data: "convert_action" },
               ],
               initComplete: () => {
+                $('#advertiser_offers_datatables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#advertiser_offers_datatables").DataTable();
                     const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -325,6 +334,13 @@
                         });
                       }
                     });
+                    $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
               },
               createdRow: function (row, data, dataIndex) {
                   $('td:eq(0)', row).html(dataIndex + 1);
@@ -353,7 +369,7 @@
               buttons: [
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Sl </a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer</a></li><li><a class="dropdown-item" href="#" data-column="4">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="5">Payout</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Sl </a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer</a></li><li><a class="dropdown-item" href="#" data-column="4">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="5">Payout</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
               ],
             });

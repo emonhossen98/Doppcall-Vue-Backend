@@ -15,7 +15,7 @@
                         Index Lead Method 
                     </h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-hover" id="lead_method_tables">
                         <thead>
                             <tr>
@@ -26,6 +26,7 @@
                                 <th>Title</th>
                                 <th>Sub Title</th>
                                 <th>Created At</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,6 +53,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -108,6 +110,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#lead_method_tables")) {
           $('#lead_method_tables').DataTable().destroy();
         }
+        var formateDate = this.formatDates;
             var table = $('#lead_method_tables').DataTable({
               data: res.data.getDatas,
               columns: [
@@ -138,10 +141,18 @@ export default {
                     return '----------';
                   },
                 },
-                // { data: 'short_title' },
                 { data: 'convart_created_at' },
+                {
+                  data: "action",
+                  render: function (data, type, full, meta) {
+                    return '<div class="lead_action d-flex align-items-center"><a data-vue-route  title="Edit" href="/admin-appearance-leadmethod-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2" ><i class="far fa-edit fa-sm"></i></a><button title="Delete" type="button" id="delete-btn"  data-id='+full.id +' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
+                  }
+                },
+                // { data: 'short_title' },
+                
               ],
               initComplete: () => { 
+                $('#lead_method_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#lead_method_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -178,6 +189,13 @@ export default {
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
                 this.attachEventListenersBlulkAction();
@@ -198,15 +216,6 @@ export default {
                   },
                   searchable: false
                 },
-                {
-                  targets: -1, 
-                  title:'Actions',
-                  searchable: false,
-                  orderable: false,
-                  render: function (data, type, full, meta) {
-                    return '<div class="lead_action d-flex align-items-center"><a data-vue-route  title="Edit" href="/admin-appearance-leadmethod-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2" ><i class="far fa-edit fa-sm"></i></a><button title="Delete" type="button" id="delete-btn"  data-id='+full.id +' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
-                  }
-                }
               ],
               order: [[2, 'desc']],
               dom: '<"row mx-2"' +
@@ -250,31 +259,31 @@ export default {
                       extend: 'print',
                       text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5] }
+                      exportOptions: { columns: [1, 2, 3, 4, 5] }
                     },
                     {
                       extend: 'csv',
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5] }
+                      exportOptions: { columns: [1, 2, 3, 4, 5] }
                     },
                     {
                       extend: 'excel',
                       text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5] }
+                      exportOptions: { columns: [1, 2, 3, 4, 5] }
                     },
                     {
                       extend: 'pdf',
                       text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5] }
+                      exportOptions: { columns: [1, 2, 3, 4, 5] }
                     },
                     {
                       extend: 'copy',
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5] }
+                      exportOptions: { columns: [1, 2, 3, 4, 5] }
                     }
                   ]
                 },
@@ -285,7 +294,7 @@ export default {
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Image</a></li><li><a class="dropdown-item" href="#" data-column="3">Title</a></li><li><a class="dropdown-item" href="#" data-column="4">Sub Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Image</a></li><li><a class="dropdown-item" href="#" data-column="3">Title</a></li><li><a class="dropdown-item" href="#" data-column="4">Sub Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
               ]
             });
@@ -298,6 +307,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersBlulkAction() {

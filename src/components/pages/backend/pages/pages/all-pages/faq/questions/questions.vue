@@ -15,7 +15,7 @@
                         FAQ Questions 
                     </h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-hover" id="questions_tables">
                         <thead>
                             <tr>
@@ -217,6 +217,7 @@ async mounted() {
               { data: '' }
             ],
             initComplete: () => { 
+              $('#questions_tables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#questions_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -252,6 +253,13 @@ async mounted() {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListeners();
               this.attachEventListenersOfButton();
@@ -344,7 +352,7 @@ async mounted() {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Service Name</a></li><li><a class="dropdown-item" href="#" data-column="3">FAQ Questions</a></li><li><a class="dropdown-item" href="#" data-column="4">FAQ Answer</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Actions</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Service Name</a></li><li><a class="dropdown-item" href="#" data-column="3">FAQ Questions</a></li><li><a class="dropdown-item" href="#" data-column="4">FAQ Answer</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Actions</a></li></div></ul></div>',
                 },
             ],
           });

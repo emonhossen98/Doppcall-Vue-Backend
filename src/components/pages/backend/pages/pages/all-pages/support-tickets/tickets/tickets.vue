@@ -13,7 +13,7 @@
                 <div class="card-header py-2 d-flex justify-content-between align-items-center">
                     <h5 class="card-title d-flex align-items-center mb-0 mt-2">Tickets</h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-hover" id="ticket_datatables">
                         <thead>
                             <tr>
@@ -27,6 +27,7 @@
                               <th>Role</th>
                               <th>Date</th>
                               <th>Status</th>
+                              <th>Created At</th>
                               <th id="action-incompleted">Actions</th>
                             </tr>
                         </thead>
@@ -83,6 +84,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -181,6 +183,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#ticket_datatables")) {
             $('#ticket_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
             var table = $('#ticket_datatables').DataTable({
               data: data,
               columns: [
@@ -237,6 +240,15 @@ export default {
                  },
                 { data: 'convart_status' },
                 {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
+                {
                    data: 'created_at',
                    render: function (data, type, full, meta) {
                     return '<div class="ticket_action d-flex align-items-center"><a data-vue-route title="View" href="/admin-tickets-view/'+full.ticket_no+'" class="bg-transparent border-0 text-success me-2"><i class="fas fa-eye fa-sm"></i></a><a data-vue-route title="Edit" href="/admin-tickets-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button id="delete-btn" type="button" title="Delete" data-id='+full.id +' class="bg-transparent border-0 text-danger"><i id="delete-btn" class="far fa-trash-alt fa-sm" data-id='+full.id +'></i></button></div>';
@@ -245,6 +257,7 @@ export default {
                 
               ],
               initComplete: () => { 
+                $('#ticket_datatables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#ticket_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -280,6 +293,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
@@ -365,37 +385,37 @@ export default {
                       extend: 'print',
                       text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9] }
                     },
                     {
                       extend: 'csv',
                       text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9] }
                     },
                     {
                       extend: 'excel',
                       text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9] }
                     },
                     {
                       extend: 'pdf',
                       text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9] }
                     },
                     {
                       extend: 'copy',
                       text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                       className: 'dropdown-item',
-                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                      exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9] }
                     }
                   ]
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Ticket No</a></li><li><a class="dropdown-item" href="#" data-column="3">Priority</a></li><li><a class="dropdown-item" href="#" data-column="4">Subject</a></li><li><a class="dropdown-item" href="#" data-column="5">Buyer</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Date</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Actions</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Ticket No</a></li><li><a class="dropdown-item" href="#" data-column="3">Priority</a></li><li><a class="dropdown-item" href="#" data-column="4">Subject</a></li><li><a class="dropdown-item" href="#" data-column="5">Buyer</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Date</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Created At</a></li><li><a class="dropdown-item" href="#" data-column="10">Actions</a></li></div></ul></div>',
                 },
                 // {
                 //   text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Ticket</span>',
@@ -412,6 +432,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersBlulkAction() {

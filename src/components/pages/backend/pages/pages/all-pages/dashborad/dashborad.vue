@@ -573,7 +573,7 @@
             <div class="card-header">
               <h5 class="card-title fw-bolder mb-0">User Activities</h5>
             </div>
-            <div class="card-datatable table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table
                 class="datatables-projects table border-top"
                 id="user_activiti_table"
@@ -1571,6 +1571,7 @@ export default {
               },
             ],
             initComplete: () => { 
+              $('#user_activiti_table').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#user_activiti_table").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -1607,6 +1608,13 @@ export default {
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
           },
             createdRow: function (row, data, dataIndex) {
               $("td:eq(0)", row).html(dataIndex + 1);
@@ -1635,7 +1643,7 @@ export default {
             buttons: [
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">First Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="5">Type</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">First Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="5">Type</a></li></div></ul></div>',
                 },
             ],
           });

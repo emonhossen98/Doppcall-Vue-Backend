@@ -181,6 +181,7 @@
 
                 ],
                 initComplete: () => {
+                  $('#publishers_tables').wrap('<div class="commonDataTablesClass"></div>');
                   const table = $("#publishers_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -216,6 +217,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                   this.attachEventListeners();
                   this.attachEventListenersOfButton();
@@ -267,37 +275,37 @@
                         extend: 'print',
                         text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4,5] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6] }
                       },
                       {
                         extend: 'csv',
                         text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4,5] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6] }
                       },
                       {
                         extend: 'excel',
                         text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4,5] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6] }
                       },
                       {
                         extend: 'pdf',
                         text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4,5] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6] }
                       },
                       {
                         extend: 'copy',
                         text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                         className: 'dropdown-item',
-                        exportOptions: { columns: [2, 3, 4,5] }
+                        exportOptions: { columns: [1, 2, 3, 4, 5, 6] }
                       }
                     ]
                   },
                    {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
                 ],
               });

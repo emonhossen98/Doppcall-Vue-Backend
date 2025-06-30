@@ -16,7 +16,7 @@
                 Job Career
               </h5>
             </div>
-            <div class="card-body table-responsive pt-0 table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="job_careers_tables">
                 <thead>
                   <!-- <th></th> -->
@@ -28,6 +28,7 @@
                   <th>Company Email</th>
                   <th>Salary</th>
                   <th>Status</th>
+                  <th>Created At</th>
                   <th>Action</th>
                 </thead>
                 <tbody></tbody>
@@ -52,6 +53,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -117,6 +119,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#job_careers_tables")) {
             $('#job_careers_tables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
           var table = $('#job_careers_tables').DataTable({
             data: res.data,
             columns: [
@@ -169,10 +172,20 @@ export default {
                 },
                },
               { data: 'convart_status' },
+              {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
               { data: '' }
             ],
 
             initComplete: () => { 
+              $('#job_careers_tables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#job_careers_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -209,6 +222,13 @@ export default {
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
               this.attachEventListeners();
               this.ListenersOfCheckbox();
               this.attachEventListenersOfButton();
@@ -236,7 +256,7 @@ export default {
                 searchable: false,
                 orderable: false,
                 render: function (data, type, full, meta) {
-                  return '<div class="text-end type-datatables-action"><a title="Edit"  data-vue-route href="/admin-career-jobcareer-edit/'+full.id+'" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm me-2"></i></a><button type="button" title="Delete"  data-id=' +
+                  return '<div class="text-start type-datatables-action"><a title="Edit"  data-vue-route href="/admin-career-jobcareer-edit/'+full.id+'" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm me-2"></i></a><button type="button" title="Delete"  data-id=' +
                     full.id +
                     ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
                     full.id +
@@ -286,7 +306,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Company Logo</a></li><li><a class="dropdown-item" href="#" data-column="3">Company Phone</a></li><li><a class="dropdown-item" href="#" data-column="4">Company Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Salary</a></li><li><a class="dropdown-item" href="#" data-column="6">Salary</a></li><li><a class="dropdown-item" href="#" data-column="7">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Salary</a></li><li><a class="dropdown-item" href="#" data-column="8">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Company Logo</a></li><li><a class="dropdown-item" href="#" data-column="3">Company Phone</a></li><li><a class="dropdown-item" href="#" data-column="4">Company Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Salary</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Created At</a></li><li><a class="dropdown-item" href="#" data-column="8">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -301,6 +321,9 @@ export default {
         });
     },
 
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
 
     attachEventListenersBlulkAction() {
       $('#job_careers_tables').on('change', '.row-checkbox', (event) => {

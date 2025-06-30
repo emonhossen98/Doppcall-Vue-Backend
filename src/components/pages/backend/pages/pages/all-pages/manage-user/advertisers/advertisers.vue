@@ -54,7 +54,7 @@
                         Manage Advertisers 
                     </h5>
                 </div>
-                <div class="card-body table-responsive table-overflow-hidden">
+                <div class="card-body">
                     <table class="align-middle mb-0 table table-hover" id="advertiser_datatables">
                         <thead>
                             <tr>
@@ -264,6 +264,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -455,7 +456,6 @@ export default {
         )
         .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
-          console.log(res.data)
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -466,10 +466,10 @@ export default {
           if ($.fn.DataTable.isDataTable("#advertiser_datatables")) {
             $('#advertiser_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
         var table = $('#advertiser_datatables').DataTable({
           data: res.data.data,
             columns: [
-              // { data: "1" }, 
               { data: "1" }, 
               { data: "1" },
               {
@@ -490,9 +490,6 @@ export default {
                   return '<a data-vue-route title="'+row['4']+'" href="/admin-manage-advertiser-view/'+row['3']+'">'+row['4']+'</a>';
                 },
               },
-
-              // { data: "2" }, 
-              // { data: "4" }, 
               { data: "5",
                 render: function (data, type, row) {
                   if (row['5'] != null) {
@@ -526,6 +523,7 @@ export default {
               { data: "10" }, 
             ],
           initComplete: () => { 
+            $('#advertiser_datatables').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#advertiser_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -561,6 +559,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
             this.attachEventListeners();
             this.attachEventListenersAssigModal();
@@ -598,7 +603,22 @@ export default {
               },
               searchable: false
             },
-            { targets: 9, orderable: false, className: 'dt-center' }
+            {
+              targets: 8, 
+              visible: false,
+            },
+            {
+              targets: 9, 
+              visible: false,
+            },
+            {
+              targets: 10, 
+              visible: false,
+            },
+            {
+              targets: 11, 
+              visible: false,
+            },
           ],
           order: [[1, 'asc']],
           dom: '<"row mx-2"' +
@@ -648,37 +668,37 @@ export default {
                   extend: 'print',
                   text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'csv',
                   text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'excel',
                   text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'pdf',
                   text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'copy',
                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8] }
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 }
               ]
             },
              {
               className: "btn btn-primary",
-              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">User Type</a></li><li><a class="dropdown-item" href="#" data-column="3">Company</a></li><li><a class="dropdown-item" href="#" data-column="4">Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Phone</a></li><li><a class="dropdown-item" href="#" data-column="7">Balance</a></li><li><a class="dropdown-item" href="#" data-column="8">Manager</a></li><li><a class="dropdown-item" href="#" data-column="9">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="10">City</a></li><li><a class="dropdown-item" href="#" data-column="11">Country</a></li><li><a class="dropdown-item" href="#" data-column="12">Status</a></li><li><a class="dropdown-item" href="#" data-column="13">Action</a></li></ul></div>',
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">User Type</a></li><li><a class="dropdown-item" href="#" data-column="3">Company</a></li><li><a class="dropdown-item" href="#" data-column="4">Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Phone</a></li><li><a class="dropdown-item" href="#" data-column="7">Balance</a></li><li><a class="dropdown-item" href="#" data-column="8">Manager</a></li><li><a class="dropdown-item" href="#" data-column="9">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="10">City</a></li><li><a class="dropdown-item" href="#" data-column="11">Country</a></li><li><a class="dropdown-item" href="#" data-column="12">Status</a></li><li><a class="dropdown-item" href="#" data-column="13">Action</a></li></div></ul></div>',
             },
           ],
         });
@@ -691,6 +711,10 @@ export default {
           this.getLoader = false;
         });
     },
+
+    formatDates(date) {
+        return moment(date).format('D MMMM YYYY');
+      },
 
     attachEventListenersForSearch() {
       $("#advertiser_datatables_wrapper #advertiser_datatables_filter input").on("keyup", (event) => {

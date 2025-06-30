@@ -13,7 +13,7 @@
               <div class="card-header pt-2 pb-0">
                 <h5 class="card-title mt-2 mb-0">Questions</h5>
               </div>
-              <div class="card-datatable table-responsive table-overflow-hidden">
+              <div class="card-body">
                 <table class="align-middle mb-0 table table-hover" id="questions-tables">
                   <thead class="border-top">
                     <tr>
@@ -22,6 +22,7 @@
                       <th>Question</th>
                       <th>Created By</th>
                       <th>Status</th>
+                      <th>Created At</th>
                       <th class="text-end" id="action-incompleted">Action</th>
                     </tr>
                   </thead>
@@ -153,6 +154,7 @@
   import Breadcrumb from "../../../../../include/breadcrumb.vue";
   import { inject } from "vue";
   import { fetchUserRole } from "@/services/userService";
+  import moment from "moment";
   
   export default {
     setup() {
@@ -212,6 +214,7 @@
             if ($.fn.DataTable.isDataTable("#questions-tables")) {
               $("#questions-tables").DataTable().destroy();
             }
+            var formateDate = this.formatDates;
             $("#questions-tables").DataTable({
               data: res.data.data,
               columns: [
@@ -257,6 +260,15 @@
                   },
                 },
                 {
+                  data: "created_at",
+                  render: function (data, type, row) {
+                    if (row.created_at != null) {
+                      return formateDate(row.created_at);
+                    }
+                    return "--------";
+                  },
+                },
+                {
                   data: "pay_out",
                   render: function (data, type, row) {
                     return (
@@ -278,6 +290,7 @@
                 },
               ],
               initComplete: () => {
+                $('#questions-tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#questions-tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -313,6 +326,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersBlulkAction();
@@ -374,31 +394,31 @@
                     extend: 'print',
                     text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [1,2, 3, 4] }
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
                   },
                   {
                     extend: 'csv',
                     text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [1,2, 3, 4] }
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
                   },
                   {
                     extend: 'excel',
                     text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [1,2, 3, 4] }
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
                   },
                   {
                     extend: 'pdf',
                     text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [1,2, 3, 4] }
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
                   },
                   {
                     extend: 'copy',
                     text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [1,2, 3, 4] }
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
                   }
                 ]
               },
@@ -409,7 +429,7 @@
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Title</a></li><li><a class="dropdown-item" href="#" data-column="2">Question</a></li><li><a class="dropdown-item" href="#" data-column="3">Created By</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Title</a></li><li><a class="dropdown-item" href="#" data-column="2">Question</a></li><li><a class="dropdown-item" href="#" data-column="3">Created By</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -422,7 +442,10 @@
             this.getLoader = false;
           });
       },
-  
+
+      formatDates(date) {
+        return moment(date).format('D MMMM YYYY');
+      },
   
       attachEventListeners() {
         $("#questions-tables").on("click", ".questions-datatables-action", (event) => {

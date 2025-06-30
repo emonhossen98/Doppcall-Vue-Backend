@@ -15,7 +15,7 @@
             <div  class="card-header py-2">
               <h5 class="card-title d-flex align-items-center mb-0 payment_info_title mt-2">Publisher Payment Info</h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="align-middle mb-0 table table-hover" id="payment_infos_table">
                 <thead>
                   <tr>
@@ -183,7 +183,7 @@ import Loader from '../../../../../include/loader.vue';
 import Breadcrumb from '../../../../../include/breadcrumb.vue';
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
-
+import moment from "moment";
 
 export default {
   setup() {
@@ -280,6 +280,7 @@ computed: {
         })
         .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
+          console.log(data)
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -289,6 +290,7 @@ computed: {
             $('#payment_infos_table').DataTable().destroy();
           }
           
+          var formateDate = this.formatDates;
         var table = $('#payment_infos_table').DataTable({
           data: data,
           columns: [
@@ -345,6 +347,7 @@ computed: {
             { data: 'convart_action' },
           ],
           initComplete: () => {
+            $('#payment_infos_table').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#payment_infos_table").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -380,6 +383,14 @@ computed: {
                       }
                     });
                   }
+                });
+
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
             this.attachEventListeners();
             this.attachEventListenersOfButton()
@@ -501,7 +512,7 @@ computed: {
             },
             {
               className: "btn btn-primary",
-              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">First Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Company</a></li><li><a class="dropdown-item" href="#" data-column="7">Type</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></ul></div>',
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">ID</a></li><li><a class="dropdown-item" href="#" data-column="3">First Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Company</a></li><li><a class="dropdown-item" href="#" data-column="7">Type</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></div></ul></div>',
             },
           ],
         });
@@ -513,6 +524,10 @@ computed: {
         .finally(() => {
           this.getLoader = false;
       });
+    },
+
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersForMenu() {

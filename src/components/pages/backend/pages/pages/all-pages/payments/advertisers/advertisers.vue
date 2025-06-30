@@ -15,7 +15,7 @@
                             Payment - Advertisers
                         </h5>
                     </div>
-                    <div class="card-body table-responsive table-overflow-hidden">
+                    <div class="card-body">
                         <table class="align-middle mb-0 table table-hover" id="publisher_datatables">
                             <thead>
                                 <tr>
@@ -27,6 +27,15 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th width="15%">Balance</th>
+                                    <th>Browser</th>
+                                    <th>Country Code</th>
+                                    <th>Monthly Visitors</th>
+                                    <th>os</th>
+                                    <th>Telegram</th>
+                                    <th>Facebook</th>
+                                    <th>Skype</th>
+                                    <th>User Agent</th>
+                                    <th>Created At</th>
                                     <th  id="action-incompleted">Action</th>
                                     <th  id="action-incompleted">History</th>
                                 </tr>
@@ -278,6 +287,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default{
   setup() {
@@ -389,6 +399,7 @@ methods: {
           if ($.fn.DataTable.isDataTable("#publisher_datatables")) {
             $('#publisher_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
         var table = $('#publisher_datatables').DataTable({
           data: data,
           columns: [
@@ -426,6 +437,87 @@ methods: {
              },
             { data: 'convart_phone' },
             { data: 'total_balance' },
+            { 
+              data: 'browser',
+              render: function (data, type, row) {
+                if (row?.browser != null) {
+                  return row?.browser;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'country_code',
+              render: function (data, type, row) {
+                if (row?.country_code != null) {
+                  return row?.country_code;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'monthly_visitors',
+              render: function (data, type, row) {
+                if (row?.monthly_visitors != null) {
+                  return row?.monthly_visitors;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'os',
+              render: function (data, type, row) {
+                if (row?.os != null) {
+                  return row?.os;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'telegram',
+              render: function (data, type, row) {
+                if (row?.telegram != null) {
+                  return row?.telegram;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'facebook',
+              render: function (data, type, row) {
+                if (row?.facebook != null) {
+                  return row?.facebook;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'skype',
+              render: function (data, type, row) {
+                if (row?.skype != null) {
+                  return row?.skype;
+                }
+                return '----------';
+              },
+             },
+            { 
+              data: 'user_agent',
+              render: function (data, type, row) {
+                if (row?.user_agent != null) {
+                  return row?.user_agent;
+                }
+                return '----------';
+              },
+             },
+             {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
             {
                 data: "created_at",
                 render: function (data, type, row) {
@@ -452,6 +544,7 @@ methods: {
               },
           ],
           initComplete: () => { 
+            $('#publisher_datatables').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#publisher_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -488,6 +581,13 @@ methods: {
                     });
                   }
                 });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
             this.attachEventListenersForMenu();
             this.attachEventListenersForSearch();
             this.attachEventListenersOfButton();
@@ -522,6 +622,42 @@ methods: {
                 return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
               },
               searchable: false
+            },
+            {
+              targets: 6, 
+              visible: false,
+            },
+            {
+              targets: 7, 
+              visible: false,
+            },
+            {
+              targets: 8, 
+              visible: false,
+            },
+            {
+              targets: 9, 
+              visible: false,
+            },
+            {
+              targets: 10, 
+              visible: false,
+            },
+            {
+              targets: 11, 
+              visible: false,
+            },
+            {
+              targets: 12, 
+              visible: false,
+            },
+            {
+              targets: 13, 
+              visible: false,
+            },
+            {
+              targets: 14, 
+              visible: false,
             },
           ],
           order: [[2, 'desc']],
@@ -566,31 +702,31 @@ methods: {
                   extend: 'print',
                   text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                 },
                 {
                   extend: 'csv',
                   text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                 },
                 {
                   extend: 'excel',
                   text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                 },
                 {
                   extend: 'pdf',
                   text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                 },
                 {
                   extend: 'copy',
                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] }
                 }
               ]
             },
@@ -605,7 +741,7 @@ methods: {
             },
             {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Company</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone</a></li><li><a class="dropdown-item" href="#" data-column="5">Balance</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li><li><a class="dropdown-item" href="#" data-column="7">History</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone</a></li><li><a class="dropdown-item" href="#" data-column="5">Balance</a></li><li><a class="dropdown-item" href="#" data-column="6">Browser</a></li><li><a class="dropdown-item" href="#" data-column="7">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="8">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="9">OS</a></li><li><a class="dropdown-item" href="#" data-column="10">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="11">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="12">Skype</a></li><li><a class="dropdown-item" href="#" data-column="13">User Agent</a></li><li><a class="dropdown-item" href="#" data-column="14">Created At</a></li><li><a class="dropdown-item" href="#" data-column="15">Action</a></li><li><a class="dropdown-item" href="#" data-column="16">History</a></li></div></ul></div>',
                 },
           ],
         });
@@ -618,6 +754,9 @@ methods: {
             this.getLoader = false;  
         });
     },
+    formatDates(date) {
+          return moment(date).format('D MMMM YYYY');
+        },
     attachEventListenersBlulkAction() {
       $('#publisher_datatables').on('change', '.row-checkbox', (event) => {
         const id = parseInt(event.target.dataset.id);

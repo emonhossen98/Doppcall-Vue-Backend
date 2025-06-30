@@ -21,7 +21,7 @@
                 </div>
               </div>
   
-              <div class="user-activities-table">
+              <div class="user-activities-table card-body">
                 <table class="table table-sm" id="user_active_tables">
                   <thead>
                     <tr>					
@@ -33,6 +33,19 @@
                       <th>Email</th>
                       <th>Phone Number</th>
                       <th>Role</th>
+                      <th>Browser</th>
+                      <th>OS</th>
+                      <th>User Agent</th>
+                      <th>Monthly Visitors</th>
+                      <th>Company Name</th>
+                      <th>Company Website</th>
+                      <th>Country Code</th>
+                      <th>Traffic URL</th>
+                      <th>Facebook</th>
+                      <th>Skype</th>
+                      <th>Telegram</th>
+                      <th>Page Name</th>
+                      <th>Created At</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -152,7 +165,8 @@
       },
     },
     methods: {
-       getresentUserActivites(page = 1, perPage = 10,searchValue = '') {
+       getresentUserActivites(page = 1, perPage = 10,searchValue = '') 
+       {
         this.getLoader = true;
         axios
           .get(this.globalVariables.apiUrl+"admin/user/activities/get-data", {
@@ -171,6 +185,7 @@
             if ($.fn.DataTable.isDataTable("#user_active_tables")) {
               $('#user_active_tables').DataTable().destroy();
             }
+            var formateDate = this.formatDates;
             var table = $('#user_active_tables').DataTable({
             data: data,
             columns: [
@@ -182,9 +197,115 @@
               { data: "email" },
               { data: "phone_number" },
               { data: "role.name" },
+              { data: 'browser',
+                render: function (data, type, row) {
+                if (row?.browser != null) {
+                  return '<span title="'+row?.browser+'">'+row?.browser+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'os',
+                render: function (data, type, row) {
+                if (row?.os != null) {
+                  return '<span title="'+row?.os+'">'+row?.os+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'user_agent',
+                render: function (data, type, row) {
+                if (row?.user_agent != null) {
+                  return '<span title="'+row?.user_agent+'">'+row?.user_agent+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'monthly_visitors',
+                render: function (data, type, row) {
+                if (row?.monthly_visitors != null) {
+                  return '<span title="'+row?.monthly_visitors+'">'+row?.monthly_visitors+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'company_name',
+                render: function (data, type, row) {
+                if (row?.company_name != null) {
+                  return '<span title="'+row?.company_name+'">'+row?.company_name+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'company_website',
+                render: function (data, type, row) {
+                if (row?.company_website != null) {
+                  return '<span title="'+row?.company_website+'">'+row?.company_website+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'country_code',
+                render: function (data, type, row) {
+                if (row?.country_code != null) {
+                  return '<span title="'+row?.country_code+'">'+row?.country_code+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'traffic_urls',
+                render: function (data, type, row) {
+                if (row?.traffic_urls != null) {
+                  return '<span title="'+row?.traffic_urls+'">'+row?.traffic_urls+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'facebook',
+                render: function (data, type, row) {
+                if (row?.facebook != null) {
+                  return '<span title="'+row?.facebook+'">'+row?.facebook+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'skype',
+                render: function (data, type, row) {
+                if (row?.skype != null) {
+                  return '<span title="'+row?.skype+'">'+row?.skype+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'telegram',
+                render: function (data, type, row) {
+                if (row?.telegram != null) {
+                  return '<span title="'+row?.telegram+'">'+row?.telegram+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              { data: 'page_name',
+                render: function (data, type, row) {
+                if (row?.page_name != null) {
+                  return '<span title="'+row?.page_name+'">'+row?.page_name+'</span>';
+                }
+                  return '----------';
+                },
+              },
+              {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
               { data: '' }
             ],
             initComplete: () => { 
+              $('#user_active_tables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#user_active_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -221,6 +342,14 @@
                     });
                   }
                 });
+
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
               this.attachEventListeners();
 
               this.attachEventListenersForMenu();
@@ -254,6 +383,50 @@
                   return '<input type="checkbox" class="dt-checkboxes form-check-input" >';
                 },
                 searchable: false
+              },
+              {
+                targets: 9, 
+                visible: false,
+              },
+              {
+                targets: 10, 
+                visible: false,
+              },
+              {
+                targets: 11, 
+                visible: false,
+              },
+              {
+                targets: 12, 
+                visible: false,
+              },
+              {
+                targets: 13, 
+                visible: false,
+              },
+              {
+                targets: 14, 
+                visible: false,
+              },
+              {
+                targets: 15, 
+                visible: false,
+              },
+              {
+                targets: 16, 
+                visible: false,
+              },
+              {
+                targets: 17, 
+                visible: false,
+              },
+              {
+                targets: 18, 
+                visible: false,
+              },
+              {
+                targets: 19, 
+                visible: false,
               },
              
               {
@@ -289,7 +462,7 @@
             buttons: [
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="3">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="3">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Browser</a></li><li><a class="dropdown-item" href="#" data-column="8">OS</a></li><li><a class="dropdown-item" href="#" data-column="9">User Agent</a></li><li><a class="dropdown-item" href="#" data-column="10">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="11">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="12">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="13">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="14">Traffic URL</a></li><li><a class="dropdown-item" href="#" data-column="15">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="16">Skype</a></li><li><a class="dropdown-item" href="#" data-column="17">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="18">Page Name</a></li><li><a class="dropdown-item" href="#" data-column="19">Created At</a></li><li><a class="dropdown-item" href="#" data-column="20">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -301,6 +474,7 @@
           this.getLoader = false;
         });
        },
+
 
        getRoleData(event,page = 1, perPage = 10,searchValue = '') {
         if(event.target.value == 0){
@@ -314,6 +488,7 @@
             })
             .then((res) => {
               const { data, current_page, last_page,recordsTotal } = res.data;
+              console.log(data)
               this.currentPage = current_page;
               this.lastPage = last_page;
               this.recordsTotal = recordsTotal;
@@ -324,7 +499,7 @@
               if ($.fn.DataTable.isDataTable("#user_active_tables")) {
                 $('#user_active_tables').DataTable().destroy();
               }
-              
+              var formateDate = this.formatDates;
               var table = $('#user_active_tables').DataTable({
               data: data,
               columns: [
@@ -339,6 +514,7 @@
                 { data: '' }
               ],
               initComplete: () => { 
+                $('#user_active_tables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#user_active_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -374,6 +550,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersForMenu();
@@ -442,7 +625,7 @@
               buttons: [
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="3">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">SL</a></li><li><a class="dropdown-item" href="#" data-column="2">Avatar</a></li><li><a class="dropdown-item" href="#" data-column="3">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -466,6 +649,9 @@
           }
         });
       },
+      formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
       attachEventListenersForMenu() {
         $("#user_active_tables_wrapper [name='user_active_tables_length']").on("change", (event) => {
           this.getLoader = true;

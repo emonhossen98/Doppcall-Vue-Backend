@@ -15,7 +15,7 @@
                           Press Categories
                       </h5>
                   </div>
-                  <div class="card-body table-responsive table-overflow-hidden">
+                  <div class="card-body">
                       <table class="align-middle mb-0 table table-hover" id="press_categiories_datatables">
                           <thead>
                               <tr>
@@ -25,6 +25,7 @@
                                 <th>Name</th>
                                 <th>Slug</th>
                                 <th>Status</th>
+                                <th>Created At</th>
                                 <th id="action-incompleted">Action</th>
                               </tr>
                           </thead>
@@ -51,6 +52,7 @@
   import Breadcrumb from "../../../../../include/breadcrumb.vue";
   import { inject } from "vue";
   import { fetchUserRole } from "@/services/userService";
+  import moment from "moment";
   
   export default {
     setup() {
@@ -116,6 +118,7 @@
             if ($.fn.DataTable.isDataTable("#press_categiories_datatables")) {
             $('#press_categiories_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
             var table = $('#press_categiories_datatables').DataTable({
               data: res.data.categories,
               columns: [
@@ -149,6 +152,15 @@
                   },
                 },
                 {
+                data: "created_at",
+                render: function (data, type, row) {
+                  if (row.created_at != null) {
+                    return formateDate(row.created_at);
+                  }
+                  return "--------";
+                },
+              },
+                {
                   data: "created_at",
                   render: function (data, type, row) {
                     return (
@@ -158,6 +170,7 @@
                 },
               ],
               initComplete: () => { 
+                $('#press_categiories_datatables').wrap('<div class="commonDataTablesClass"></div>');
                 const table = $("#press_categiories_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -193,6 +206,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
                 this.attachEventListeners();
                 this.attachEventListenersOfButton();
@@ -259,7 +279,7 @@
                 },
                 {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Slug</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Slug</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
               ],
             });
@@ -271,6 +291,10 @@
             this.getLoader = false;
           });
       },
+
+      formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
   attachEventListenersBlulkAction() {
     $('#press_categiories_datatables').on('change', '.row-checkbox', (event) => {
       const id = parseInt(event.target.dataset.id);

@@ -577,7 +577,8 @@ export default {
               },
             ],
             initComplete: () => {
-            const table = $("#publishers_offers").DataTable();
+              $('#publishers_offers').wrap('<div class="commonDataTablesClass"></div>');
+              const table = $("#publishers_offers").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
                 dropdownItems.forEach((item) => {
@@ -613,6 +614,14 @@ export default {
                     });
                   }
                 });
+
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
           },
             
             order: [[3, "desc"]],
@@ -640,7 +649,7 @@ export default {
             buttons: [
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">ID</a></li><li><a class="dropdown-item" href="#" data-column="1">Offer Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">ID</a></li><li><a class="dropdown-item" href="#" data-column="1">Offer Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Country</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li></div></ul></div>',
                 },
             ],
           });

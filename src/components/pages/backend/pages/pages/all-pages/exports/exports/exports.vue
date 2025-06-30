@@ -56,7 +56,7 @@
                     Users
                   </h5>
                 </div>
-              <div class="card-body px-4 table-responsive table-overflow-hidden">
+              <div class="card-body">
                 <table class="align-middle mb-0 table table-hover" id="data_tables_report">
                   <thead>
                     <tr>
@@ -64,19 +64,19 @@
                       <th></th>
                       <th>First Name</th>
                       <th>Last Name</th>
-                      <!-- <th>Last Name</th> -->
                       <th>Email</th>
                       <th>Role</th>
                       <th>Phone</th>
                       <th>Company</th>
-                      <!-- <th>Company Website</th> -->
+                      <th>Company Website</th>
                       <!-- <th>User Offer</th>
                       <th>Traffic Urls</th> -->
                       <th>Visitors</th>
-                      <!--<th></th>
-                       <th>Skype</th>
-                      <th>Telegram</th>
-                      <th>Facebook</th> -->
+                      <th>Created At</th>
+                      <th>Linkedin</th>
+                      <th>Facebook</th>
+                      <!-- <th>Skype</th>
+                      <th>Telegram</th>-->
                       <th>Status</th>
                       <th>Country</th>
                     </tr>
@@ -135,6 +135,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -324,6 +325,7 @@ export default {
         })
         .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
+                    console.log(data)
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -334,6 +336,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#data_tables_report")) {
             $('#data_tables_report').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
         var table = $('#data_tables_report').DataTable({
           data: data,
           columns: [
@@ -387,11 +390,45 @@ export default {
                   return '----------';
                 },
                },  
-              { data: "10" },  
+              { data: "7",
+                render: function (data, type, row) {
+                  if (row['7'] != null) {
+                    return '<span title="'+row['7']+'">'+row['7']+'</span>';
+                  }
+                  return '----------';
+                },
+               }, 
+               { data: "10" }, 
+              { data: "16",
+                render: function (data, type, row) {
+                  if (row['16'] != null) {
+                    return row['16'];
+                  }
+                  return '----------';
+                },
+               },  
+               { data: "13",
+                render: function (data, type, row) {
+                  if (row['13'] != null) {
+                    return '<span title="'+row['13']+'">'+row['13']+'</span>';
+                  }
+                  return '----------';
+                },
+               },
+               { data: "9",
+                render: function (data, type, row) {
+                  if (row['9'] != null) {
+                    return '<span title="'+row['9']+'">'+row['9']+'</span>';
+                  }
+                  return '----------';
+                },
+               },
+                
               { data: "15" }, 
               { data: "11" }, 
               ],
           initComplete: () => { 
+            $('#data_tables_report').wrap('<div class="commonDataTablesClass"></div>');
             const table = $("#data_tables_report").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -428,6 +465,14 @@ export default {
                     });
                   }
                 });
+
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
             this.attachEventListenersForSearch();
             this.attachEventListenersForMenu();
             this.attachEventListenersBlulkAction();
@@ -458,6 +503,22 @@ export default {
                 return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row['17']}">`;
               },
               searchable: false
+            },
+            {
+              targets: 8, 
+              visible: false,
+            },
+            {
+              targets: 9, 
+              visible: false,
+            },
+            {
+              targets: 10, 
+              visible: false,
+            },
+            {
+              targets: 11, 
+              visible: false,
             },
           ],
           order: [[2, 'desc']],
@@ -502,37 +563,37 @@ export default {
                   extend: 'print',
                   text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'csv',
                   text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'excel',
                   text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'pdf',
                   text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 },
                 {
                   extend: 'copy',
                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                   className: 'dropdown-item',
-                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9] }
+                  exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
                 }
               ]
             },
             {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">First Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Role</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Company</a></li><li><a class="dropdown-item" href="#" data-column="7">Visitors</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Country</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">First Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Role</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone</a></li><li><a class="dropdown-item" href="#" data-column="6">Company</a></li><li><a class="dropdown-item" href="#" data-column="7">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="8">Visitors</a></li><li><a class="dropdown-item" href="#" data-column="9">Created At</a></li><li><a class="dropdown-item" href="#" data-column="10">Linkedin</a></li><li><a class="dropdown-item" href="#" data-column="11">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="12">Status</a></li><li><a class="dropdown-item" href="#" data-column="13">Country</a></li></div></ul></div>',
                 },
           ],
         });

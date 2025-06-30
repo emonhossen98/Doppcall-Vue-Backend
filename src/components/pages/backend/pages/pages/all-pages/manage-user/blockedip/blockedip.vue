@@ -15,7 +15,7 @@
                   Blocked Ip
                 </h5>
               </div>
-              <div class="card-body table-responsive table-overflow-hidden">
+              <div class="card-body">
                 <table class="align-middle mb-0 table table-hover" id="blockedip_datatables">
                   <thead>
                     <tr>
@@ -195,6 +195,7 @@
                 },
             ],
             initComplete: () => { 
+              $('#blockedip_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#blockedip_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -230,6 +231,13 @@
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListeners();
               this.attachEventListenersBlulkAction();
@@ -294,37 +302,37 @@
                     extend: 'print',
                     text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [2] }
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                   },
                   {
                     extend: 'csv',
                     text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [2] }
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                   },
                   {
                     extend: 'excel',
                     text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [2] }
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                   },
                   {
                     extend: 'pdf',
                     text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [2] }
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                   },
                   {
                     extend: 'copy',
                     text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
                     className: 'dropdown-item',
-                    exportOptions: { columns: [2] }
+                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
                   }
                 ]
               },
                {
               className: "btn btn-primary",
-              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Blocked Date & Time</a></li><li><a class="dropdown-item" href="#" data-column="3">Country</a></li><li><a class="dropdown-item" href="#" data-column="4">Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Attempted Username(s)</a></li><li><a class="dropdown-item" href="#" data-column="6">Number of Attempts</a></li><li><a class="dropdown-item" href="#" data-column="7">User Agent / Device</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Ip Address</a></li><li><a class="dropdown-item" href="#" data-column="10">Action</a></li></ul></div>',
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Blocked Date & Time</a></li><li><a class="dropdown-item" href="#" data-column="3">Country</a></li><li><a class="dropdown-item" href="#" data-column="4">Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Attempted Username(s)</a></li><li><a class="dropdown-item" href="#" data-column="6">Number of Attempts</a></li><li><a class="dropdown-item" href="#" data-column="7">User Agent / Device</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Ip Address</a></li><li><a class="dropdown-item" href="#" data-column="10">Action</a></li></div></ul></div>',
             },
             ],
           });

@@ -14,7 +14,7 @@
             <div class="card-header pt-3 pb-0">
               <h5 class="card-title ms-1 mb-0">Campaigns </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="table mb-0" id="users_campaign_datatables">
                 <thead>
                   <tr>
@@ -84,6 +84,7 @@ import Loader from '../../../../../include/loader.vue';
 import Breadcrumb from '../../../../../include/breadcrumb.vue';
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -177,7 +178,6 @@ methods: {
         })
       .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
-          console.log(data);
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
@@ -187,6 +187,7 @@ methods: {
           if ($.fn.DataTable.isDataTable("#users_campaign_datatables")) {
             $('#users_campaign_datatables').DataTable().destroy();
           }
+          var formateDate = this.formatDates;
           var table = $('#users_campaign_datatables').DataTable({
             data: data,
             columns: [
@@ -268,6 +269,7 @@ methods: {
               { data: '' }
             ],
             initComplete: () => { 
+              $('#users_campaign_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#users_campaign_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -304,6 +306,13 @@ methods: {
                     });
                   }
                 });
+                 $('.select-colunm-position').on('click', function (e) {
+                    e.stopPropagation();
+                  });
+  
+                  $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                    e.stopPropagation();
+                  });
               this.attachEventListenersForMenu();
               this.attachEventListenersForSearch();
               this.attachEventListenersBlulkAction();
@@ -428,7 +437,7 @@ methods: {
             },
             {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Campaign Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Person Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="5">Offer Category</a></li><li><a class="dropdown-item" href="#" data-column="6">DID Number</a></li><li><a class="dropdown-item" href="#" data-column="7">Status</a></li><li><a class="dropdown-item" href="#" data-column="8">Date</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Campaign Name</a></li><li><a class="dropdown-item" href="#" data-column="2">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Person Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="5">Offer Category</a></li><li><a class="dropdown-item" href="#" data-column="6">DID Number</a></li><li><a class="dropdown-item" href="#" data-column="7">Status</a></li><li><a class="dropdown-item" href="#" data-column="8">Date</a></li><li><a class="dropdown-item" href="#" data-column="9">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -440,6 +449,10 @@ methods: {
         this.getLoader = false;
     });
   },
+  formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
+    },
+    
   attachEventListeners() {
     $('#users_campaign_datatables').on('click', '.user-campaign-action', (event) => {
       const target = $(event.target);

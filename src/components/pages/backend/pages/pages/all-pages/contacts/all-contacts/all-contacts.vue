@@ -13,7 +13,7 @@
             <div class="card-header py-2">
               <h5 class="card-title mb-0 mt-2">Contacts</h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table class="aalign-middle mb-0 table table-hover" id="contact_datatables">
                 <thead>
                   <!-- <th></th> -->
@@ -150,6 +150,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -245,6 +246,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#contact_datatables")) {
             $("#contact_datatables").DataTable().destroy();
           }
+          var formateDate = this.formatDates;
           var table = $("#contact_datatables").DataTable({
             data: data,
             columns: [
@@ -320,6 +322,7 @@ export default {
               },
             ],
             initComplete: () => {
+              $('#contact_datatables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#contact_datatables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -355,6 +358,13 @@ export default {
                       }
                     });
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListeners();
               this.attachEventListenersForMenu();
@@ -466,7 +476,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Buy calls (Advertiser or Publisher)</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Phone</a></li><li><a class="dropdown-item" href="#" data-column="7">Country</a></li><li><a class="dropdown-item" href="#" data-column="8">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Full Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Buy calls (Advertiser or Publisher)</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Phone</a></li><li><a class="dropdown-item" href="#" data-column="7">Country</a></li><li><a class="dropdown-item" href="#" data-column="8">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -480,6 +490,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
 
     attachEventListenersBlulkAction() {

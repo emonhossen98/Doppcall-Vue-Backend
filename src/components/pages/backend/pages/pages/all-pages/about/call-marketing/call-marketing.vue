@@ -18,7 +18,7 @@
                 Call Marketing List
               </h5>
             </div>
-            <div class="card-body table-responsive table-overflow-hidden">
+            <div class="card-body">
               <table
                 class="align-middle mb-0 table table-hover"
                 id="call_marketing_tables"
@@ -309,6 +309,7 @@ import Loader from "../../../../../include/loader.vue";
 import Breadcrumb from "../../../../../include/breadcrumb.vue";
 import { inject } from "vue";
 import { fetchUserRole } from "@/services/userService";
+import moment from "moment";
 
 export default {
   setup() {
@@ -380,6 +381,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#call_marketing_tables")) {
             $("#call_marketing_tables").DataTable().destroy();
           }
+          var formateDate = this.formatDates;
           // Initialize DataTable and store the instance in a variable
           var table = $("#call_marketing_tables").DataTable({
             data: res.data,
@@ -411,6 +413,7 @@ export default {
               { data: "" },
             ],
             initComplete: () => {
+              $('#call_marketing_tables').wrap('<div class="commonDataTablesClass"></div>');
               const table = $("#call_marketing_tables").DataTable();
                 const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
@@ -446,6 +449,13 @@ export default {
                       }
                     });
                   }
+                });
+                 $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
                 });
               this.attachEventListeners();
               this.attachEventListenersBlulkAction();
@@ -530,7 +540,7 @@ export default {
               },
               {
                   className: "btn btn-primary",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><li><a class="dropdown-item" href="#" data-column="all">All</a></li><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Image</a></li><li><a class="dropdown-item" href="#" data-column="2">Differentiates Title</a></li><li><a class="dropdown-item" href="#" data-column="3">Differentiates Description</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></ul></div>',
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Image</a></li><li><a class="dropdown-item" href="#" data-column="2">Differentiates Title</a></li><li><a class="dropdown-item" href="#" data-column="3">Differentiates Description</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
             ],
           });
@@ -542,6 +552,9 @@ export default {
         .finally(() => {
           this.getLoader = false;
         });
+    },
+    formatDates(date) {
+      return moment(date).format('D MMMM YYYY');
     },
     attachEventListeners() {
       $("#call_marketing_tables").on("click", ".call-marketing-action", (event) => {
