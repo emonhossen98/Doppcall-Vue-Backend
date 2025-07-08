@@ -141,31 +141,31 @@
         }
       },
       paymentSingleSave() {
-        var email_address    = $("#email_address").val();
-      var email            = $("#el_email_address").val();
-      var un_email_address = $("#un_email_address").val();
-      var ca_email_address = $("#ca_email_address").val();
-      var ba_email_address = $("#ba_email_address").val();
-      var in_email_address = $("#in_email_address").val();
-      var uk_email_address = $("#uk_email_address").val();
-      var pk_email_address = $("#pk_email_address").val();
+      var email_address    = $("#email_address").val() ?? null;
+      var el_email_address = $("#el_email_address").val() ?? null;
+      var un_email_address = $("#un_email_address").val() ?? null;
+      var ca_email_address = $("#ca_email_address").val() ?? null;
+      var ba_email_address = $("#ba_email_address").val() ?? null;
+      var in_email_address = $("#in_email_address").val() ?? null;
+      var uk_email_address = $("#uk_email_address").val() ?? null;
+      var pk_email_address = $("#pk_email_address").val() ?? null;
 
       
-      if(email_address !== ""){
-       this.paymentInfoCreate.email_address = email_address;
-      }else if(email !== ""){
-        this.paymentInfoCreate.email_address = email;
-      }else if(un_email_address !== ""){
+      if (email_address !== '' && email_address !== null && email_address !== '<empty string>') {
+        this.paymentInfoCreate.email_address = email_address;
+      } else if (el_email_address !== '' && el_email_address !== null && el_email_address !== '<empty string>') {
+        this.paymentInfoCreate.email_address = el_email_address;
+      } else if (un_email_address !== '' && un_email_address !== null && un_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = un_email_address;
-      }else if(ca_email_address !== ""){
+      } else if (ca_email_address !== '' && ca_email_address !== null && ca_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = ca_email_address;
-      }else if(ba_email_address !== ""){
+      } else if (ba_email_address !== '' && ba_email_address !== null && ba_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = ba_email_address;
-      }else if(in_email_address !== ""){
+      } else if (in_email_address !== '' && in_email_address !== null && in_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = in_email_address;
-      }else if(uk_email_address !== ""){
+      } else if (uk_email_address !== '' && uk_email_address !== null && uk_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = uk_email_address;
-      }else if(pk_email_address !== ""){
+      } else if (pk_email_address !== '' && pk_email_address !== null && pk_email_address !== '<empty string>') {
         this.paymentInfoCreate.email_address = pk_email_address;
       }
 
@@ -197,16 +197,22 @@
             }
           )
           .then((res) => {  
+            $('.common-error-class').html('');
             if(res.data.status == 'success'){
-            this.validationErrors = null;
-            toastr.success(res.data.message);
-            this.$router.push('/admin-payment-system-publisher');
+              this.validationErrors = null;
+              toastr.success(res.data.message);
+              this.$router.push('/admin-payment-system-publisher');
             }else if(res.data.status == 'error'){
               toastr.error(res.data.message);
             }else if(res.data.status == 'warning'){
               toastr.warning(res.data.message);
             }else{
                 this.validationErrors = res.data.errors;
+                for (let field in this.validationErrors) {
+                  if (this.validationErrors.hasOwnProperty(field)) {
+                    $('#'+field+'_error').html(this.validationErrors[field]);
+                  }
+                }
             }
           })
           .catch((e) => {
@@ -244,13 +250,14 @@
                         <option value="Business Account">Business Account</option>
                         <option value="Personal Account">Personal Account</option>
                       </select>
+                      <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                    </div>
                    </div>
-              </div>
               <div class="col-md-6">
                   <div class="row form-group mt-3">
                     <label for="bank_name" class="required mb-1">Bank Name</label>
                     <input type="text" id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                    <span id="bank_name_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -259,12 +266,14 @@
                   <div class="row form-group pr-md-3 mt-3">
                     <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                     <input type="text"id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                    <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               <div class="col-md-6">
                   <div class="row form-group mt-3">
                     <label for="account_number" class="required mb-1">Account Number</label>
                     <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                    <span id="account_number_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -273,6 +282,7 @@
                   <div class="row form-group pr-md-3 mt-3">
                     <label for="routing_number" class="required mb-1">Routing Number</label>
                     <input type="text" id="routing_number" class="form-control" required placeholder="Enter Routing Number"/>
+                    <span id="routing_number_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               <div class="col-md-6">
@@ -282,6 +292,7 @@
                        <option value="C- Checking Account">C- Checking Account</option>
                        <option value="S- Savings Account">S- Savings Account</option>
                     </select>
+                    <span id="account_type_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -289,11 +300,13 @@
               <div class="col-md-6 px-2" style="margin-top: 62px !important">
                   <label for="phone_number" class="required mb-1">Phone Number</label>
                   <input id="phone_number" class="phone_number form-control"  type="tel" required placeholder="Enter Phone Number">
+                  <span id="phone_number_error" class="text-danger common-error-class"></span>
                   </div>
               <div class="col-md-6">
                   <div class="row form-group mt-3">
                     <label for="email_address" class="required mb-1">Email Address</label>
                     <input type="email"  id="un_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                    <span id="email_address_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -302,12 +315,14 @@
                   <div class="row form-group pr-md-3 mt-3">
                     <label for="city" class="required mb-1">City</label>
                     <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                    <span id="city_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               <div class="col-md-6">
                   <div class="row form-group mt-3">
                     <label for="state" class="required mb-1">State</label>
                     <input type="text"  id="state" class="form-control" required placeholder="Enter State"/>
+                    <span id="state_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -316,6 +331,7 @@
                   <div class="row form-group pr-md-3 mt-3">
                     <label for="zip_code" class="required mb-1">Zip Code</label>
                     <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                    <span id="zip_code_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               <div class="col-md-6">
@@ -324,6 +340,7 @@
                     <select class="form-select" id="countryOption" required>
 
                     </select>
+                    <span id="country_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -331,7 +348,8 @@
               <div class="col-md-6">
                   <div class="row form-group pr-md-3 mt-3">
                     <label for="address" class="required">Address</label>
-                    <textarea id="address" required class="form-control"></textarea>
+                    <textarea id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                    <span id="address_error" class="text-danger common-error-class"></span>
                   </div>
               </div>
               </div>
@@ -364,12 +382,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text"  id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -378,12 +398,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text"  id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -392,6 +414,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="branch_number" class="required mb-1">Branch Number</label>
                           <input type="text" id="branch_number" class="form-control" required placeholder="Enter Branch Number"/>
+                          <span id="branch_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -401,6 +424,7 @@
                             <option value="C- Checking Account">C- Checking Account</option>
                             <option value="S- Savings Account">S- Savings Account</option>
                           </select>
+                          <span id="account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -408,11 +432,13 @@
                     <div class="col-md-6 px-2" style="margin-top: 62px">
                         <label for="phone_number" class="required mb-1">Phone Number</label>
                         <input id="phone_number" class="phone_number"  type="tel" placeholder="Enter Phone Number"> 
+                        <span id="phone_number_error" class="text-danger common-error-class"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email"  id="ca_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -421,12 +447,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="city" class="required mb-1">City</label>
                           <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="state" class="required mb-1">State</label>
                           <input type="text"  id="state" class="form-control" required placeholder="Enter Email State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -435,6 +463,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -443,6 +472,7 @@
                           <select class="form-select" id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -451,6 +481,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="address" class="required mb-1">Address</label>
                           <textarea id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -487,12 +518,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text"  id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -501,12 +534,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text"  id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text" id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -514,11 +549,13 @@
                     <div class="col-md-6 px-2" style="margin-top: 62px">
                         <label for="phone_number" class="required mb-1">Phone Number</label>
                         <input id="phone_number" class="phone_number" type="tel" placeholder="Enter Phone Number">
+                        <span id="phone_number_error" class="text-danger common-error-class"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email"  id="ba_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -527,12 +564,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="city" class="required mb-1">City</label>
                           <input type="text" id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="state" class="required mb-1">State</label>
                           <input type="text" id="state" class="form-control" required placeholder="Enter State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -541,6 +580,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text" id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -549,6 +589,7 @@
                           <select class="form-select" id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -557,6 +598,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="address" class="required mb-1">Address</label>
                           <textarea  id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -590,12 +632,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text" id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -604,12 +648,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text"  id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -618,12 +664,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="swift_bic_code" class="required mb-1">SWIFT / BIC Number</label>
                           <input type="text" id="swift_bic_code" class="form-control"  placeholder="Enter SWIFT / BIC Number"/>
+                          <span id="swift_bic_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="ifsc_code" class="required mb-1">IFSC</label>
                           <input type="text"  id="ifsc_code" class="form-control"  placeholder="Enter IFSC"/>
+                          <span id="ifsc_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -631,11 +679,13 @@
                     <div class="col-md-6 px-2" style="margin-top: 62px">
                       <label for="phone_number" class="required mb-1">Phone Number</label>
                       <input id="phone_number"  class="phone_number" type="tel" placeholder="Enter Phone Number">
+                      <span id="phone_number_error" class="text-danger common-error-class"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email"  id="in_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -644,12 +694,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="city" class="required mb-1">City</label>
                           <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="state" class="required mb-1">State</label>
                           <input type="text"  id="state" class="form-control" required placeholder="Enter State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -658,6 +710,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -666,6 +719,7 @@
                           <select class="form-select"  id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -674,6 +728,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="address" class="required mb-1">Address</label>
                           <textarea  id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -706,12 +761,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text"  id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -720,12 +777,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text" id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -734,12 +793,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="swift_bic_code" class="required mb-1">SWIFT / BIC Number</label>
                           <input type="text"  id="swift_bic_code" class="form-control"  placeholder="Enter SWIFT / BIC Number"/>
+                          <span id="swift_bic_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="iban_code" class="required mb-1">IBAN Code</label>
                           <input  id="iban_code" class="form-control" required  placeholder="Enter IBAN Code"/>
+                          <span id="iban_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -747,11 +808,13 @@
                     <div class="col-md-6 px-2" style="margin-top: 62px">
                         <label for="phone_number" class="required mb-1">Phone Number</label>
                         <input id="phone_number" class="phone_number"  type="tel"  placeholder="Enter Phone Number">
+                        <span id="phone_number_error" class="text-danger common-error-class"></span>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email"  id="uk_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -760,12 +823,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="city" class="required mb-1">City</label>
                           <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="state" class="required mb-1">State</label>
                           <input type="text"  id="state" class="form-control" required placeholder="Enter State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -774,6 +839,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -782,6 +848,7 @@
                           <select class="form-select"  id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -790,6 +857,7 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="address" class="required mb-1">Address</label>
                           <textarea  id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -822,12 +890,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text"  id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -836,12 +906,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text"  id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -850,11 +922,13 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="iban_code" class="required mb-1">IBAN Code</label>
                           <input  id="iban_code" class="form-control" required  placeholder="Enter IBAN Code"/>
+                          <span id="iban_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6 px-2" style="margin-top: 62px">
                         <label for="phone_number" class="required mb-1">Phone Number</label>
                           <input id="phone_number" class="phone_number"  type="tel"  placeholder="Enter Phone Number">
+                          <span id="phone_number_error" class="text-danger common-error-class"></span>
                     </div>
                     </div>
                     <div class="row g-5">
@@ -862,12 +936,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email"  id="pk_email_address" class="form-control" required placeholder="Enter Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="city" class="required mb-1">City</label>
                           <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -876,12 +952,14 @@
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="state" class="required mb-1">State</label>
                           <input type="text"  id="state" class="form-control" required placeholder="Enter State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group pr-md-3 mt-3">
                           <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -892,12 +970,14 @@
                           <select class="form-select" id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row form-group mt-3">
                           <label for="address" class="required mb-1">Address</label>
                           <textarea  id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                         </div>
                     </div>
                     </div>
@@ -930,12 +1010,14 @@
                               <option value="Business Account">Business Account</option>
                               <option value="Personal Account">Personal Account</option>
                           </select>
+                          <span id="bank_account_type_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="bank_name" class="required mb-1">Bank Name</label>
                           <input type="text"  id="bank_name" class="form-control" required placeholder="Enter Bank Name"/>
+                          <span id="bank_name_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -944,12 +1026,14 @@
                       <div class="row form-group pr-md-3 mt-3">
                         <label for="account_holder_name" class="required mb-1">Account Holder Name</label>
                           <input type="text"  id="account_holder_name" class="form-control" required placeholder="Enter Account Holder Name"/>
+                          <span id="account_holder_name_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="account_number" class="required mb-1">Account Number</label>
                           <input type="text"  id="account_number" class="form-control" required placeholder="Enter Account Number"/>
+                          <span id="account_number_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -958,12 +1042,14 @@
                       <div class="row form-group pr-md-3 mt-3">
                         <label for="routing_number" class="required mb-1">Routing Number</label>
                         <input  id="routing_number" class="form-control"  required  placeholder="Enter Routing Number"/>
+                        <span id="routing_number_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="swift_bic_code" class="required mb-1">SWIFT / BIC Number</label>
                           <input type="text"  id="swift_bic_code" class="form-control"  placeholder="Enter SWIFT / BIC Number"/>
+                          <span id="swift_bic_code_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -972,11 +1058,13 @@
                       <div class="row form-group pr-md-3 mt-3">
                         <label for="iban_code" class="required mb-1">IBAN</label>
                         <input  id="iban_code" class="form-control" required  placeholder="Enter IBAN"/>
+                        <span id="iban_code_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6 px-2" style="margin-top: 62px">
                       <label for="phone_number" class="required mb-1">Phone Number</label>
                           <input id="phone_number" class="phone_number"  type="tel" placeholder="Enter Phone Number">
+                          <span id="phone_number_error" class="text-danger common-error-class"></span>
                   </div>
                   </div>
                   <div class="row g-5">
@@ -984,12 +1072,14 @@
                       <div class="row form-group pr-md-3 mt-3">
                         <label for="email_address" class="required mb-1">Email Address</label>
                           <input type="email" id="el_email_address" class="form-control" required placeholder="Enter Email Address"/>
+                          <span id="email_address_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="city" class="required mb-1">City</label>
                           <input type="text"  id="city" class="form-control" required placeholder="Enter City"/>
+                          <span id="city_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -998,12 +1088,14 @@
                       <div class="row form-group pr-md-3 mt-3">
                         <label for="state" class="required mb-1">State</label>
                           <input type="text"  id="state" class="form-control" required placeholder="Enter State"/>
+                          <span id="state_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="zip_code" class="required mb-1">Zip Code</label>
                           <input type="text"  id="zip_code" class="form-control" required placeholder="Enter Zip Code"/>
+                          <span id="zip_code_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -1014,12 +1106,14 @@
                           <select class="form-select"  id="countryOption" required>
                             <CountryOption></CountryOption>
                           </select>
+                          <span id="country_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="row form-group mt-3">
                         <label for="address" class="required mb-1">Address</label>
                           <textarea  id="address" required class="form-control" placeholder="Enter Address"></textarea>
+                          <span id="address_error" class="text-danger common-error-class"></span>
                       </div>
                   </div>
                   </div>
@@ -1049,6 +1143,16 @@
   </script>
   
   <style>
+  .iti.iti--allow-dropdown{
+  width: 100% !important;
+}
+.iti--allow-dropdown input, .iti--allow-dropdown input[type="text"], .iti--allow-dropdown input[type="tel"], .iti--separate-dial-code input, .iti--separate-dial-code input[type="text"], .iti--separate-dial-code input[type="tel"] {
+	padding: 7px 50px !important;
+	border: 1px solid #dbdade !important;
+	border-radius: 4px !important;
+  width: 100% !important;
+}
+
   input.phone_number {
     padding-left: 52px !important;
     padding: 0.25rem 0.5rem;

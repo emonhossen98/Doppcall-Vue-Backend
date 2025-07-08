@@ -280,7 +280,6 @@ computed: {
         })
         .then((res) => {
           const { data, current_page, last_page,recordsTotal } = res.data;
-          console.log(data)
           this.currentPage = current_page;
           this.lastPage = last_page;
           this.recordsTotal = recordsTotal;
