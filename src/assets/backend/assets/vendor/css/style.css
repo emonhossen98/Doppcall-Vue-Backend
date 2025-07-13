@@ -54,6 +54,22 @@ li{
 .check-active {
 	color: #6251fd !important;
 }
+.check-active::after {
+	content: 'x';
+	position: absolute;
+	top: 5px;
+	right: 0;
+	background: #f6f5f8;
+	width: 17px;
+	height: 13px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 8px 5px 9px 5px;
+	border-radius: 50%;
+	border: 0.1px solid #606060;
+	font-size: 11px;
+}
 .padding_top {
 	padding-top: 17rem;
 }
@@ -212,11 +228,18 @@ li{
 	right: 36px;
 	width: 350px;
 	background: white;
-	padding: 20px 25px;
+	padding: 8px 12px;
 	border-radius: 4px;
 	box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 	min-height: 450px;
 	transition: all 0.5s;
+}
+#externalFilters #externalFiltersWrapper {
+	height: 50vh;
+	overflow: auto;
+	scroll-behavior: smooth;
+	scrollbar-color: #7367f0 #f3f1f5;
+	scrollbar-width: thin;
 }
 .clearallexternalfilter {
 	cursor: pointer;

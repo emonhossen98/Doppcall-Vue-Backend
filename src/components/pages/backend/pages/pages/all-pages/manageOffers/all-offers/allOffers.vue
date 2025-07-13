@@ -11,19 +11,6 @@
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between">
-                <!-- <template v-if="!getSkeletonLoader">
-                  <div class="content-left">
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                    <div class="d-flex align-items-center my-2">
-                      <SkeletonShape type="text" animation="wave" :width="'50px'" :height="'30px'" :radius="5" />
-                    </div>
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5" />
-                  </div>
-                  <div class="avatar">
-                    <SkeletonShape type="text" animation="wave" :width="'40px'" :height="'38px'" :radius="5" />
-                  </div>
-                </template>
-<template v-else> -->
                 <div class="content-left">
                   <span>Admin Offers</span>
                   <div class="d-flex align-items-center my-2">
@@ -36,7 +23,6 @@
                     <i class="fa-brands fa-buffer ti-sm"></i>
                   </span>
                 </div>
-                <!-- </template> -->
               </div>
             </div>
           </div>
@@ -45,19 +31,6 @@
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between">
-                <!-- <template v-if="!getSkeletonLoader">
-                  <div class="content-left">
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                    <div class="d-flex align-items-center my-2">
-                      <SkeletonShape type="text" animation="wave" :width="'50px'" :height="'30px'" :radius="5"/>
-                    </div>
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                  </div>
-                  <div class="avatar">
-                    <SkeletonShape type="text" animation="wave" :width="'40px'" :height="'38px'" :radius="5"/>
-                  </div>
-                </template>
-                <template v-else> -->
                 <div class="content-left">
                   <span>Admin Offers</span>
                   <div class="d-flex align-items-center my-2">
@@ -72,7 +45,6 @@
                     <i class="fa-brands fa-buffer ti-sm"></i>
                   </span>
                 </div>
-                <!-- </template> -->
               </div>
             </div>
           </div>
@@ -81,19 +53,6 @@
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between">
-                <!-- <template v-if="!getSkeletonLoader">
-                  <div class="content-left">
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                    <div class="d-flex align-items-center my-2">
-                      <SkeletonShape type="text" animation="wave" :width="'50px'" :height="'30px'" :radius="5"/>
-                    </div>
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                  </div>
-                  <div class="avatar">
-                    <SkeletonShape type="text" animation="wave" :width="'40px'" :height="'38px'" :radius="5" />
-                  </div>
-                </template>
-                <template v-else> -->
                 <div class="content-left">
                   <span>Admin Offers</span>
                   <div class="d-flex align-items-center my-2">
@@ -108,7 +67,6 @@
                     <i class="fa-brands fa-buffer ti-sm"></i>
                   </span>
                 </div>
-                <!-- </template> -->
               </div>
             </div>
           </div>
@@ -117,19 +75,6 @@
           <div class="card">
             <div class="card-body">
               <div class="d-flex align-items-start justify-content-between">
-                <!-- <template v-if="!getSkeletonLoader">
-                  <div class="content-left">
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                    <div class="d-flex align-items-center my-2">
-                      <SkeletonShape type="text" animation="wave" :width="'50px'" :height="'30px'" :radius="5"/>
-                    </div>
-                    <SkeletonShape type="text" animation="wave" :width="'130px'" :height="'25px'" :radius="5"/>
-                  </div>
-                  <div class="avatar">
-                    <SkeletonShape type="text" animation="wave" :width="'40px'" :height="'38px'" :radius="5"/>
-                  </div>
-                </template>
-                <template v-else> -->
                 <div class="content-left">
                   <span>Admin Offers</span>
                   <div class="d-flex align-items-center my-2">
@@ -144,7 +89,6 @@
                     <i class="fa-brands fa-buffer ti-sm"></i>
                   </span>
                 </div>
-                <!-- </template> -->
               </div>
             </div>
           </div>
@@ -153,76 +97,7 @@
       <div class="row mt-4">
         <div class="col-12">
           <div class="card px-0">
-            <!--<div class="card-header border-bottom">
-              <h5 class="card-title mb-0">Filter</h5>
-            <div
-              class="d-flex justify-content-between align-items-center row py-3 gap-3 gap-md-0"
-            >
-              <div class="col-md-4">
-                <template v-if="!getSkeletonLoader">
-                  <SkeletonShape type="text"  animation="wave"  :width="'100%'" :height="'38px'" :radius="5" />
-                </template>
-                <template v-else> 
-                  <select v-model="filtarData.country" class="select2 form-select"  @change="getFiltarOffers()">
-                    <option value="">Select Country</option>
-                    <template v-for="(countryOffer,index) in OfferIndex.countryOffers" :key="index">
-                      <template v-if="countryOffer.primary_country != null && countryOffer.primary_country != ''">
-                        <option :value="countryOffer.primary_country">{{ countryOffer.primary_country }}</option>
-                      </template>
-                    </template>
-                  </select>
-                 </template> 
-              </div>
-
-              <div class="col-md-4">
-              <template v-if="!getSkeletonLoader">
-                  <SkeletonShape type="text" animation="wave" :width="'100%'" :height="'38px'" :radius="5"/>
-                </template>
-                <template v-else> 
-                  <select
-                    v-model="filtarData.category"
-                    class="select2 form-select"
-                    @change="getFiltarOffers()"
-                  >
-                    <option value="">Select Category</option>
-                    <option
-                      v-for="category in OfferIndex.categoryOffers"
-                      :value="category.id"
-                      :key="category.id"
-                    >
-                      {{ category.name }}
-                    </option>
-                  </select>
-                 </template> 
-              </div>
-              <div class="col-md-4">
-                 <template v-if="!getSkeletonLoader">
-                  <SkeletonShape  type="text"  animation="wave"  :width="'100%'"  :height="'38px'" :radius="5" />
-                </template>
-                <template v-else> 
-                  <select
-                    v-model="filtarData.type"
-                    class="select2 form-select"
-                    @change="getFiltarOffers()"
-                  >
-                    <option value="">Select Type</option>
-                    <option
-                      v-for="offerType in OfferIndex.offerTypes"
-                      :value="offerType.id"
-                      :key="offerType.id"
-                    >
-                      {{ offerType.type }}
-                    </option>
-                  </select>
-                </template> 
-              </div>
-            </div>
-          </div>-->
             <div class="card-body">
-              <!-- <template v-if="!getSkeletonLoader">
-              <SkeletonDataTables></SkeletonDataTables>
-            </template>
-            <template v-else> -->
               <table class="datatables-products table position-relative" id="offer_datatables">
                 <thead class="border-top">
                   <tr>
@@ -256,27 +131,31 @@
                 <div>
                   <div class="row">
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-2 pb-2">
-                      <h5 class="mb-0">Apply Filter</h5>
-                      <a class="clearallexternalfilter">Clear All</a>
+                      <h5 class="mb-0">Apply Filter <template v-if="checkfilter.columns.length > 0"><span class="badge bg-dark text-white">{{ checkfilter.columns.length }}</span></template></h5>
+                      <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" id="externalFiltersWrapper">
                     <div class="col-md-5">
                       <ul class="px-0" id="offer-extra-filter">
-                        <li><a :class="checkfilter.column == 'name' ? 'check-active' : ''"
-                            @click="clickFilters('name', 'Name')">Name</a></li>
-                        <li><a :class="checkfilter.column == 'featured' ? 'check-active' : ''"
-                            @click="clickFilters('featured', 'Featured')">Featured</a></li>
-                        <li><a :class="checkfilter.column == 'primary_country' ? 'check-active' : ''"
-                            @click="clickFilters('primary_country', 'Country')">Country</a></li>
-                        <li><a :class="checkfilter.column == 'assign_user_id' ? 'check-active' : ''"
-                            @click="clickFilters('assign_user_id', 'Assign')">Assign</a></li>
-                        <li><a :class="checkfilter.column == 'pay_out' ? 'check-active' : ''"
-                            @click="clickFilters('pay_out', 'Pay')">Pay</a></li>
-                        <li><a :class="checkfilter.column == 'phone_no' ? 'check-active' : ''"
-                            @click="clickFilters('phone_no', 'Phone')">Phone</a></li>
-                        <li><a :class="checkfilter.column == 'owner' ? 'check-active' : ''"
-                            @click="clickFilters('owner', 'Owner')">Owner</a></li>
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('name') ? 'check-active' : ''"
+                            @click="clickFilters('name', 'search', 'Name')">Name</a></li>
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('featured') ? 'check-active' : ''"
+                            @click="clickFilters('featured', 'select', 'Featured')">Featured</a></li>
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('primary_country') ? 'check-active' : ''"
+                            @click="clickFilters('primary_country', 'select', 'Country')">Country</a></li>
+                        <!-- <li><a :class="checkfilter.columns.includes('assign_user_id') ? 'check-active' : ''"
+                            @click="clickFilters('assign_user_id', 'Assign')">Assign</a></li> -->
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('pay_out') ? 'check-active' : ''"
+                            @click="clickFilters('pay_out', 'search', 'Pay')">Pay</a></li>
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('phone_no') ? 'check-active' : ''"
+                            @click="clickFilters('phone_no', 'search', 'Phone')">Phone</a></li>
+                        <!-- <li><a :class="checkfilter.columns.includes('owner') ? 'check-active' : ''"
+                            @click="clickFilters('owner', 'Owner')">Owner</a></li> -->
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('category') ? 'check-active' : ''"
+                            @click="clickFilters('category', 'select', 'Category')">Category</a></li>
+                        <li class="position-relative"><a :class="checkfilter.columns.includes('type') ? 'check-active' : ''"
+                            @click="clickFilters('type', 'select', 'Type')">Type</a></li>
                       </ul>
                     </div>
                     <div class="col-md-7">
@@ -300,9 +179,61 @@
                         <div>
                           <p>Have value</p>
                           <div>
-                            <label for="filtertext">Contains</label>
-                            <input type="text" @keyup="clickCheckboxFilters()" v-model="checkfilter.text"
-                              class="form-control" id="filtertext">
+                            <template v-if="checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters()" v-model="checkfilter.text"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+
+                            <template  v-if="checkfilter.columns.includes('featured') && checkfilter.types.includes('select')">
+                                  <div class="form-check">
+                                    <input @change="clickCheckboxFilters()"  v-model="checkfilter.selectedValues['featured']" class="form-check-input" type="checkbox" value="1" id="featured">
+                                    <label  class="form-check-label" for="featured">
+                                      Yes
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input @change="clickCheckboxFilters()"  v-model="checkfilter.selectedValues['featured']" class="form-check-input" type="checkbox" value="0" id="featuredno">
+                                    <label class="form-check-label" for="featuredno">
+                                      No
+                                    </label>
+                                  </div>
+                              </template>
+
+
+                              <template  v-if="checkfilter.columns.includes('primary_country') && checkfilter.types.includes('select')">
+                                <template v-for="(countryOffer,index) in OfferIndex.countryOffers" :key="index">
+                                  <template v-if="countryOffer.primary_country != null && countryOffer.primary_country != ''">
+                                    <div class="form-check">
+                                      <input @change="clickCheckboxFilters()" v-model="checkfilter.selectedValues['primary_country']" class="form-check-input" type="checkbox" :value="countryOffer.primary_country" :id="'countryOffer'+countryOffer.primary_country">
+                                      <label class="form-check-label" :for="'countryOffer'+countryOffer.primary_country">
+                                      {{ countryOffer.primary_country ?? '' }}
+                                      </label>
+                                    </div>
+                                  </template>
+                                </template>
+                              </template>
+
+                              <template  v-if="checkfilter.columns.includes('category') && checkfilter.types.includes('select')">
+                                <template v-for="(category,index) in OfferIndex.categoryOffers" :key="index">
+                                  <div class="form-check">
+                                    <input @change="clickCheckboxFilters()" v-model="checkfilter.selectedValues['category']" class="form-check-input" type="checkbox" :value="category.id" :id="'category'+category.id">
+                                    <label class="form-check-label" :for="'category'+category.id">
+                                     {{ category.name ?? '' }}
+                                    </label>
+                                  </div>
+                                </template>
+                              </template>
+                              <template v-if="checkfilter.columns.includes('type') && checkfilter.types.includes('select')">
+                                <template v-for="(offerType,index) in OfferIndex.offerTypes" :key="index">
+                                  <div class="form-check">
+                                    <input @change="clickCheckboxFilters()" v-model="checkfilter.selectedValues['type']" class="form-check-input" type="checkbox" :value="offerType.id" :id="'offertype'+offerType.id">
+                                    <label class="form-check-label" :for="'offertype'+offerType.id">
+                                     {{ offerType.type ?? '' }}
+                                    </label>
+                                  </div>
+                                </template>
+                              </template>
                           </div>
                         </div>
                       </div>
@@ -411,11 +342,19 @@ export default {
       searchInputValue: "",
       showHiddenExternalFilter: false,
       checkfilter: {
-        column: "",
+        columns: ['name'],
         empty: "",
         notempty: "",
         text: "",
-        showcolumn: "",
+        showcolumn: "Name",
+        types : ['search'],
+        role_type: "publisher",
+        selectedValues: {
+          primary_country: [],
+          category: [],
+          type: [],
+          featured: [],
+        },
       }
     };
   },
@@ -937,476 +876,51 @@ export default {
       });
     },
 
-    clickFilters(value, key) {
-      this.checkfilter.column = value;
+    externalfilterreset(){
+      this.checkfilter.columns = ['name'];
+      this.checkfilter.empty =  "";
+      this.checkfilter.notempty =  "";
+      this.checkfilter.text =  "";
+      this.checkfilter.showcolumn =  "Name";
+      this.checkfilter.types  =  ['search'];
+      this.checkfilter.selectedValues = {
+        primary_country: [],
+        category: [],
+        type: [],
+        featured: [],
+      };
+      this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+      this.clickCheckboxFilters();
+    },
+    
+    clickFilters(value,type, key) {
+      if (!Array.isArray(this.checkfilter.columns)) {
+        this.checkfilter.columns = [];
+      }
+      const index = this.checkfilter.columns.indexOf(value);
+      if (index > -1) {
+        this.checkfilter.columns.splice(index, 1);
+      } else {
+        this.checkfilter.columns.push(value);
+      }
+
+      this.checkfilter.types.push(type);
       this.checkfilter.showcolumn = key;
-      this.getFiltarOfExtranalFilter(1, 20, '', this.checkfilter.column, this.checkfilter.empty, this.checkfilter.notempty, this.checkfilter.text);
+      this.getFiltarOfExtranalFilter();
     },
 
     clickCheckboxFilters() {
-      this.getFiltarOfExtranalFilter(1, 20, '', this.checkfilter.column, this.checkfilter.empty, this.checkfilter.notempty, this.checkfilter.text);
+      this.getFiltarOfExtranalFilter();
     },
 
-    // getFiltarOffers(page = 1, perPage = 20,searchValue = '') {
-    //   if (
-    //     this.filtarData.country === "" &&
-    //     this.filtarData.category === "" &&
-    //     this.filtarData.type === ""
-    //   ) {
-    //     this.getOfferData();
-    //   } else {
-    //     axios
-    //       .post(
-    //         this.globalVariables.apiUrl + "admin/offers/search-get-data",
-    //         this.filtarData,
-    //         {
-    //           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-    //           params: { page: page, perPage: perPage,search: searchValue},
-    //         }
-    //       )
-    //       .then((res) => {
-    //         const { data, current_page, last_page,recordsTotal } = res.data;
-    //         this.currentPage = current_page;
-    //         this.lastPage = last_page;
-    //         this.recordsTotal = recordsTotal;
 
-    //         this.startPage = (current_page - 1) * perPage + 1;
-    //         this.endPage = Math.min(current_page * perPage, recordsTotal);
-    //         if ($.fn.DataTable.isDataTable("#offer_datatables")) {
-    //           $("#offer_datatables").DataTable().destroy();
-    //         }
-    //         var table = $("#offer_datatables").DataTable({
-    //           data: res.data.getDatas,
-    //           columns: [
-    //               { 
-    //                 data: "id",
-    //                 className: 'dt-center select-checkbox',
-    //                 orderable: false
-    //               },
-    //             { data: "id" },
-    //             { data: "convart_offer_name" },
-    //             { data: "convart_featured" },
-    //             { data: "convart_primary_contry" },
-    //             { data: "convart_assign_user" },
-    //             {
-    //               data: "pay_out",
-    //               render: function (data, type, row) {
-    //                 if (row.pay_out != null) {
-    //                   return row.pay_out.slice(0, 5);
-    //                 }
-    //                 return "";
-    //               },
-    //             },
-    //             {
-    //               data: "phone_no",
-    //               render: function (data, type, row) {
-    //                 if (row.phone_no != null) {
-    //                   return row.owner;
-    //                 }
-    //                 return "--------";
-    //               },
-    //             },
-    //             {
-    //               data: "owner",
-    //               render: function (data, type, row) {
-    //                 if (row.owner != null) {
-    //                   return row.owner.slice(0, 5);
-    //                 }
-    //                 return "--------";
-    //               },
-    //             },
-    //             { data: "convart_status" },
-    //             {
-    //             data: "category",
-    //             render: function (data, type, row) {
-    //               if (row.category != null) {
-    //                 return row.category.name;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "type",
-    //             render: function (data, type, row) {
-    //               if (row.type != null) {
-    //                 return row.type.type;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "convart_create_at",
-    //             render: function (data, type, row) {
-    //               if (row.convart_create_at != null) {
-    //                 return row.convart_create_at;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "call_type",
-    //             render: function (data, type, row) {
-    //               if (row.call_type != null) {
-    //                 return row.call_type;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "call_limit",
-    //             render: function (data, type, row) {
-    //               if (row.call_limit != null) {
-    //                 return row.call_limit;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "allow_trafic",
-    //             render: function (data, type, row) {
-    //               if (row.allow_trafic != null) {
-    //                 return row.allow_trafic;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "appeal_period",
-    //             render: function (data, type, row) {
-    //               if (row.appeal_period != null) {
-    //                 return row.appeal_period;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "offer_price",
-    //             render: function (data, type, row) {
-    //               if (row.offer_price != null) {
-    //                 return row.offer_price;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "promotion_types",
-    //             render: function (data, type, row) {
-    //               if (row.promotion_types != null) {
-    //                 return row.promotion_types;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "tools",
-    //             render: function (data, type, row) {
-    //               if (row.tools != null) {
-    //                 return row.tools;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "traffic_source",
-    //             render: function (data, type, row) {
-    //               if (row.traffic_source != null) {
-    //                 return row.traffic_source;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "trafics",
-    //             render: function (data, type, row) {
-    //               if (row.trafics != null) {
-    //                 return row.trafics;
-    //               }
-    //               return "--------";
-    //             },
-    //           },
-    //           {
-    //             data: "updated_at",
-    //             className: 'dt-center',
-    //             orderable: false,
-    //             render: function (data, type, row) {
-    //               return row.convart_action;
-    //             },
-    //           },
-    //           ],
-    //           initComplete: () => {
-    //             $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
-    //           const table = $("#offer_datatables").DataTable();
-    //           const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-
-    //           dropdownItems.forEach((item) => {
-    //             const columnAttr = item.getAttribute("data-column"); 
-    //             if (columnAttr === "all") {
-    //               item.addEventListener("click", function (e) {
-    //                 e.preventDefault();
-    //                 table.columns().visible(true);
-    //                 dropdownItems.forEach((el) => {
-    //                   if (el.getAttribute("data-column") !== "all") {
-    //                     el.classList.add("active");
-    //                   }
-    //                 });
-    //               });
-    //             } else {
-    //               const columnIndex = parseInt(columnAttr);
-    //               const column = table.column(columnIndex);
-    //               if (column.visible()) {
-    //                 item.classList.add("active");
-    //               }
-
-    //               item.addEventListener("click", function (e) {
-    //                 e.preventDefault();
-
-    //                 const currentVisible = column.visible();
-    //                 column.visible(!currentVisible);
-
-    //                 if (!currentVisible) {
-    //                   item.classList.add("active");
-    //                 } else {
-    //                   item.classList.remove("active");
-    //                 }
-    //               });
-    //             }
-    //           });
-    //           $('.select-colunm-position').on('click', function (e) {
-    //             e.stopPropagation();
-    //           });
-
-    //           $('.select-colunm-position .dropdown-item').on('click', function (e) {
-    //             e.stopPropagation();
-    //           });
-
-    //             this.attachEventListeners();
-    //             this.attachEventListenersOfButton();
-
-    //             this.attachEventListenersForMenu();
-    //             this.attachEventListenersForSearch();
-
-    //             this.attachEventListenersBlulkAction();
-    //             this.attachEventListenersBlulkActionSubmit();
-
-    //             const searchInput = $("#offer_datatables_filter input");
-    //             searchInput.val(this.searchInputValue);
-    //             if(this.searchInputValue != ''){
-    //                 searchInput.focus();
-    //             }
-
-    //             searchInput.off().on("keyup", (e) => {
-    //               const searchTerm = e.target.value;
-    //               this.searchInputValue = searchTerm;
-    //               this.getOfferData(1, perPage, searchTerm);
-    //             });
-    //             $('<style>')
-    //             .prop('type', 'text/css')
-    //             .html(`
-    //               .select-checkbox .sorting_asc,
-    //               .select-checkbox .sorting_desc,
-    //               .select-checkbox .sorting {
-    //                 display: none !important;
-    //               }
-    //             `)
-    //             .appendTo('head');
-    //           },
-    //           // createdRow: function (row, data, dataIndex) {
-    //           //   const perPage = 10; 
-    //           //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
-    //           //   $('td:eq(1)', row).html(rowNumber);
-    //           // },
-    //           columnDefs: [
-    //           {
-    //               targets: 0,
-    //               orderable: false,
-    //               className: 'select-checkbox',
-    //               checkboxes: {
-    //                 selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
-    //               },
-    //               render: function (data, type, row) {
-    //                 return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
-    //               },
-    //               searchable: false,
-    //             },
-    //             {
-    //             targets: 10, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 11, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 12, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 13, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 14, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 15, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 16, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 17, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 18, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 19, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 20, 
-    //             visible: false,
-    //           },
-    //           {
-    //             targets: 21, 
-    //             visible: false,
-    //           },
-    //           { targets: 22, orderable: false, className: 'dt-center' }
-    //           ],
-    //           orderCellsTop: true,
-    //           order: [[1, "asc"]], 
-    //           dom:
-    //             '<"row mx-2"' +
-    //             '<"col-md-2"f>' +
-    //             '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
-    //             '<"col-md-3 d-none"p>>' +
-    //             "t" +
-    //             '<"row mx-2"' +
-    //             '<"col-md-5 d-none"i>' +
-    //             '<"col-md-7 d-none"p>>',
-    //           displayLength: perPage,
-    //           lengthMenu: [20, 50, 100, 200],
-    //           language: {
-    //             sLengthMenu: "_MENU_",
-    //             search: "",
-    //             searchPlaceholder: "Search Offer",
-    //             paginate: {
-    //               previous: '<i class="fa-solid fa-chevron-left"></i>',
-    //               next: '<i class="fa-solid fa-chevron-right"></i>',
-    //             },
-    //           },
-    //           buttons: [
-    //             {
-    //               text: `
-    //                 <div id="bulk-action-wrapper">
-    //                   <select id="bulk-action-select" class="form-select form-select-sm">
-    //                     <option value=""> ✓ Bulk Actions</option>
-    //                     <option value="delete">Bulk Delete</option>
-    //                     <option value="0">Bulk Pending</option>
-    //                     <option value="1">Bulk Active</option>
-    //                     <option value="2">Bulk Paused</option>
-    //                     <option value="3">Bulk Resume</option>
-    //                     <option value="4">Bulk Reject</option>
-    //                   </select>
-    //                 </div>
-    //               `,
-    //               className: "me-2 p-0 btn-primary d-none",
-    //               attr: { id: "bulk-action-container-second" },
-    //             },
-    //             {
-    //               extend: "collection",
-    //               className: "btn btn-label-primary dropdown-toggle me-3",
-    //               text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
-    //               buttons: [
-    //                 {
-    //                   extend: "print",
-    //                   text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
-    //                   className: "dropdown-item",
-    //                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
-    //                 },
-    //                 {
-    //                   extend: "csv",
-    //                   text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
-    //                   className: "dropdown-item",
-    //                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
-    //                 },
-    //                 {
-    //                   extend: "excel",
-    //                   text:
-    //                     '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
-    //                   className: "dropdown-item",
-    //                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
-    //                 },
-    //                 {
-    //                   extend: "pdf",
-    //                   text:
-    //                     '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
-    //                   className: "dropdown-item",
-    //                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
-    //                 },
-    //                 {
-    //                   extend: "copy",
-    //                   text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
-    //                   className: "dropdown-item",
-    //                   exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8,9,10,11,12,13,14,15,16,17,18,19,20,21] },
-    //                 },
-    //               ],
-    //             },
-    //             {
-    //               text:
-    //                 '<span id="import"><i class="fa-solid fa-upload me-1"></i>Import</span>',
-    //               className: "create-new btn btn-primary me-3",
-    //               attr: { id: "import" },
-    //             },
-    //             {
-    //               text:
-    //                 '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
-    //               className: "create-new btn btn-primary me-3",
-    //               attr: { id: "create" },
-    //             },
-    //             {
-    //             className: "create-new btn btn-primary me-3",
-    //             text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Category</a></li><li><a class="dropdown-item" href="#" data-column="11">Type</a></li><li><a class="dropdown-item" href="#" data-column="12">Created at</a></li><li><a class="dropdown-item" href="#" data-column="13">Call Type</a></li><li><a class="dropdown-item" href="#" data-column="14">Call Limit</a></li><li><a class="dropdown-item" href="#" data-column="15">Allow Trafic</a></li><li><a class="dropdown-item" href="#" data-column="16">Appeal Period</a></li><li><a class="dropdown-item" href="#" data-column="17">Offer Price</a></li><li><a class="dropdown-item" href="#" data-column="18">Promotion Types</a></li><li><a class="dropdown-item" href="#" data-column="19">Tools</a></li><li><a class="dropdown-item" href="#" data-column="20">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="21">Trafics</a></li><li><a class="dropdown-item" href="#" data-column="22">Actions</a></li></div></ul></div>',
-    //           },
-    //             {
-    //               text:
-    //                 '<span><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-    //                 className: "btn btn-primary",
-    //                 attr: { 
-    //                   id: "all_filters",
-    //                   "data-bs-toggle": "offcanvas",
-    //                   "aria-controls": "offcanvasRight",
-    //                   "data-bs-target": "#offcanvasRight"
-    //                 },
-    //               },
-    //           ],
-    //         });
-    //         // this.getSkeletonLoader = false;
-    //         this.getLoader = false;
-    //       })
-    //       .catch((error) => {
-    //         console.error(error);
-    //       })
-    //       .finally(() => {
-    //         // this.getSkeletonLoader = false;
-    //         this.getLoader = false;
-    //       });
-    //   }
-    // },
-
-    getFiltarOfExtranalFilter(page = 1, perPage = 20, searchValue = '', column = '', empty = '', notempty = '', text = '') {
+    getFiltarOfExtranalFilter(perPage = 10,) {
       axios
         .post(
           this.globalVariables.apiUrl + "admin/offers/search-get-data/all-filter",
-          this.filtarData,
+          this.checkfilter,
           {
-            headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-            params: { page: page, perPage: perPage, search: searchValue, column: column, empty: empty, notempty: notempty, text: text },
+            headers: { Authorization: "Bearer " + localStorage.getItem("token") }
           }
         )
         .then((res) => {
@@ -1417,337 +931,343 @@ export default {
 
           this.startPage = (current_page - 1) * perPage + 1;
           this.endPage = Math.min(current_page * perPage, recordsTotal);
-          if ($.fn.DataTable.isDataTable("#offer_datatables")) {
-            $("#offer_datatables").DataTable().destroy();
-          }
-          var table = $("#offer_datatables").DataTable({
-            data: res.data.getDatas,
-            columns: [
-              {
-                data: "id",
-                className: 'dt-center select-checkbox',
-                orderable: false
-              },
-              { data: "id" },
-              { data: "convart_offer_name" },
-              { data: "convart_featured" },
-              { data: "convart_primary_contry" },
-              { data: "convart_assign_user" },
-              {
-                data: "pay_out",
-                render: function (data, type, row) {
-                  if (row.pay_out != null) {
-                    return row.pay_out.slice(0, 5);
-                  }
-                  return "";
-                },
-              },
-              {
-                data: "phone_no",
-                render: function (data, type, row) {
-                  if (row.phone_no != null) {
-                    return row.owner;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "owner",
-                render: function (data, type, row) {
-                  if (row.owner != null) {
-                    return row.owner.slice(0, 5);
-                  }
-                  return "--------";
-                },
-              },
-              { data: "convart_status" },
-              {
-                data: "category",
-                render: function (data, type, row) {
-                  if (row.category != null) {
-                    return row.category.name;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "type",
-                render: function (data, type, row) {
-                  if (row.type != null) {
-                    return row.type.type;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "convart_create_at",
-                render: function (data, type, row) {
-                  if (row.convart_create_at != null) {
-                    return row.convart_create_at;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "call_type",
-                render: function (data, type, row) {
-                  if (row.call_type != null) {
-                    return row.call_type;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "call_limit",
-                render: function (data, type, row) {
-                  if (row.call_limit != null) {
-                    return row.call_limit;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "allow_trafic",
-                render: function (data, type, row) {
-                  if (row.allow_trafic != null) {
-                    return row.allow_trafic;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "appeal_period",
-                render: function (data, type, row) {
-                  if (row.appeal_period != null) {
-                    return row.appeal_period;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "offer_price",
-                render: function (data, type, row) {
-                  if (row.offer_price != null) {
-                    return row.offer_price;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "promotion_types",
-                render: function (data, type, row) {
-                  if (row.promotion_types != null) {
-                    return row.promotion_types;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "tools",
-                render: function (data, type, row) {
-                  if (row.tools != null) {
-                    return row.tools;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "traffic_source",
-                render: function (data, type, row) {
-                  if (row.traffic_source != null) {
-                    return row.traffic_source;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "trafics",
-                render: function (data, type, row) {
-                  if (row.trafics != null) {
-                    return row.trafics;
-                  }
-                  return "--------";
-                },
-              },
-              {
-                data: "updated_at",
-                className: 'dt-center',
-                orderable: false,
-                render: function (data, type, row) {
-                  return row.convart_action;
-                },
-              },
-            ],
-            initComplete: () => {
-              $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
-              const table = $("#offer_datatables").DataTable();
-              const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
-              dropdownItems.forEach((item) => {
-                const columnAttr = item.getAttribute("data-column");
-                if (columnAttr === "all") {
-                  item.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    table.columns().visible(true);
-                    dropdownItems.forEach((el) => {
-                      if (el.getAttribute("data-column") !== "all") {
-                        el.classList.add("active");
+          // if ($.fn.DataTable.isDataTable("#offer_datatables")) {
+          //   $("#offer_datatables").DataTable().destroy();
+          // }
+
+          if ($.fn.DataTable.isDataTable("#offer_datatables")) {
+            const table = $("#offer_datatables").DataTable();
+            table.clear();
+            table.rows.add(res.data.getDatas ?? []);
+            table.draw();
+          } else {
+            var table = $("#offer_datatables").DataTable({
+              data: res.data.getDatas ?? [],
+              columns: [
+                {
+                  data: "id",
+                  className: 'dt-center select-checkbox',
+                  orderable: false
+                },
+                { data: "id" },
+                { data: "convart_offer_name" ?? '------' },
+                { data: "convart_featured" },
+                { data: "convart_primary_contry" ?? '------' },
+                { data: "convart_assign_user" ?? '------' },
+                {
+                  data: "pay_out",
+                  render: function (data, type, row) {
+                    if (row.pay_out != null) {
+                      return row.pay_out.slice(0, 5);
+                    }
+                    return "------";
+                  },
+                },
+                {
+                  data: "phone_no",
+                  render: function (data, type, row) {
+                    if (row.phone_no != null) {
+                      return row.owner;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "owner",
+                  render: function (data, type, row) {
+                    if (row.owner != null) {
+                      return row.owner.slice(0, 5);
+                    }
+                    return "--------";
+                  },
+                },
+                { data: "convart_status" },
+                {
+                  data: "category",
+                  render: function (data, type, row) {
+                    if (row.category != null) {
+                      return row.category.name;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "type",
+                  render: function (data, type, row) {
+                    if (row.type != null) {
+                      return row.type.type;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "convart_create_at",
+                  render: function (data, type, row) {
+                    if (row.convart_create_at != null) {
+                      return row.convart_create_at;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "call_type",
+                  render: function (data, type, row) {
+                    if (row.call_type != null) {
+                      return row.call_type;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "call_limit",
+                  render: function (data, type, row) {
+                    if (row.call_limit != null) {
+                      return row.call_limit;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "allow_trafic",
+                  render: function (data, type, row) {
+                    if (row.allow_trafic != null) {
+                      return row.allow_trafic;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "appeal_period",
+                  render: function (data, type, row) {
+                    if (row.appeal_period != null) {
+                      return row.appeal_period;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "offer_price",
+                  render: function (data, type, row) {
+                    if (row.offer_price != null) {
+                      return row.offer_price;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "promotion_types",
+                  render: function (data, type, row) {
+                    if (row.promotion_types != null) {
+                      return row.promotion_types;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "tools",
+                  render: function (data, type, row) {
+                    if (row.tools != null) {
+                      return row.tools;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "traffic_source",
+                  render: function (data, type, row) {
+                    if (row.traffic_source != null) {
+                      return row.traffic_source;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "trafics",
+                  render: function (data, type, row) {
+                    if (row.trafics != null) {
+                      return row.trafics;
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "updated_at",
+                  className: 'dt-center',
+                  orderable: false,
+                  render: function (data, type, row) {
+                    return row.convart_action;
+                  },
+                },
+              ],
+              initComplete: () => {
+                $('#offer_datatables').wrap('<div class="commonDataTablesClass"></div>');
+                const table = $("#offer_datatables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column");
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
                       }
                     });
-                  });
-                } else {
-                  const columnIndex = parseInt(columnAttr);
-                  const column = table.column(columnIndex);
-                  if (column.visible()) {
-                    item.classList.add("active");
                   }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
 
-                  item.addEventListener("click", function (e) {
-                    e.preventDefault();
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
+                this.attachEventListeners();
+                this.attachEventListenersOfButton();
+                this.attachEventListenersForMenu();
+                this.attachEventListenersForSearch();
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
 
-                    const currentVisible = column.visible();
-                    column.visible(!currentVisible);
-
-                    if (!currentVisible) {
-                      item.classList.add("active");
-                    } else {
-                      item.classList.remove("active");
-                    }
-                  });
+                const searchInput = $("#offer_datatables_filter input");
+                searchInput.val(this.searchInputValue);
+                if (this.searchInputValue != '') {
+                  searchInput.focus();
                 }
-              });
 
-              $('.select-colunm-position').on('click', function (e) {
-                e.stopPropagation();
-              });
+                searchInput.off().on("keyup", (e) => {
+                  const searchTerm = e.target.value;
+                  this.searchInputValue = searchTerm;
+                  this.getOfferData(1, perPage, searchTerm);
+                });
 
-              $('.select-colunm-position .dropdown-item').on('click', function (e) {
-                e.stopPropagation();
-              });
-              this.attachEventListeners();
-              this.attachEventListenersOfButton();
-
-              this.attachEventListenersForMenu();
-              this.attachEventListenersForSearch();
-
-              this.attachEventListenersBlulkAction();
-              this.attachEventListenersBlulkActionSubmit();
-
-              const searchInput = $("#offer_datatables_filter input");
-              searchInput.val(this.searchInputValue);
-              if (this.searchInputValue != '') {
-                searchInput.focus();
-              }
-
-              searchInput.off().on("keyup", (e) => {
-                const searchTerm = e.target.value;
-                this.searchInputValue = searchTerm;
-                this.getOfferData(1, perPage, searchTerm);
-              });
-              $('<style>')
-                .prop('type', 'text/css')
-                .html(`
-                  .select-checkbox .sorting_asc,
-                  .select-checkbox .sorting_desc,
-                  .select-checkbox .sorting {
-                    display: none !important;
-                  }
-                `)
-                .appendTo('head');
-            },
-            // createdRow: function (row, data, dataIndex) {
-            //   const perPage = 10; 
-            //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
-            //   $('td:eq(1)', row).html(rowNumber);
-            // },
-            columnDefs: [
-              {
-                targets: 0,
-                orderable: false,
-                className: 'select-checkbox',
-                checkboxes: {
-                  selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                $('<style>')
+                  .prop('type', 'text/css')
+                  .html(`
+                    .select-checkbox .sorting_asc,
+                    .select-checkbox .sorting_desc,
+                    .select-checkbox .sorting {
+                      display: none !important;
+                    }
+                  `)
+                  .appendTo('head');
+              },
+              // createdRow: function (row, data, dataIndex) {
+              //   const perPage = 10;
+              //   const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
+              //   $('td:eq(1)', row).html(rowNumber);
+              // },
+              columnDefs: [
+                {
+                  targets: 0,
+                  orderable: false,
+                  className: 'select-checkbox',
+                  checkboxes: {
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                  },
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                  },
+                  searchable: false,
                 },
-                render: function (data, type, row) {
-                  return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                {
+                  targets: 10,
+                  visible: false,
                 },
-                searchable: false,
+                {
+                  targets: 11,
+                  visible: false,
+                },
+                {
+                  targets: 12,
+                  visible: false,
+                },
+                {
+                  targets: 13,
+                  visible: false,
+                },
+                {
+                  targets: 14,
+                  visible: false,
+                },
+                {
+                  targets: 15,
+                  visible: false,
+                },
+                {
+                  targets: 16,
+                  visible: false,
+                },
+                {
+                  targets: 17,
+                  visible: false,
+                },
+                {
+                  targets: 18,
+                  visible: false,
+                },
+                {
+                  targets: 19,
+                  visible: false,
+                },
+                {
+                  targets: 20,
+                  visible: false,
+                },
+                {
+                  targets: 21,
+                  visible: false,
+                },
+                { targets: 22, orderable: false, className: 'dt-center' }
+              ],
+              orderCellsTop: true,
+              order: [[1, "asc"]],
+              dom:
+                '<"row mx-2"' +
+                '<"col-md-2"f>' +
+                '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-3 d-none"p>>' +
+                "t" +
+                '<"row mx-2"' +
+                '<"col-md-5 d-none"i>' +
+                '<"col-md-7 d-none"p>>',
+              displayLength: perPage,
+              lengthMenu: [20, 50, 100, 200],
+              language: {
+                sLengthMenu: "_MENU_",
+                search: "",
+                searchPlaceholder: "Search Offer",
+                paginate: {
+                  previous: '<i class="fa-solid fa-chevron-left"></i>',
+                  next: '<i class="fa-solid fa-chevron-right"></i>',
+                },
               },
-              {
-                targets: 10,
-                visible: false,
-              },
-              {
-                targets: 11,
-                visible: false,
-              },
-              {
-                targets: 12,
-                visible: false,
-              },
-              {
-                targets: 13,
-                visible: false,
-              },
-              {
-                targets: 14,
-                visible: false,
-              },
-              {
-                targets: 15,
-                visible: false,
-              },
-              {
-                targets: 16,
-                visible: false,
-              },
-              {
-                targets: 17,
-                visible: false,
-              },
-              {
-                targets: 18,
-                visible: false,
-              },
-              {
-                targets: 19,
-                visible: false,
-              },
-              {
-                targets: 20,
-                visible: false,
-              },
-              {
-                targets: 21,
-                visible: false,
-              },
-              { targets: 22, orderable: false, className: 'dt-center' }
-            ],
-            orderCellsTop: true,
-            order: [[1, "asc"]],
-            dom:
-              '<"row mx-2"' +
-              '<"col-md-2"f>' +
-              '<"col-md-10 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
-              '<"col-md-3 d-none"p>>' +
-              "t" +
-              '<"row mx-2"' +
-              '<"col-md-5 d-none"i>' +
-              '<"col-md-7 d-none"p>>',
-            displayLength: perPage,
-            lengthMenu: [20, 50, 100, 200],
-            language: {
-              sLengthMenu: "_MENU_",
-              search: "",
-              searchPlaceholder: "Search Offer",
-              paginate: {
-                previous: '<i class="fa-solid fa-chevron-left"></i>',
-                next: '<i class="fa-solid fa-chevron-right"></i>',
-              },
-            },
-            buttons: [
-              {
-                text: `
+              buttons: [
+                {
+                  text: `
                     <div id="bulk-action-wrapper">
                       <select id="bulk-action-select" class="form-select form-select-sm">
                         <option value=""> ✓ Bulk Actions</option>
@@ -1760,73 +1280,73 @@ export default {
                       </select>
                     </div>
                   `,
-                className: "me-2 p-0 btn-primary d-none",
-                attr: { id: "bulk-action-container-second" },
-              },
-              {
-                extend: "collection",
-                className: "btn btn-label-primary dropdown-toggle me-3",
-                text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
-                buttons: [
-                  {
-                    extend: "print",
-                    text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
-                    className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                  },
-                  {
-                    extend: "csv",
-                    text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
-                    className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                  },
-                  {
-                    extend: "excel",
-                    text:
-                      '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
-                    className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                  },
-                  {
-                    extend: "pdf",
-                    text:
-                      '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
-                    className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                  },
-                  {
-                    extend: "copy",
-                    text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
-                    className: "dropdown-item",
-                    exportOptions: { columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
-                  },
-                ],
-              },
-              {
-                text:
-                  '<span id="import"><i class="fa-solid fa-upload me-1"></i>Import</span>',
-                className: "create-new btn btn-primary me-3",
-                attr: { id: "import" },
-              },
-              {
-                text:
-                  '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
-                className: "create-new btn btn-primary me-3",
-                attr: { id: "create" },
-              },
-              {
-                className: "create-new btn btn-primary me-3",
-                text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Category</a></li><li><a class="dropdown-item" href="#" data-column="11">Type</a></li><li><a class="dropdown-item" href="#" data-column="12">Created at</a></li><li><a class="dropdown-item" href="#" data-column="13">Call Type</a></li><li><a class="dropdown-item" href="#" data-column="14">Call Limit</a></li><li><a class="dropdown-item" href="#" data-column="15">Allow Trafic</a></li><li><a class="dropdown-item" href="#" data-column="16">Appeal Period</a></li><li><a class="dropdown-item" href="#" data-column="17">Offer Price</a></li><li><a class="dropdown-item" href="#" data-column="18">Promotion Types</a></li><li><a class="dropdown-item" href="#" data-column="19">Tools</a></li><li><a class="dropdown-item" href="#" data-column="20">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="21">Trafics</a></li><li><a class="dropdown-item" href="#" data-column="22">Actions</a></li></div></ul></div>',
-              },
-              {
-                text:
-                  '<span id="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                className: "btn btn-primary",
-                attr: { id: "all_filters"},
-              },
-            ],
-          });
-          // this.getSkeletonLoader = false;
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
+                {
+                  extend: "collection",
+                  className: "btn btn-label-primary dropdown-toggle me-3",
+                  text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+                  buttons: [
+                    {
+                      extend: "print",
+                      text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+                    },
+                    {
+                      extend: "csv",
+                      text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+                    },
+                    {
+                      extend: "excel",
+                      text:
+                        '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+                    },
+                    {
+                      extend: "pdf",
+                      text:
+                        '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+                    },
+                    {
+                      extend: "copy",
+                      text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                      className: "dropdown-item",
+                      exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21] },
+                    },
+                  ],
+                },
+                {
+                  text:
+                    '<span id="import"><i class="fa-solid fa-upload me-1"></i>Import</span>',
+                  className: "create-new btn btn-primary me-3",
+                  attr: { id: "import" },
+                },
+                {
+                  text:
+                    '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Add Offer</span>',
+                  className: "create-new btn btn-primary me-3",
+                  attr: { id: "create" },
+                },
+                {
+                  className: "create-new btn btn-primary me-3",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">ID</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Featured</a></li><li><a class="dropdown-item" href="#" data-column="4">Country</a></li><li><a class="dropdown-item" href="#" data-column="5">Assign</a></li><li><a class="dropdown-item" href="#" data-column="6">Pay</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Owner</a></li><li><a class="dropdown-item" href="#" data-column="9">Status</a></li><li><a class="dropdown-item" href="#" data-column="10">Category</a></li><li><a class="dropdown-item" href="#" data-column="11">Type</a></li><li><a class="dropdown-item" href="#" data-column="12">Created at</a></li><li><a class="dropdown-item" href="#" data-column="13">Call Type</a></li><li><a class="dropdown-item" href="#" data-column="14">Call Limit</a></li><li><a class="dropdown-item" href="#" data-column="15">Allow Trafic</a></li><li><a class="dropdown-item" href="#" data-column="16">Appeal Period</a></li><li><a class="dropdown-item" href="#" data-column="17">Offer Price</a></li><li><a class="dropdown-item" href="#" data-column="18">Promotion Types</a></li><li><a class="dropdown-item" href="#" data-column="19">Tools</a></li><li><a class="dropdown-item" href="#" data-column="20">Traffic Source</a></li><li><a class="dropdown-item" href="#" data-column="21">Trafics</a></li><li><a class="dropdown-item" href="#" data-column="22">Actions</a></li></div></ul></div>',
+                },
+                {
+                  text:
+                    '<span id="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
+                },
+              ],
+            });
+          };
           this.getLoader = false;
         })
         .catch((error) => {
