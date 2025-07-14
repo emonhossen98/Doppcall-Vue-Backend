@@ -131,7 +131,7 @@
                 <div>
                   <div class="row">
                     <div class="d-flex justify-content-between align-items-center border-bottom mb-2 pb-2">
-                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length }}</span></template></h5>
+                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
                       <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
                     </div>
                   </div>
@@ -1050,39 +1050,42 @@ export default {
     },
 
     externalfilterreset(){
+      this.applyfillters = [],
       this.checkfilter.columns = ['name'],
-        this.checkfilter.showcolumn = "Name",
-        this.checkfilter.types = ['search'],
-        this.checkfilter.role_type = "publisher",
-        this.checkfilter.emptyValues = {
-          name : [],
-          featured : [],
-          country : [],
-          pay : [],
-          phone : [],
-          category : [],
-          type : [],
-        },
-        this.checkfilter.notemptyValues = {
-          name : [],
-          featured : [],
-          country : [],
-          pay : [],
-          phone : [],
-          category : [],
-          type : [],
-        },
-        this.checkfilter.searchValues = {
-          name: [],
-          pay_out: [],
-          phone_no: [],
-        },
-        this.checkfilter.selectedValues = {
-          primary_country: [],
-          category: [],
-          type: [],
-          featured: [],
-        },
+      this.checkfilter.showcolumn = "Name",
+      this.checkfilter.types = ['search'],
+      this.checkfilter.role_type = "publisher",
+      this.checkfilter.emptyValues = {
+        name : [],
+        featured : [],
+        country : [],
+        pay : [],
+        phone : [],
+        category : [],
+        type : [],
+      },
+
+      this.checkfilter.notemptyValues = {
+        name : [],
+        featured : [],
+        country : [],
+        pay : [],
+        phone : [],
+        category : [],
+        type : [],
+      },
+      this.checkfilter.searchValues = {
+        name: [],
+        pay_out: [],
+        phone_no: [],
+      },
+
+      this.checkfilter.selectedValues = {
+        primary_country: [],
+        category: [],
+        type: [],
+        featured: [],
+      },
       this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
       this.clickCheckboxFilters();
     },
@@ -1100,13 +1103,12 @@ export default {
     },
 
     clickCheckboxFilters(value) {
-     if (!Array.isArray(this.applyfillters)) {
+      if (!Array.isArray(this.applyfillters)) {
         this.applyfillters = [];
       }
-      if (!this.applyfillters.includes(value)) {
-          this.applyfillters.push(value);
+      if (value !== null && value !== undefined && !this.applyfillters.includes(value)) {
+        this.applyfillters.push(value);
       }
-
       this.getFiltarOfExtranalFilter();
     },
 
