@@ -130,17 +130,17 @@
               <div id="externalFilters" v-if="showHiddenExternalFilter">
                 <div>
                   <div class="row">
-                    <div class="d-flex justify-content-between align-items-center border-bottom mb-2 pb-2">
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
                       <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
                       <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
                     </div>
                   </div>
-                  <div class="row" id="externalFiltersWrapper">
-                    <div class="col-md-5">
-                      <ul class="px-0" id="offer-extra-filter">
+                  <div class="row px-3" id="externalFiltersWrapper">
+                    <div class="col-md-6 border-right">
+                      <ul class="px-0 mt-3" id="offer-extra-filter">
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Name' ? 'check-active' : ''"
-                            @click="clickFilters('name', 'search', 'Name')">Name
+                            @click="clickFilters('name', 'search', 'Name')">Name 
                           </a>
                           <template v-if="applyfillters.includes('Name')">
                             <span @click="removeSearch('Name','name','search')" id="remove-to-search-list">x</span>
@@ -148,7 +148,7 @@
                           </li>
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Featured' ? 'check-active' : ''"
-                            @click="clickFilters('featured', 'select', 'Featured')">Featured
+                            @click="clickFilters('featured', 'select', 'Featured')">Featured <i class="fa-solid fa-caret-down"></i>
                           </a>
                           <template v-if="applyfillters.includes('Featured')">
                             <span @click="removeSearch('Featured','featured','select')" id="remove-to-search-list">x</span>
@@ -156,7 +156,7 @@
                           </li>
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Country' ? 'check-active' : ''"
-                            @click="clickFilters('primary_country', 'select', 'Country')">Country
+                            @click="clickFilters('primary_country', 'select', 'Country')">Country <i class="fa-solid fa-caret-down"></i>
                           </a>
                           <template v-if="applyfillters.includes('Country')">
                             <span @click="removeSearch('Country','country','select')" id="remove-to-search-list">x</span>
@@ -180,11 +180,9 @@
                             <span  @click="removeSearch('Phone','phone','select')" id="remove-to-search-list">x</span>
                           </template>
                         </li>
-                        <!-- <li><a :class="checkfilter.showcolumn == 'Owner' ? 'check-active' : ''"
-                            @click="clickFilters('owner', 'Owner')">Owner</a></li> -->
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Category' ? 'check-active' : ''"
-                            @click="clickFilters('category', 'select', 'Category')">Category
+                            @click="clickFilters('category', 'select', 'Category')">Category <i class="fa-solid fa-caret-down"></i>
                           </a>
                           <template v-if="applyfillters.includes('Category')">
                             <span  @click="removeSearch('Category','category','select')" id="remove-to-search-list">x</span>
@@ -192,26 +190,58 @@
                         </li>
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Type' ? 'check-active' : ''"
-                            @click="clickFilters('type', 'select', 'Type')">Type
+                            @click="clickFilters('type', 'select', 'Type')">Type <i class="fa-solid fa-caret-down"></i>
                           </a>
                           <template v-if="applyfillters.includes('Type')">
                             <span  @click="removeSearch('Type','type','select')" id="remove-to-search-list">x</span>
                           </template>
                         </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Owner' ? 'check-active' : ''"
+                            @click="clickFilters('owner', 'select', 'Owner')">Owner <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Owner')">
+                            <span  @click="removeSearch('Owner','owner','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Offer Tag' ? 'check-active' : ''"
+                            @click="clickFilters('offer_tag', 'select', 'Offer Tag')">Offer Tag <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Offer Tag')">
+                            <span  @click="removeSearch('Offer Tag','offer_tag','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Allow Trafic' ? 'check-active' : ''"
+                            @click="clickFilters('allow_trafic', 'select', 'Allow Trafic')">Allow Trafic <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Allow Trafic')">
+                            <span  @click="removeSearch('Allow Trafic','allow_trafic','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                            @click="clickFilters('status', 'select', 'Status')">Status <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Status')">
+                            <span  @click="removeSearch('Status','status','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
                       </ul>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-6 ps-4">
                       <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
-                        <p>{{ checkfilter.showcolumn ?? '' }}</p>
+                        <p class="mt-3 mb-1">{{ checkfilter.showcolumn ?? '' }}</p>
                         <template v-if="checkfilter.showcolumn == 'Name' && checkfilter.types.includes('search')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['name']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['name']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -220,14 +250,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Featured' && checkfilter.types.includes('select')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['featured']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['featured']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -236,14 +266,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Country' && checkfilter.types.includes('select')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['country']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['country']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -252,14 +282,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Pay' && checkfilter.types.includes('search')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['pay']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['pay']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -268,14 +298,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Phone' && checkfilter.types.includes('search')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['phone']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['phone']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -284,14 +314,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Category' && checkfilter.types.includes('select')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['category']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['category']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -300,14 +330,14 @@
                           </div>
                         </template>
                         <template v-if="checkfilter.showcolumn == 'Type' && checkfilter.types.includes('select')"> 
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['type']"
                               type="checkbox" value="1" id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
-                          <div class="form-check">
+                          <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
                               v-model="checkfilter.notemptyValues['type']" type="checkbox" value="0" id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
@@ -315,7 +345,70 @@
                             </label>
                           </div>
                         </template>
-                        <hr>
+                        <template v-if="checkfilter.showcolumn == 'Owner' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['owner']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['owner']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Offer Tag' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['offer_tag']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['offer_tag']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Allow Trafic' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['allow_trafic']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['allow_trafic']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['status']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
                         <div>
                           <p>Have value</p>
                           <div>
@@ -325,7 +418,7 @@
                                 class="form-control mb-2" id="filtertext" placeholder="Search here..">
                             </template>
                             <template  v-if="checkfilter.showcolumn == 'Featured' && checkfilter.types.includes('select')">
-                              <div class="form-check">
+                              <div class="form-check mb-2">
                                 <input @change="clickCheckboxFilters(checkfilter.showcolumn)"  v-model="checkfilter.selectedValues['featured']" class="form-check-input" type="checkbox" value="1" id="featured">
                                 <label  class="form-check-label" for="featured">
                                   Yes
@@ -341,7 +434,7 @@
                             <template  v-if="checkfilter.showcolumn == 'Country' && checkfilter.types.includes('select')">
                               <template v-for="(countryOffer,index) in OfferIndex.countryOffers" :key="index">
                                 <template v-if="countryOffer.primary_country != null && countryOffer.primary_country != ''">
-                                  <div class="form-check">
+                                  <div class="form-check mb-2">
                                     <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['primary_country']" class="form-check-input" type="checkbox" :value="countryOffer.primary_country" :id="'countryOffer'+countryOffer.primary_country">
                                     <label class="form-check-label" :for="'countryOffer'+countryOffer.primary_country">
                                     {{ countryOffer.primary_country ?? '' }}
@@ -362,7 +455,7 @@
                             </template>
                             <template  v-if="checkfilter.showcolumn == 'Category' && checkfilter.types.includes('select')">
                               <template v-for="(category,index) in OfferIndex.categoryOffers" :key="index">
-                                <div class="form-check">
+                                <div class="form-check mb-2">
                                   <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['category']" class="form-check-input" type="checkbox" :value="category.id" :id="'category'+category.id">
                                   <label class="form-check-label" :for="'category'+category.id">
                                     {{ category.name ?? '' }}
@@ -372,13 +465,69 @@
                             </template>
                             <template v-if="checkfilter.showcolumn == 'Type' && checkfilter.types.includes('select')">
                               <template v-for="(offerType,index) in OfferIndex.offerTypes" :key="index">
-                                <div class="form-check">
+                                <div class="form-check mb-2">
                                   <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['type']" class="form-check-input" type="checkbox" :value="offerType.id" :id="'offertype'+offerType.id">
                                   <label class="form-check-label" :for="'offertype'+offerType.id">
                                     {{ offerType.type ?? '' }}
                                   </label>
                                 </div>
                               </template>
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Owner' && checkfilter.types.includes('select')">
+                              <template v-for="(owner,index) in OfferIndex.offerowner" :key="index">
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['owner']" class="form-check-input" type="checkbox" :value="owner" :id="'offerowner'+owner">
+                                  <label class="form-check-label" :for="'offerowner'+owner">
+                                    {{ owner ?? '' }}
+                                  </label>
+                                </div>
+                              </template>
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Offer Tag' && checkfilter.types.includes('select')">
+                              <template v-for="(tag,index) in OfferIndex.offertags" :key="index">
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['offer_tag']" class="form-check-input" type="checkbox" :value="tag" :id="'offertag'+tag">
+                                  <label class="form-check-label" :for="'offertag'+tag">
+                                    {{ tag ?? '' }}
+                                  </label>
+                                </div>
+                              </template>
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Allow Trafic' && checkfilter.types.includes('select')">
+                              <template v-for="(trafic,index) in OfferIndex.allowTraficOffers" :key="index">
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['allow_trafic']" class="form-check-input" type="checkbox" :value="trafic.id" :id="'offertrafic'+trafic.id">
+                                  <label class="form-check-label" :for="'offertrafic'+trafic.id">
+                                    {{ trafic.title ?? '' }}
+                                  </label>
+                                </div>
+                              </template>
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="0" id="0">
+                                  <label class="form-check-label" for="0">
+                                    Pending
+                                  </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="1" id="1">
+                                  <label class="form-check-label" for="1">
+                                    Approved
+                                  </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="2" id="2">
+                                  <label class="form-check-label" for="2">
+                                    Pause
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="3" id="3">
+                                  <label class="form-check-label" for="3">
+                                    Resume
+                                  </label>
+                                </div>
                             </template>
                           </div>
                         </div>
@@ -500,6 +649,10 @@ export default {
           phone : [],
           category : [],
           type : [],
+          owner : [],
+          offer_tag : [],
+          allow_trafic : [],
+          status : [],
         },
         notemptyValues : {
           name : [],
@@ -509,6 +662,10 @@ export default {
           phone : [],
           category : [],
           type : [],
+          owner : [],
+          offer_tag : [],
+          allow_trafic : [],
+          status : [],
         },
         searchValues : {
           name: [],
@@ -520,6 +677,10 @@ export default {
           category: [],
           type: [],
           featured: [],
+          owner : [],
+          offer_tag : [],
+          allow_trafic : [],
+          status : [],
         },
       },
       applyfillters : [],
@@ -1018,7 +1179,7 @@ export default {
                 },
                 {
                   text:
-                    '<span id="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters </span>',
                   className: "btn btn-primary",
                   attr: { id: "all_filters"},
                 },
@@ -1063,6 +1224,10 @@ export default {
         phone : [],
         category : [],
         type : [],
+        owner : [],
+        offer_tag : [],
+        allow_trafic : [],
+        status : [],
       },
 
       this.checkfilter.notemptyValues = {
@@ -1073,6 +1238,10 @@ export default {
         phone : [],
         category : [],
         type : [],
+        owner : [],
+        offer_tag : [],
+        allow_trafic : [],
+        status : [],
       },
       this.checkfilter.searchValues = {
         name: [],
@@ -1085,6 +1254,10 @@ export default {
         category: [],
         type: [],
         featured: [],
+        owner : [],
+        offer_tag : [],
+        allow_trafic : [],
+        status : [],
       },
       this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
       this.clickCheckboxFilters();
@@ -1139,8 +1312,6 @@ export default {
       }
       this.getFiltarOfExtranalFilter();
     },
-
-
 
     getFiltarOfExtranalFilter(perPage = 10,) {
       axios
@@ -1568,7 +1739,7 @@ export default {
                 },
                 {
                   text:
-                    '<span id="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
                   className: "btn btn-primary",
                   attr: { id: "all_filters"},
                 },
@@ -1585,6 +1756,8 @@ export default {
           this.getLoader = false;
         });
     },
+
+    
 
     attachEventListeners() {
       $("#offer_datatables").on("click", ".offer-action", (event) => {
@@ -1891,9 +2064,11 @@ export default {
 };
 </script>
 <style>
+
 .offer-view {
   border: none;
 }
+
 
 .create-campaign {
   border: none;
@@ -1986,6 +2161,7 @@ button.btn-outline {
   padding: 12px 10px !important;
   transition: all 0.4s ease;
 }
+
 
 button.btn-outline:last-child {
   border-radius: 0 4px 0 0 !important;

@@ -28,6 +28,193 @@
                   </thead>
                   <tbody></tbody>
                 </table>
+                <div id="externalFilters" v-if="showHiddenExternalFilter">
+                <div>
+                  <div class="row">
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
+                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
+                      <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
+                    </div>
+                  </div>
+                  <div class="row px-3" id="externalFiltersWrapper">
+                    <div class="col-md-6 border-right">
+                      <ul class="px-0 mt-3" id="offer-extra-filter">
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Title' ? 'check-active' : ''"
+                            @click="clickFilters('title', 'search', 'Title')">Title 
+                          </a>
+                          <template v-if="applyfillters.includes('Title')">
+                            <span @click="removeSearch('Title','title','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Question' ? 'check-active' : ''"
+                            @click="clickFilters('question', 'search', 'Question')">Question 
+                          </a>
+                          <template v-if="applyfillters.includes('Question')">
+                            <span @click="removeSearch('Question','question','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Created By' ? 'check-active' : ''"
+                            @click="clickFilters('user_id', 'select', 'Created By')">Created By <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Created By')">
+                            <span @click="removeSearch('Created By','user_id','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                            @click="clickFilters('status', 'select', 'Status')">Status <i class="fa-solid fa-caret-down"></i>
+                          </a>
+                          <template v-if="applyfillters.includes('Status')">
+                            <span  @click="removeSearch('Status','status','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Created At' ? 'check-active' : ''"
+                            @click="clickFilters('created_at', 'search', 'Created At')">Created At 
+                          </a>
+                          <template v-if="applyfillters.includes('Created At')">
+                            <span @click="removeSearch('Created At','created_at','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6 ps-4">
+                      <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+                        <p class="mt-3 mb-1">{{ checkfilter.showcolumn ?? '' }}</p>
+                        <template v-if="checkfilter.showcolumn == 'Title' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['title']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['title']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Question' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['question']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['question']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Created By' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['user_id']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['user_id']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['status']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['created_at']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <div>
+                          <p>Have value</p>
+                          <div>
+                            <template v-if="checkfilter.showcolumn == 'Title' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['title']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Question' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['question']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+                            <template  v-if="checkfilter.showcolumn == 'Created By' && checkfilter.types.includes('select')">
+                              <template v-if="getOffersQuestionUsers.length > 0">
+                                <template v-for="(user,index) in getOffersQuestionUsers" :key="index">
+                                    <div class="form-check mb-2">
+                                      <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['user_id']" class="form-check-input" type="checkbox" :value="user.id" :id="'user_id'+user.id">
+                                      <label class="form-check-label" :for="'user_id'+user.id">
+                                      {{ user.fname ?? '' }}
+                                      </label>
+                                    </div>
+                                </template>
+                              </template>
+                            </template>
+                            <template  v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                              <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="0" id="0">
+                                  <label class="form-check-label" for="0">
+                                    Inactive
+                                  </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="1" id="1">
+                                  <label class="form-check-label" for="1">
+                                    Active
+                                  </label>
+                                </div>
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['created_at']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -182,6 +369,37 @@
           selectedIds: [],
         },
         validationErrors: null,
+        showHiddenExternalFilter: false,
+      checkfilter: {
+        columns: ['title'],
+        showcolumn: "Title",
+        types : ['search'],
+        emptyValues : {
+          title : [],
+          question : [],
+          user_id : [],
+          status : [],
+          created_at : [],
+        },
+        notemptyValues : {
+          title : [],
+          question : [],
+          user_id : [],
+          status : [],
+          created_at : [],
+        },
+        searchValues : {
+          title : [],
+          question : [],
+          created_at : [],
+        },
+        selectedValues: {
+          user_id : [],
+          status : [],
+        },
+      },
+      applyfillters : [],
+      getOffersQuestionUsers : [],
       };
     },
     async mounted() { 
@@ -204,6 +422,7 @@
         }
       },
     methods: {
+
       getOffersQuestion() {
         this.getLoader = true;
         axios
@@ -211,6 +430,7 @@
             headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           })
           .then((res) => {
+            this.getOffersQuestionUsers = res.data.users;
             if ($.fn.DataTable.isDataTable("#questions-tables")) {
               $("#questions-tables").DataTable().destroy();
             }
@@ -334,6 +554,7 @@
                 $('.select-colunm-position .dropdown-item').on('click', function (e) {
                   e.stopPropagation();
                 });
+                this.attachEventListenersOfButton();
                 this.attachEventListeners();
                 this.attachEventListenersBlulkAction();
                 this.attachEventListenersBlulkActionSubmit();
@@ -428,8 +649,14 @@
                   className: "create-new btn btn-primary me-2",
                 },
                 {
-                  className: "btn btn-primary",
+                  className: "btn btn-primary me-2",
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Title</a></li><li><a class="dropdown-item" href="#" data-column="2">Question</a></li><li><a class="dropdown-item" href="#" data-column="3">Created By</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
+                },
+                {
+                  text:
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters </span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
                 },
               ],
             });
@@ -442,6 +669,347 @@
             this.getLoader = false;
           });
       },
+
+    attachEventListenersOfButton() {
+      $("#questions-tables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if(dataClass == 'all_filters'){
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+        }
+      });
+    },
+
+    externalfilterreset(){
+      this.applyfillters = [],
+      this.checkfilter.columns = ['title'],
+      this.checkfilter.showcolumn = "Title",
+      this.checkfilter.types = ['search'],
+      this.checkfilter.emptyValues = {
+          title : [],
+          question : [],
+          user_id : [],
+          status : [],
+          created_at : [],
+      },
+      this.checkfilter.notemptyValues = {
+          title : [],
+          question : [],
+          user_id : [],
+          status : [],
+          created_at : [],
+      },
+      this.checkfilter.searchValues = {
+          title : [],
+          question : [],
+          created_at : [],
+      },
+      this.checkfilter.selectedValues = {
+          user_id : [],
+          status : [],
+      },
+      this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+      this.clickCheckboxFilters();
+    },
+    
+    clickFilters(value,type, key) {
+      if (!Array.isArray(this.checkfilter.columns)) {
+        this.checkfilter.columns = [];
+      }
+      if (!this.checkfilter.columns.includes(value)) {
+          this.checkfilter.columns.push(value);
+      }
+      this.checkfilter.types.push(type);
+      this.checkfilter.showcolumn = key;
+      this.getFiltarOfExtranalFilter();
+    },
+
+    clickCheckboxFilters(value) {
+      if (!Array.isArray(this.applyfillters)) {
+        this.applyfillters = [];
+      }
+      if (value !== null && value !== undefined && !this.applyfillters.includes(value)) {
+        this.applyfillters.push(value);
+      }
+      this.getFiltarOfExtranalFilter();
+    },
+
+    removeSearch(value, key, type) {
+      if (!Array.isArray(this.applyfillters)) {
+        this.applyfillters = [];
+      }
+      const index = this.applyfillters.indexOf(value);
+      if (index > -1) {
+        this.applyfillters.splice(index, 1);
+        if (this.checkfilter.emptyValues.hasOwnProperty(key)) {
+          this.checkfilter.emptyValues[key] = [];
+        }
+
+        if (this.checkfilter.notemptyValues.hasOwnProperty(key)) {
+          this.checkfilter.notemptyValues[key] = [];
+        }
+        if (this.checkfilter.searchValues.hasOwnProperty(key)) {
+          this.checkfilter.searchValues[key] = [];
+        }
+      }
+      this.getFiltarOfExtranalFilter();
+    },
+
+    getFiltarOfExtranalFilter(perPage = 10,) {
+      axios
+        .post(
+          this.globalVariables.apiUrl + "admin/offer-question/search-get-data-dal-filter",
+          this.checkfilter,
+          {
+            headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+          }
+        )
+        .then((res) => {
+          // this.$nextTick(() => {
+            if ($.fn.DataTable.isDataTable("#questions-tables")) {
+            const table = $("#questions-tables").DataTable();
+            table.clear();
+            table.rows.add(res.data.data ?? []);
+            table.draw();
+          } else {
+            var formateDate = this.formatDates;
+            $("#questions-tables").DataTable({
+              data: res.data.data,
+              columns: [
+                { data: "id" },
+                {
+                  data: "title",
+                  render: function (data, type, row) {
+                    if(row?.title != null){
+                      return '<span title="'+row?.title+'">'+row?.title+'</span>';
+                    }else{
+                      return '-----';
+                    }
+                  },
+                },
+                {
+                  data: "question",
+                  render: function (data, type, row) {
+                    if(row?.question != null){
+                      return '<span title="'+row?.question+'">'+row?.question+'</span>';
+                    }else{
+                      return '-----';
+                    }
+                  },
+                },
+                {
+                  data: "user_id",
+                  render: function (data, type, row) {
+                    if(row?.user?.fname != null){
+                      return  '<span title="'+row?.user?.fname+'">'+row?.user?.fname+'</span>';
+                    }else{
+                      return '-----';
+                    }
+                  },
+                },
+                {
+                  data: "status",
+                  render: function (data, type, row) {
+                    if(row?.status == '1'){
+                      return '<span class="badge bg-success">Active</span>';
+                    }else{
+                      return '<span class="badge bg-warning">Inactive</span>';
+                    }
+                  },
+                },
+                {
+                  data: "created_at",
+                  render: function (data, type, row) {
+                    if (row.created_at != null) {
+                      return formateDate(row.created_at);
+                    }
+                    return "--------";
+                  },
+                },
+                {
+                  data: "pay_out",
+                  render: function (data, type, row) {
+                    return (
+                      '<div class="text-end questions-datatables-action">' +
+                      "<button title='Edit' data-id=" +
+                      row.id +
+                      ' class="rounded-circle bg-transparent border-0 text-primary me-2" data-bs-toggle="modal" data-bs-target="#OfferQuestionEdit">' +
+                      '<i class="far fa-edit fa-sm" data-id=' +
+                      row.id +
+                      "></i></button>" +
+                      '<button title="Delete" type="button"  data-id=' +
+                      row.id +
+                      ' class="type-delete-btn border-0 rounded-circle bg-transparent border-0 text-danger">' +
+                      '<i  data-id="' +
+                      row.id +
+                      '" class="far fa-trash-alt fa-sm"></i></button></div>'
+                    );
+                  },
+                },
+              ],
+              initComplete: () => {
+                $('#questions-tables').wrap('<div class="commonDataTablesClass"></div>');
+                const table = $("#questions-tables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
+                this.attachEventListenersOfButton();
+                this.attachEventListeners();
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
+              },
+              columnDefs: [
+                {
+                  targets: 0,
+                  orderable: false,
+                  checkboxes: {
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                  },
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                  },
+                  searchable: false,
+                },
+              ],
+              order: [[2, "desc"]],
+              dom:
+                '<"row mx-2"' +
+                '<"col-md-4"f>' +
+                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                '<"col-md-3 d-none"p>>' +
+                "t" +
+                '<"row mx-2"' +
+                '<"col-md-5"i>' +
+                '<"col-md-7"p>>',
+              displayLength: 10,
+              lengthMenu: [10, 20, 50, 100, 200],
+              language: {
+                sLengthMenu: "_MENU_",
+                search: "",
+                searchPlaceholder: "Search Url",
+                paginate: {
+                  previous: '<i class="fa-solid fa-chevron-left"></i>',
+                  next: '<i class="fa-solid fa-chevron-right"></i>',
+                },
+              },
+              buttons: [
+                {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
+                {
+                extend: 'collection',
+                className: 'btn btn-label-primary dropdown-toggle me-3',
+                text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+                buttons: [
+                  {
+                    extend: 'print',
+                    text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
+                  },
+                  {
+                    extend: 'csv',
+                    text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
+                  },
+                  {
+                    extend: 'excel',
+                    text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
+                  },
+                  {
+                    extend: 'pdf',
+                    text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
+                  },
+                  {
+                    extend: 'copy',
+                    text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                    className: 'dropdown-item',
+                    exportOptions: { columns: [1,2, 3, 4, 5] }
+                  }
+                ]
+              },
+                {
+                  text:
+                    '<span data-bs-toggle="modal" data-bs-target="#offerQuestionCreate"><i class="ti ti-plus me-1 ti-xs"></i>Create Question</span>',
+                  className: "create-new btn btn-primary me-2",
+                },
+                {
+                  className: "btn btn-primary me-2",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">SL</a></li><li><a class="dropdown-item" href="#" data-column="1">Title</a></li><li><a class="dropdown-item" href="#" data-column="2">Question</a></li><li><a class="dropdown-item" href="#" data-column="3">Created By</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
+                },
+                {
+                  text:
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters </span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
+                },
+              ],
+            });
+          }
+          // });
+          this.getLoader = false;
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          // this.getSkeletonLoader = false;
+          this.getLoader = false;
+        });
+    },
 
       formatDates(date) {
         return moment(date).format('D MMMM YYYY');
@@ -632,7 +1200,6 @@
             this.getLoader = false;
           });
       },
-
   
       QuestionUpdateSubmit() {
         this.getLoader = true;
