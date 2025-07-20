@@ -825,7 +825,7 @@ export default {
     getFiltarOfExtranalFilter(perPage = 10,) {
           axios
             .post(
-              this.globalVariables.apiUrl + "admin/about/differentiates/search-get-data-all-filte",
+              this.globalVariables.apiUrl + "admin/about/differentiates-search-get-data-all-filter",
               this.checkfilter,
               {
                 headers: { Authorization: "Bearer " + localStorage.getItem("token") }
