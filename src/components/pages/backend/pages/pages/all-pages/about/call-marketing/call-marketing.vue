@@ -641,9 +641,9 @@ export default {
               this.attachEventListenersBlulkAction();
               this.attachEventListenersBlulkActionSubmit();
             },
-            createdRow: function (row, data, dataIndex) {
-              $("td:eq(0)", row).html(dataIndex + 1);
-            },
+            // createdRow: function (row, data, dataIndex) {
+            //   $("td:eq(0)", row).html(dataIndex + 1);
+            // },
             columnDefs: [
               {
                 targets: 0,
@@ -723,11 +723,11 @@ export default {
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Image</a></li><li><a class="dropdown-item" href="#" data-column="2">Differentiates Title</a></li><li><a class="dropdown-item" href="#" data-column="3">Differentiates Description</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
                 {
-                        text:
-                          '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                        className: "btn btn-primary",
-                        attr: { id: "all_filters"},
-                      },
+                  text:
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
+                },
             ],
           });
           this.getLoader = false;
@@ -857,173 +857,173 @@ export default {
                 table.draw();
               } else {
                 var table = $("#call_marketing_tables").DataTable({
-                  data: res.data,
-                  columns: [
-                    // { data: 'id' },
-                    // { data: 'id' },
-                    { data: "id" },
-                    { data: "convart_image" },
-                    { 
-                      data: "title",
-                      render: function (data, type, row) {
-                        if (row?.title != null) {
-                          return '<span title="'+row?.title+'">'+row?.title+'</span>';
-                        }
-                        return '----------';
-                      },
+                data: res.data,
+                columns: [
+                  // { data: 'id' },
+                  // { data: 'id' },
+                  { data: "id" },
+                  { data: "convart_image" },
+                  { 
+                    data: "title",
+                    render: function (data, type, row) {
+                      if (row?.title != null) {
+                        return '<span title="'+row?.title+'">'+row?.title+'</span>';
+                      }
+                      return '----------';
                     },
-                    {
-                      data: "convart_dis",
-                      render: function (data, type, row) {
-                        if (row?.convart_dis != null) {
-                          return '<span title="'+row?.convart_dis+'">'+row?.convart_dis+'</span>';
-                        }
-                        return '----------';
-                      },
+                  },
+                  {
+                    data: "convart_dis",
+                    render: function (data, type, row) {
+                      if (row?.convart_dis != null) {
+                        return '<span title="'+row?.convart_dis+'">'+row?.convart_dis+'</span>';
+                      }
+                      return '----------';
                     },
-                    { data: "convart_status" },
-                    { data: "convart_date" },
-                    { data: "" },
-                  ],
-                  initComplete: () => {
-                    $('#call_marketing_tables').wrap('<div class="commonDataTablesClass"></div>');
-                    const table = $("#call_marketing_tables").DataTable();
-                      const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+                  },
+                  { data: "convart_status" },
+                  { data: "convart_date" },
+                  { data: "" },
+                ],
+                initComplete: () => {
+                  $('#call_marketing_tables').wrap('<div class="commonDataTablesClass"></div>');
+                  const table = $("#call_marketing_tables").DataTable();
+                    const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
-                      dropdownItems.forEach((item) => {
-                        const columnAttr = item.getAttribute("data-column"); 
-                        if (columnAttr === "all") {
-                          item.addEventListener("click", function (e) {
-                            e.preventDefault();
-                            table.columns().visible(true);
-                            dropdownItems.forEach((el) => {
-                              if (el.getAttribute("data-column") !== "all") {
-                                el.classList.add("active");
-                              }
-                            });
-                          });
-                        } else {
-                          const columnIndex = parseInt(columnAttr);
-                          const column = table.column(columnIndex);
-                          if (column.visible()) {
-                            item.classList.add("active");
-                          }
-
-                          item.addEventListener("click", function (e) {
-                            e.preventDefault();
-
-                            const currentVisible = column.visible();
-                            column.visible(!currentVisible);
-
-                            if (!currentVisible) {
-                              item.classList.add("active");
-                            } else {
-                              item.classList.remove("active");
+                    dropdownItems.forEach((item) => {
+                      const columnAttr = item.getAttribute("data-column"); 
+                      if (columnAttr === "all") {
+                        item.addEventListener("click", function (e) {
+                          e.preventDefault();
+                          table.columns().visible(true);
+                          dropdownItems.forEach((el) => {
+                            if (el.getAttribute("data-column") !== "all") {
+                              el.classList.add("active");
                             }
                           });
+                        });
+                      } else {
+                        const columnIndex = parseInt(columnAttr);
+                        const column = table.column(columnIndex);
+                        if (column.visible()) {
+                          item.classList.add("active");
                         }
-                      });
-                      $('.select-colunm-position').on('click', function (e) {
-                        e.stopPropagation();
-                      });
 
-                      $('.select-colunm-position .dropdown-item').on('click', function (e) {
-                        e.stopPropagation();
-                      });
-                    this.attachEventListenersOfButton();
-                    this.attachEventListeners();
-                    this.attachEventListenersBlulkAction();
-                    this.attachEventListenersBlulkActionSubmit();
-                  },
-                  createdRow: function (row, data, dataIndex) {
-                    $("td:eq(0)", row).html(dataIndex + 1);
-                  },
-                  columnDefs: [
-                    {
-                      targets: 0,
-                      orderable: false,
-                      checkboxes: {
-                        selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
-                      },
-                      render: function (data, type, row) {
-                        return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
-                      },
-                      searchable: false,
+                        item.addEventListener("click", function (e) {
+                          e.preventDefault();
+
+                          const currentVisible = column.visible();
+                          column.visible(!currentVisible);
+
+                          if (!currentVisible) {
+                            item.classList.add("active");
+                          } else {
+                            item.classList.remove("active");
+                          }
+                        });
+                      }
+                    });
+                    $('.select-colunm-position').on('click', function (e) {
+                      e.stopPropagation();
+                    });
+
+                    $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                      e.stopPropagation();
+                    });
+                  this.attachEventListenersOfButton();
+                  this.attachEventListeners();
+                  this.attachEventListenersBlulkAction();
+                  this.attachEventListenersBlulkActionSubmit();
+                },
+                // createdRow: function (row, data, dataIndex) {
+                //   $("td:eq(0)", row).html(dataIndex + 1);
+                // },
+                columnDefs: [
+                  {
+                    targets: 0,
+                    orderable: false,
+                    checkboxes: {
+                      selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                     },
-                    {
-                      targets: -1,
-                      title: "Actions",
-                      searchable: false,
-                      orderable: false,
-                      render: function (data, type, full, meta) {
-                        return (
-                          '<div class="text-end call-marketing-action"><button title="Edit" data-bs-toggle="modal" data-bs-target="#callInfoEdit" data-id="' +
-                          full.id +
-                          '" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm" data-id="' +
-                          full.id +
-                          '"></i></button><button type="button" title="Delete" data-id=' +
-                          full.id +
-                          ' class="call_marketing_delete_btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
-                          full.id +
-                          ' " class="far fa-trash-alt fa-sm"></i></button></div>'
-                        );
-                      },
+                    render: function (data, type, row) {
+                      return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
                     },
-                  ],
-                  order: [[2, "desc"]],
-                  dom:
-                    '<"row mx-2"' +
-                    '<"col-md-4"f>' +
-                    '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
-                    '<"col-md-3 d-none"p>>' +
-                    "t" +
-                    '<"row mx-2"' +
-                    '<"col-md-5"i>' +
-                    '<"col-md-7"p>>',
-                  displayLength: 10,
-                  lengthMenu: [10, 20, 50, 100, 200],
-                  language: {
-                    sLengthMenu: "_MENU_",
-                    search: "",
-                    searchPlaceholder: "Search Call Marketing",
-                    paginate: {
-                      previous: '<i class="fa-solid fa-chevron-left"></i>',
-                      next: '<i class="fa-solid fa-chevron-right"></i>',
+                    searchable: false,
+                  },
+                  {
+                    targets: -1,
+                    title: "Actions",
+                    searchable: false,
+                    orderable: false,
+                    render: function (data, type, full, meta) {
+                      return (
+                        '<div class="text-end call-marketing-action"><button title="Edit" data-bs-toggle="modal" data-bs-target="#callInfoEdit" data-id="' +
+                        full.id +
+                        '" class="rounded-circle bg-transparent border-0 text-primary"><i class="far fa-edit fa-sm" data-id="' +
+                        full.id +
+                        '"></i></button><button type="button" title="Delete" data-id=' +
+                        full.id +
+                        ' class="call_marketing_delete_btn border-0 rounded-circle bg-transparent border-0 text-danger"><i  data-id="' +
+                        full.id +
+                        ' " class="far fa-trash-alt fa-sm"></i></button></div>'
+                      );
                     },
                   },
-                  buttons: [
-                    {
-                      text: `
-                        <div id="bulk-action-wrapper">
-                          <select id="bulk-action-select" class="form-select form-select-sm">
-                            <option value=""> ✓ Bulk Actions</option>
-                            <option value="delete">Bulk Delete</option>
-                            <option value="0">Bulk Pending</option>
-                            <option value="1">Bulk Approved</option>
-                          </select>
-                        </div>
-                      `,
-                      className: "me-2 p-0 btn-primary d-none",
-                      attr: { id: "bulk-action-container" },
+                ],
+                order: [[2, "desc"]],
+                dom:
+                  '<"row mx-2"' +
+                  '<"col-md-4"f>' +
+                  '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' +
+                  '<"col-md-3 d-none"p>>' +
+                  "t" +
+                  '<"row mx-2"' +
+                  '<"col-md-5"i>' +
+                  '<"col-md-7"p>>',
+                displayLength: 10,
+                lengthMenu: [10, 20, 50, 100, 200],
+                language: {
+                  sLengthMenu: "_MENU_",
+                  search: "",
+                  searchPlaceholder: "Search Call Marketing",
+                  paginate: {
+                    previous: '<i class="fa-solid fa-chevron-left"></i>',
+                    next: '<i class="fa-solid fa-chevron-right"></i>',
+                  },
+                },
+                buttons: [
+                  {
+                    text: `
+                      <div id="bulk-action-wrapper">
+                        <select id="bulk-action-select" class="form-select form-select-sm">
+                          <option value=""> ✓ Bulk Actions</option>
+                          <option value="delete">Bulk Delete</option>
+                          <option value="0">Bulk Pending</option>
+                          <option value="1">Bulk Approved</option>
+                        </select>
+                      </div>
+                    `,
+                    className: "me-2 p-0 btn-primary d-none",
+                    attr: { id: "bulk-action-container" },
+                  },
+                  {
+                    text:
+                      '<span data-bs-toggle="modal" data-bs-target="#callInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Call Marketing</span>',
+                    className: "create-new btn btn-primary me-2",
+                  
+                  },
+                  {
+                      className: "btn btn-primary me-2",
+                      text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Image</a></li><li><a class="dropdown-item" href="#" data-column="2">Differentiates Title</a></li><li><a class="dropdown-item" href="#" data-column="3">Differentiates Description</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                     },
                     {
-                      text:
-                        '<span data-bs-toggle="modal" data-bs-target="#callInfoCreate"><i class="ti ti-plus me-1 ti-xs"></i>New Call Marketing</span>',
-                      className: "create-new btn btn-primary me-2",
-                    
-                    },
-                    {
-                        className: "btn btn-primary me-2",
-                        text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Image</a></li><li><a class="dropdown-item" href="#" data-column="2">Differentiates Title</a></li><li><a class="dropdown-item" href="#" data-column="3">Differentiates Description</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
-                      },
-                      {
-                              text:
-                                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                              className: "btn btn-primary",
-                              attr: { id: "all_filters"},
-                            },
-                  ],
-                });
+                            text:
+                              '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                            className: "btn btn-primary",
+                            attr: { id: "all_filters"},
+                          },
+                ],
+              });
               };
               this.getLoader = false;
             })
