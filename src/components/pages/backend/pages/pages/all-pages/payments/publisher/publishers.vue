@@ -1148,15 +1148,15 @@ export default {
               }
             },
             {
-                  className: "btn btn-primary me-2",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone</a></li><li><a class="dropdown-item" href="#" data-column="5">Balance</a></li><li><a class="dropdown-item" href="#" data-column="6">Browser</a></li><li><a class="dropdown-item" href="#" data-column="7">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="8">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="9">OS</a></li><li><a class="dropdown-item" href="#" data-column="10">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="11">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="12">Skype</a></li><li><a class="dropdown-item" href="#" data-column="13">User Agent</a></li><li><a class="dropdown-item" href="#" data-column="14">Created At</a></li><li><a class="dropdown-item" href="#" data-column="15">Action</a></li><li><a class="dropdown-item" href="#" data-column="16">History</a></li></div></ul></div>',
-                },
-                {
-                  text:
-                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                  className: "btn btn-primary",
-                  attr: { id: "all_filters"},
-                },
+              className: "btn btn-primary me-2",
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company</a></li><li><a class="dropdown-item" href="#" data-column="2">Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Email</a></li><li><a class="dropdown-item" href="#" data-column="4">Phone</a></li><li><a class="dropdown-item" href="#" data-column="5">Balance</a></li><li><a class="dropdown-item" href="#" data-column="6">Browser</a></li><li><a class="dropdown-item" href="#" data-column="7">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="8">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="9">OS</a></li><li><a class="dropdown-item" href="#" data-column="10">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="11">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="12">Skype</a></li><li><a class="dropdown-item" href="#" data-column="13">User Agent</a></li><li><a class="dropdown-item" href="#" data-column="14">Created At</a></li><li><a class="dropdown-item" href="#" data-column="15">Action</a></li><li><a class="dropdown-item" href="#" data-column="16">History</a></li></div></ul></div>',
+            },
+            {
+              text:
+                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+              className: "btn btn-primary",
+              attr: { id: "all_filters"},
+            },
           ],
         });
         this.getLoader = false;
