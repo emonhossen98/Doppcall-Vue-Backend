@@ -40,7 +40,7 @@
                       <th>Telegram</th>
                       <th>Facebook</th>
                       <th>Status</th>
-                      <th>Verified</th>
+                      <th>Email Verified</th>
                       <th>Created At</th>
                     </tr>
                   </thead>
@@ -1322,15 +1322,15 @@ export default {
               ]
             },
             {
-                  className: "btn btn-primary me-2",
-                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Slug</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Company</a></li><li><a class="dropdown-item" href="#" data-column="9">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="10">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="11">User Offers</a></li><li><a class="dropdown-item" href="#" data-column="12">Traffic Urls</a></li><li><a class="dropdown-item" href="#" data-column="13">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="14">Browser</a></li><li><a class="dropdown-item" href="#" data-column="15">OS</a></li><li><a class="dropdown-item" href="#" data-column="16">Skype</a></li><li><a class="dropdown-item" href="#" data-column="17">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="18">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="19">Status</a></li><li><a class="dropdown-item" href="#" data-column="20">Created At</a></li></div></ul></div>',
-                },
-                {
-                  text:
-                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                  className: "btn btn-primary",
-                  attr: { id: "all_filters"},
-                },
+              className: "btn btn-primary me-2",
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Slug</a></li><li><a class="dropdown-item" href="#" data-column="5">Email</a></li><li><a class="dropdown-item" href="#" data-column="6">Role</a></li><li><a class="dropdown-item" href="#" data-column="7">Phone</a></li><li><a class="dropdown-item" href="#" data-column="8">Company</a></li><li><a class="dropdown-item" href="#" data-column="9">Company Website</a></li><li><a class="dropdown-item" href="#" data-column="10">Monthly Visitors</a></li><li><a class="dropdown-item" href="#" data-column="11">User Offers</a></li><li><a class="dropdown-item" href="#" data-column="12">Traffic Urls</a></li><li><a class="dropdown-item" href="#" data-column="13">Country Code</a></li><li><a class="dropdown-item" href="#" data-column="14">Browser</a></li><li><a class="dropdown-item" href="#" data-column="15">OS</a></li><li><a class="dropdown-item" href="#" data-column="16">Skype</a></li><li><a class="dropdown-item" href="#" data-column="17">Telegram</a></li><li><a class="dropdown-item" href="#" data-column="18">Facebook</a></li><li><a class="dropdown-item" href="#" data-column="19">Status</a></li><li><a class="dropdown-item" href="#" data-column="20">Email Verified</a></li><li><a class="dropdown-item" href="#" data-column="21">Created At</a></li></div></ul></div>',
+            },
+            {
+              text:
+                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+              className: "btn btn-primary",
+              attr: { id: "all_filters"},
+            },
           ],
         });
         this.getLoader = false;
