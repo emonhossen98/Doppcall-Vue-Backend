@@ -83,7 +83,7 @@
                 <select v-model="addNewUserCreate.role_name" id="role_name" class="form-select" required>
                   <option value="">Select Role</option>
                   <option v-for="role in addNewUser.roles" :value="role.id" :key="role.id" >
-                    {{ role.name }}
+                    {{ role.secondary_name ?? '' }}
                   </option>
                 </select>
                 <div v-if="validationErrors && validationErrors.role_name" class="text-danger">
