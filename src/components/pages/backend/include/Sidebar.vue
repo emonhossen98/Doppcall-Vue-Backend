@@ -248,7 +248,7 @@
       </li>
 
       <!-- Banner Management -->
-      <li class="menu-item" :class="isExpanded === 'banner_management' ? 'open' : ''" v-if="userRole == 'Super' || userRole == 'Admin'">
+      <!-- <li class="menu-item" :class="isExpanded === 'banner_management' ? 'open' : ''" v-if="userRole == 'Super' || userRole == 'Admin'">
         <a href="javascript:void(0);" class="menu-link menu-toggle" @click="toggleAccordion('banner_management')">
           <i class="menu-icon fa-solid fa-file-image"></i>
           <div data-i18n="banner_management" class="mt-1">Banner Management</div>
@@ -260,7 +260,7 @@
             </RouterLink>
           </li>
         </ul>
-      </li>
+      </li> -->
 
       <!-- Notice -->
       <li :class="{ 'active': isExpandedSubMenu === 'admin_notice' }" class="menu-item" v-if="userRole == 'Super' || userRole == 'Admin'">

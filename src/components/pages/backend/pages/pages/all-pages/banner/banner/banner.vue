@@ -33,6 +33,177 @@
                             <tbody>
                             </tbody>
                         </table>
+                        <div id="externalFilters" v-if="showHiddenExternalFilter">
+                          <div>
+                            <div class="row">
+                              <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
+                                <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
+                                <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
+                              </div>
+                            </div>
+                            <div class="row px-3" id="externalFiltersWrapper">
+                              <div class="col-md-6 border-right">
+                                <ul class="px-0 mt-3" id="offer-extra-filter">
+                                  <li class="position-relative">
+                                    <a :class="checkfilter.showcolumn == 'Id' ? 'check-active' : ''"
+                                      @click="clickFilters('id', 'search', 'Id')">Id 
+                                    </a>
+                                    <template v-if="applyfillters.includes('Id')">
+                                      <span @click="removeSearch('Id','id','search')" id="remove-to-search-list">x</span>
+                                    </template>
+                                  </li>
+                                  <li class="position-relative">
+                                    <a :class="checkfilter.showcolumn == 'Email' ? 'check-active' : ''"
+                                      @click="clickFilters('email', 'search', 'Email')">Email 
+                                    </a>
+                                    <template v-if="applyfillters.includes('Email')">
+                                      <span @click="removeSearch('Email','email','search')" id="remove-to-search-list">x</span>
+                                    </template>
+                                  </li>
+                                  <li class="position-relative">
+                                    <a :class="checkfilter.showcolumn == 'Expires At' ? 'check-active' : ''"
+                                      @click="clickFilters('expires_at', 'search', 'Expires At')">Expires At 
+                                    </a>
+                                    <template v-if="applyfillters.includes('Expires At')">
+                                      <span @click="removeSearch('Expires At','expires_at','search')" id="remove-to-search-list">x</span>
+                                    </template>
+                                  </li>
+                                  <li class="position-relative">
+                                    <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                                      @click="clickFilters('status ', 'search', 'Status')">Status 
+                                    </a>
+                                    <template v-if="applyfillters.includes('Status')">
+                                      <span @click="removeSearch('Status','status ','search')" id="remove-to-search-list">x</span>
+                                    </template>
+                                  </li>
+                                  <li class="position-relative">
+                                    <a :class="checkfilter.showcolumn == 'Created At' ? 'check-active' : ''"
+                                      @click="clickFilters('created_at', 'search', 'Created At')">Created At 
+                                    </a>
+                                    <template v-if="applyfillters.includes('Created At')">
+                                      <span @click="removeSearch('Created At','created_at','search')" id="remove-to-search-list">x</span>
+                                    </template>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="col-md-6 ps-4">
+                                <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+                                  <p class="mt-3 mb-1 font-class">{{ checkfilter.showcolumn ?? '' }}</p>
+                                  <template v-if="checkfilter.showcolumn == 'Id' && checkfilter.types.includes('search')"> 
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['id']"
+                                        type="checkbox" value="1" id="isemptyvalue">
+                                      <label class="form-check-label" for="isemptyvalue">
+                                        is Empty
+                                      </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                        v-model="checkfilter.notemptyValues['id']" type="checkbox" value="0" id="isnotemptyvalue">
+                                      <label class="form-check-label" for="isnotemptyvalue">
+                                        is not Empty
+                                      </label>
+                                    </div>
+                                  </template>
+                                  <template v-if="checkfilter.showcolumn == 'Email' && checkfilter.types.includes('search')"> 
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['email']"
+                                        type="checkbox" value="1" id="isemptyvalue">
+                                      <label class="form-check-label" for="isemptyvalue">
+                                        is Empty
+                                      </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                        v-model="checkfilter.notemptyValues['email']" type="checkbox" value="0" id="isnotemptyvalue">
+                                      <label class="form-check-label" for="isnotemptyvalue">
+                                        is not Empty
+                                      </label>
+                                    </div>
+                                  </template>
+                                  <template v-if="checkfilter.showcolumn == 'Expires At' && checkfilter.types.includes('search')"> 
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['expires_at']"
+                                        type="checkbox" value="1" id="isemptyvalue">
+                                      <label class="form-check-label" for="isemptyvalue">
+                                        is Empty
+                                      </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                        v-model="checkfilter.notemptyValues['expires_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                                      <label class="form-check-label" for="isnotemptyvalue">
+                                        is not Empty
+                                      </label>
+                                    </div>
+                                  </template>
+                                  <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('search')"> 
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['status']"
+                                        type="checkbox" value="1" id="isemptyvalue">
+                                      <label class="form-check-label" for="isemptyvalue">
+                                        is Empty
+                                      </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                        v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0" id="isnotemptyvalue">
+                                      <label class="form-check-label" for="isnotemptyvalue">
+                                        is not Empty
+                                      </label>
+                                    </div>
+                                  </template>
+                                  <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')"> 
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['created_at']"
+                                        type="checkbox" value="1" id="isemptyvalue">
+                                      <label class="form-check-label" for="isemptyvalue">
+                                        is Empty
+                                      </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                      <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                        v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                                      <label class="form-check-label" for="isnotemptyvalue">
+                                        is not Empty
+                                      </label>
+                                    </div>
+                                  </template>
+                                  <div>
+                                    <p>Have value</p>
+                                    <div>
+                                      <template v-if="checkfilter.showcolumn == 'Id' && checkfilter.types.includes('search')">
+                                        <label for="filtertext">Contains</label>
+                                        <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['id']"
+                                          class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                                      </template>
+                                      <template v-if="checkfilter.showcolumn == 'Email' && checkfilter.types.includes('search')">
+                                        <label for="filtertext">Contains</label>
+                                        <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['email']"
+                                          class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                                      </template>
+                                      <template v-if="checkfilter.showcolumn == 'Expires At' && checkfilter.types.includes('search')">
+                                        <label for="filtertext">Contains</label>
+                                        <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['expires_at']"
+                                          class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                                      </template>
+                                      <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('search')">
+                                        <label for="filtertext">Contains</label>
+                                        <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['status']"
+                                          class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                                      </template>
+                                      <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
+                                        <label for="filtertext">Contains</label>
+                                        <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['created_at']"
+                                          class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                                      </template>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,6 +246,36 @@ export default {
         selectedIds: [],
         status: "",
       },
+      showHiddenExternalFilter: false,
+      checkfilter: {
+        columns: ['id'],
+        showcolumn: "Id",
+        types : ['search'],
+        emptyValues : {
+          id : [],
+          email : [],
+          expires_at : [],
+          status : [],
+          created_at : [],
+        },
+        notemptyValues : {
+          id : [],
+          email : [],
+          expires_at : [],
+          status : [],
+          created_at : [],
+        },
+        searchValues : {
+          id : [],
+          email : [],
+          expires_at : [],
+          status : [],
+          created_at : [],
+        },
+        selectedValues: {
+        },
+      },
+      applyfillters : [],
     };
   },
   async mounted() { 
@@ -194,8 +395,8 @@ export default {
                 $('.select-colunm-position .dropdown-item').on('click', function (e) {
                   e.stopPropagation();
                 });
-                this.attachEventListeners();
                 this.attachEventListenersOfButton();
+                this.attachEventListeners();
                 this.attachEventListenersBlulkAction();
                 this.attachEventListenersBlulkActionSubmit();
               },
@@ -294,8 +495,14 @@ export default {
                   attr: { id: 'create' },
                 },
                 {
-                  className: "btn btn-primary",
+                  className: "btn btn-primary me-2",
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Image</a></li><li><a class="dropdown-item" href="#" data-column="3">Link</a></li><li><a class="dropdown-item" href="#" data-column="4">Status</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
+                },
+                {
+                  text:
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
                 },
               ],
             });
@@ -312,6 +519,7 @@ export default {
     formatDates(date) {
       return moment(date).format('D MMMM YYYY');
     },
+
     attachEventListeners() {
       $("#bannars_tables").on("click", ".banner_action", (event) => {
         const target = $(event.target);
@@ -329,6 +537,8 @@ export default {
         const dataClass = target.attr("id");
         if (dataClass === "create") {
           this.$router.push("/admin-banners-create");
+        }else if(dataClass == 'all_filters'){
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
         } 
       });
     },
