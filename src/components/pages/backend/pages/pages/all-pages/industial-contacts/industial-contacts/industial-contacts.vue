@@ -493,8 +493,8 @@ export default {
 
       showHiddenExternalFilter: false,
       checkfilter: {
-        columns: ['Company Name'],
-        showcolumn: "company_name",
+        columns: ['company_name'], 
+        showcolumn: "Company Name",
         types: ['search'],
         emptyValues: {
           company_name: [],
@@ -904,8 +904,8 @@ export default {
     },
 
     externalfilterreset() {
-      this.checkfilter.columns = ['name'],
-        this.checkfilter.showcolumn = "Name",
+      this.checkfilter.columns = ['company_name'],
+        this.checkfilter.showcolumn = "Company Name",
         this.checkfilter.types = ['search'],
         this.checkfilter.emptyValues = {
           company_name: [],
