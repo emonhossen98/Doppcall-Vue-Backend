@@ -402,6 +402,7 @@ export default {
           if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
             $('#blockedip_datatables').DataTable().destroy();
           }
+          console.log(res.data)
           var table = $('#blockedip_datatables').DataTable({
             data: res.data.blockedips,
             columns: [
