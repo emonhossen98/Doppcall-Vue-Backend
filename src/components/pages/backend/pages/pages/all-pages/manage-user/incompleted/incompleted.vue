@@ -519,7 +519,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+              </div>
               <div class="row justify-content-between align-items-center">
                 <div class="col-md-3">
                   Showing {{ startPage }} to {{ endPage }} of {{ recordsTotal }} entries

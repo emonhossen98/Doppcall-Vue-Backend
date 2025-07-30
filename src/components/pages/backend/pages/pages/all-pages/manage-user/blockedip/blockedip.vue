@@ -35,6 +35,244 @@
                   </thead>
                   <tbody></tbody>
                 </table>
+                <div id="externalFilters" v-if="showHiddenExternalFilter">
+                  <div>
+                    <div class="row">
+                      <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
+                        <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
+                        <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
+                      </div>
+                    </div>
+                    <div class="row px-3" id="externalFiltersWrapper">
+                      <div class="col-md-6 border-right">
+                        <ul class="px-0 mt-3" id="offer-extra-filter">
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Blocked Date & Time' ? 'check-active' : ''"
+                              @click="clickFilters('updated_at', 'search', 'Blocked Date & Time')">Blocked Date & Time 
+                            </a>
+                            <template v-if="applyfillters.includes('Blocked Date & Time')">
+                              <span @click="removeSearch('Blocked Date & Time','updated_at','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Country' ? 'check-active' : ''"
+                              @click="clickFilters('user_country', 'search', 'Country')">Country 
+                            </a>
+                            <template v-if="applyfillters.includes('Country')">
+                              <span @click="removeSearch('Country','user_country','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Location' ? 'check-active' : ''"
+                              @click="clickFilters('user_address', 'search', 'Location')">Location 
+                            </a>
+                            <template v-if="applyfillters.includes('Location')">
+                              <span @click="removeSearch('Location','user_address','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Attempted Username(s)' ? 'check-active' : ''"
+                              @click="clickFilters('user_name', 'search', 'Attempted Username(s)')">Attempted Username(s) 
+                            </a>
+                            <template v-if="applyfillters.includes('Attempted Username(s)')">
+                              <span @click="removeSearch('Attempted Username(s)','user_name','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Number of Attempts' ? 'check-active' : ''"
+                              @click="clickFilters('attempts', 'search', 'Number of Attempts')">Number of Attempts 
+                            </a>
+                            <template v-if="applyfillters.includes('Number of Attempts')">
+                              <span @click="removeSearch('Number of Attempts','attempts','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                              @click="clickFilters('blocked_until', 'select', 'Status')">Status  <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <template v-if="applyfillters.includes('Status')">
+                              <span @click="removeSearch('Status','blocked_until','select')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Ip Address' ? 'check-active' : ''"
+                              @click="clickFilters('ip_address', 'search', 'Ip Address')">Ip Address 
+                            </a>
+                            <template v-if="applyfillters.includes('Ip Address')">
+                              <span @click="removeSearch('Ip Address','ip_address','search')" id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6 ps-4">
+                        <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+                          <p class="mt-3 mb-1 font-class">{{ checkfilter.showcolumn ?? '' }}</p>
+                          <template v-if="checkfilter.showcolumn == ' Blocked Date & Time' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['updated_at']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['updated_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Country' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['user_country']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['user_country']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Location' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['user_address']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['user_address']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Attempted Username(s)' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['user_name']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['user_name']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Number of Attempts' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['attempts']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['attempts']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['blocked_until']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['blocked_until']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template v-if="checkfilter.showcolumn == 'Ip Address' && checkfilter.types.includes('search')"> 
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['ip_address']"
+                                type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['ip_address']" type="checkbox" value="0" id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <div>
+                            <p>Have value</p>
+                            <div>
+                              <template v-if="checkfilter.showcolumn == 'Blocked Date & Time' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['updated_at']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Country' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['user_country']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Location' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['user_address']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Attempted Username(s)' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['user_name']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Number of Attempts' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['attempts']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                              <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['blocked_until']" class="form-check-input" type="checkbox" value="0" id="dynamicidstatus0">
+                                  <label class="form-check-label" for="dynamicidstatus0">
+                                    Block
+                                  </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['blocked_until']" class="form-check-input" type="checkbox" value="1" id="dynamicidstatus1">
+                                  <label class="form-check-label" for="dynamicidstatus1">
+                                    Unblock
+                                  </label>
+                                </div>
+                              </template>
+                              <template v-if="checkfilter.showcolumn == 'Ip Address' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['ip_address']"
+                                  class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              </template>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -75,6 +313,42 @@
         bulkactionids : {
           selectedIds: [],
         },
+        showHiddenExternalFilter: false,
+        checkfilter: {
+          columns: ['updated_at'],
+          showcolumn: "Blocked Date & Time",
+          types : ['search'],
+          emptyValues : {
+            updated_at : [],
+            user_country : [],
+            user_address : [],
+            user_name : [],
+            attempts : [],
+            blocked_until : [],
+            ip_address : [],
+          },
+          notemptyValues : {
+            updated_at : [],
+            user_country : [],
+            user_address : [],
+            user_name : [],
+            attempts : [],
+            blocked_until : [],
+            ip_address : [],
+          },
+          searchValues : {
+            updated_at : [],
+            user_country : [],
+            user_address : [],
+            user_name : [],
+            attempts : [],
+            ip_address : [],
+          },
+          selectedValues: {
+            blocked_until : [],
+          },
+        },
+        applyfillters : [],
       };
     },
     async mounted() { 
@@ -95,259 +369,640 @@
       }
     },
     methods: {
-      getUserBlockedIp() {
-        this.getLoader = true;
-        axios
-          .get(this.globalVariables.apiUrl+"admin/manage/user/blockedip", {
-            headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-          })
-          .then((res) => {
-          if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
-              $('#blockedip_datatables').DataTable().destroy();
-          }
-          console.log(res.data)
-          var table = $('#blockedip_datatables').DataTable({
-            data: res.data.blockedips,
-            columns: [
-              // { data: 'id' },
-              { data: 'id' },
-              { data: 'id' },
-              {
-                data: 'updated_at',
-                render: function (data, type, row) {
-                  if (data) {
-                    const date = new Date(data);
-                    const day = String(date.getDate()).padStart(2, '0'); 
-                    const month = date.toLocaleString('en-US', { month: 'long' }); 
-                    const year = date.getFullYear();
-                    
-                    let hours = date.getHours();
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    const ampm = hours >= 12 ? 'PM' : 'AM';
-                    
-                    hours = hours % 12;
-                    hours = hours ? hours : 12;
-                    
-                    return '<span title="'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'">'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'</span>';
-                  } else {
-                    return '';
-                  }
+    getUserBlockedIp() {
+      this.getLoader = true;
+      axios
+        .get(this.globalVariables.apiUrl+"admin/manage/user/blockedip", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        })
+        .then((res) => {
+        if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
+            $('#blockedip_datatables').DataTable().destroy();
+        }
+        console.log(res.data)
+        var table = $('#blockedip_datatables').DataTable({
+          data: res.data.blockedips,
+          columns: [
+            // { data: 'id' },
+            { data: 'id' },
+            { data: 'id' },
+            {
+              data: 'updated_at',
+              render: function (data, type, row) {
+                if (data) {
+                  const date = new Date(data);
+                  const day = String(date.getDate()).padStart(2, '0'); 
+                  const month = date.toLocaleString('en-US', { month: 'long' }); 
+                  const year = date.getFullYear();
+                  
+                  let hours = date.getHours();
+                  const minutes = String(date.getMinutes()).padStart(2, '0');
+                  const ampm = hours >= 12 ? 'PM' : 'AM';
+                  
+                  hours = hours % 12;
+                  hours = hours ? hours : 12;
+                  
+                  return '<span title="'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'">'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'</span>';
+                } else {
+                  return '';
                 }
-              },
-              { 
-                data: 'user_country',
-                render: function(data, type, row) {
-                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
-                }
-              },
-              { 
-                data: 'user_address',
-                render: function(data, type, row) {
-                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
-                }
-              },
-              { 
-                data: 'user_name',
-                render: function(data, type, row) {
-                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
-                }
-              },
-              { 
-                data: 'attempts',
-                render: function(data, type, row) {
-                  return data ? '<span title="'+data+'">'+data+'</span>' : '------';
-                }
-              },
-              {
-                data: "user_agent",
-                render: function (data, type, row) {
-                  if (data != null) {
-                    return '<span title="'+data+'">'+ data.slice(0, 20)+'</span>';
-                  }
-                  return "--------";
-                },
-              },
-              {
-                  data: "action",
-                  render: function (data, type, row) {
-                    if(row.blocked_until != null){
-                      return '<span title="Block" class="badge bg-danger">Block</span>'
-                    }else{
-                      return '<span title="Unblock" class="badge bg-success">Unblock</span>'
-                    }
-                  }
-                },
-              {
-                data: "ip_address",
-                render: function (data, type, row) {
-                  if (data != null) {
-                    return data.slice(0, 20);
-                  }
-                  return "--------";
-                },
-              },
-              {
-                  data: "action",
-                  render: function (data, type, row) {
-                     return (
-                      '<div class="blocked_action text-end"><button title="Unblock" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-unlock-keyhole" id="delete_btn" data-id='+row.id +'></i></button></div>'
-                    );
-                  }
-                },
-            ],
-            initComplete: () => { 
-              $('#blockedip_datatables').wrap('<div class="commonDataTablesClass"></div>');
-              const table = $("#blockedip_datatables").DataTable();
-                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-
-                dropdownItems.forEach((item) => {
-                  const columnAttr = item.getAttribute("data-column"); 
-                  if (columnAttr === "all") {
-                    item.addEventListener("click", function (e) {
-                      e.preventDefault();
-                      table.columns().visible(true);
-                      dropdownItems.forEach((el) => {
-                        if (el.getAttribute("data-column") !== "all") {
-                          el.classList.add("active");
-                        }
-                      });
-                    });
-                  } else {
-                    const columnIndex = parseInt(columnAttr);
-                    const column = table.column(columnIndex);
-                    if (column.visible()) {
-                      item.classList.add("active");
-                    }
-
-                    item.addEventListener("click", function (e) {
-                      e.preventDefault();
-
-                      const currentVisible = column.visible();
-                      column.visible(!currentVisible);
-
-                      if (!currentVisible) {
-                        item.classList.add("active");
-                      } else {
-                        item.classList.remove("active");
-                      }
-                    });
-                  }
-                });
-                $('.select-colunm-position').on('click', function (e) {
-                  e.stopPropagation();
-                });
-
-                $('.select-colunm-position .dropdown-item').on('click', function (e) {
-                  e.stopPropagation();
-                });
-              this.attachEventListeners();
-              this.attachEventListenersBlulkAction();
-              this.attachEventListenersBlulkActionSubmit();
-            },
-            createdRow: function (row, data, dataIndex) {
-                $('td:eq(1)', row).html(dataIndex + 1);
-            },
-            columnDefs: [
-              {
-                targets: 0,
-                orderable: false,
-                checkboxes: {
-                  selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
-                },
-                render: function (data, type, row) {
-                  return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
-                },
-                searchable: false
-              },
-              { targets: 3, orderable: false, className: 'dt-center' }
-            ],
-            order: [[1, 'desc']],
-            dom: '<"row mx-2"' +
-              '<"col-md-4 px-0"f>' + 
-              '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
-              '<"col-md-3 d-none"p>>' +
-              't' + 
-              '<"row mx-2"' +
-              '<"col-md-5"i>' + 
-              '<"col-md-7"p>>', 
-            displayLength: 10, 
-            lengthMenu: [10, 20, 50, 100, 200], 
-            language: {
-              sLengthMenu: '_MENU_',
-              search: '', 
-              searchPlaceholder: 'Search Offer',
-              paginate: { 
-                previous: '<i class="fa-solid fa-chevron-left"></i>',
-                next: '<i class="fa-solid fa-chevron-right"></i>'
               }
             },
-            buttons: [
+            { 
+              data: 'user_country',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'user_address',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'user_name',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'attempts',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
             {
-                text: `
-                  <div id="bulk-action-wrapper">
-                    <select id="bulk-action-select" class="form-select form-select-sm">
-                      <option value=""> ✓ Bulk Actions</option>
-                      <option value="delete">Bulk Delete</option>
-                    </select>
-                  </div>
-                `,
-                className: "me-2 p-0 btn-primary d-none",
-                attr: { id: "bulk-action-container" },
+              data: "user_agent",
+              render: function (data, type, row) {
+                if (data != null) {
+                  return '<span title="'+data+'">'+ data.slice(0, 20)+'</span>';
+                }
+                return "--------";
               },
-              {
-                extend: 'collection',
-                className: 'btn btn-label-primary dropdown-toggle me-3',
-                text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
-                buttons: [
-                  {
-                    extend: 'print',
-                    text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
-                    className: 'dropdown-item',
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
-                  },
-                  {
-                    extend: 'csv',
-                    text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
-                    className: 'dropdown-item',
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
-                  },
-                  {
-                    extend: 'excel',
-                    text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
-                    className: 'dropdown-item',
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
-                  },
-                  {
-                    extend: 'pdf',
-                    text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
-                    className: 'dropdown-item',
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
-                  },
-                  {
-                    extend: 'copy',
-                    text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
-                    className: 'dropdown-item',
-                    exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+            },
+            {
+                data: "action",
+                render: function (data, type, row) {
+                  if(row.blocked_until != null){
+                    return '<span title="Block" class="badge bg-danger">Block</span>'
+                  }else{
+                    return '<span title="Unblock" class="badge bg-success">Unblock</span>'
                   }
-                ]
+                }
               },
-               {
-              className: "btn btn-primary",
+            {
+              data: "ip_address",
+              render: function (data, type, row) {
+                if (data != null) {
+                  return data.slice(0, 20);
+                }
+                return "--------";
+              },
+            },
+            {
+                data: "action",
+                render: function (data, type, row) {
+                    return (
+                    '<div class="blocked_action text-end"><button title="Unblock" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-unlock-keyhole" id="delete_btn" data-id='+row.id +'></i></button></div>'
+                  );
+                }
+              },
+          ],
+          initComplete: () => { 
+            $('#blockedip_datatables').wrap('<div class="commonDataTablesClass"></div>');
+            const table = $("#blockedip_datatables").DataTable();
+              const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+              dropdownItems.forEach((item) => {
+                const columnAttr = item.getAttribute("data-column"); 
+                if (columnAttr === "all") {
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    table.columns().visible(true);
+                    dropdownItems.forEach((el) => {
+                      if (el.getAttribute("data-column") !== "all") {
+                        el.classList.add("active");
+                      }
+                    });
+                  });
+                } else {
+                  const columnIndex = parseInt(columnAttr);
+                  const column = table.column(columnIndex);
+                  if (column.visible()) {
+                    item.classList.add("active");
+                  }
+
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    const currentVisible = column.visible();
+                    column.visible(!currentVisible);
+
+                    if (!currentVisible) {
+                      item.classList.add("active");
+                    } else {
+                      item.classList.remove("active");
+                    }
+                  });
+                }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
+              });
+            this.attachEventListeners();
+            this.attachEventListenersOfButton();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
+          },
+          createdRow: function (row, data, dataIndex) {
+              $('td:eq(1)', row).html(dataIndex + 1);
+          },
+          columnDefs: [
+            {
+              targets: 0,
+              orderable: false,
+              checkboxes: {
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+              },
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+              },
+              searchable: false
+            },
+            { targets: 3, orderable: false, className: 'dt-center' }
+          ],
+          order: [[1, 'desc']],
+          dom: '<"row mx-2"' +
+            '<"col-md-4 px-0"f>' + 
+            '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
+            '<"col-md-3 d-none"p>>' +
+            't' + 
+            '<"row mx-2"' +
+            '<"col-md-5"i>' + 
+            '<"col-md-7"p>>', 
+          displayLength: 10, 
+          lengthMenu: [10, 20, 50, 100, 200], 
+          language: {
+            sLengthMenu: '_MENU_',
+            search: '', 
+            searchPlaceholder: 'Search Offer',
+            paginate: { 
+              previous: '<i class="fa-solid fa-chevron-left"></i>',
+              next: '<i class="fa-solid fa-chevron-right"></i>'
+            }
+          },
+          buttons: [
+          {
+              text: `
+                <div id="bulk-action-wrapper">
+                  <select id="bulk-action-select" class="form-select form-select-sm">
+                    <option value=""> ✓ Bulk Actions</option>
+                    <option value="delete">Bulk Delete</option>
+                  </select>
+                </div>
+              `,
+              className: "me-2 p-0 btn-primary d-none",
+              attr: { id: "bulk-action-container" },
+            },
+            {
+              extend: 'collection',
+              className: 'btn btn-label-primary dropdown-toggle me-3',
+              text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+              buttons: [
+                {
+                  extend: 'print',
+                  text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'csv',
+                  text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'excel',
+                  text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'pdf',
+                  text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'copy',
+                  text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                }
+              ]
+            },
+              {
+              className: "btn btn-primary me-2",
               text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Blocked Date & Time</a></li><li><a class="dropdown-item" href="#" data-column="3">Country</a></li><li><a class="dropdown-item" href="#" data-column="4">Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Attempted Username(s)</a></li><li><a class="dropdown-item" href="#" data-column="6">Number of Attempts</a></li><li><a class="dropdown-item" href="#" data-column="7">User Agent / Device</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Ip Address</a></li><li><a class="dropdown-item" href="#" data-column="10">Action</a></li></div></ul></div>',
             },
-            ],
-          });
+            {
+              text:
+                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+              className: "btn btn-primary",
+              attr: { id: "all_filters"},
+            },
+          ],
+        });
+        this.getLoader = false;
+        })
+        .catch((error) => {
+          console.log(error); ;
+        })
+        .finally(() => {
           this.getLoader = false;
-          })
-          .catch((error) => {
-            console.log(error); ;
-          })
-          .finally(() => {
-            this.getLoader = false;
-          });
-      },
+        });
+    },
+    attachEventListenersOfButton() {
+      $("#blockedip_datatables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if(dataClass == 'all_filters'){
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+        } 
+      });
+    },
 
-      attachEventListenersBlulkAction() {
+    externalfilterreset(){
+      this.checkfilter.columns = ['updated_at'],
+      this.checkfilter.showcolumn = "Blocked Date & Time",
+      this.checkfilter.types = ['search'],
+      this.checkfilter.emptyValues = {
+        updated_at : [],
+        user_country : [],
+        user_address : [],
+        user_name : [],
+        attempts : [],
+        blocked_until : [],
+        ip_address : [],
+      },
+      this.checkfilter.notemptyValues = {
+        updated_at : [],
+        user_country : [],
+        user_address : [],
+        user_name : [],
+        attempts : [],
+        blocked_until : [],
+        ip_address : [],
+      },
+      this.checkfilter.searchValues = {
+        updated_at : [],
+        user_country : [],
+        user_address : [],
+        user_name : [],
+        attempts : [],
+        ip_address : [],
+      },
+      this.checkfilter.selectedValues = {
+        blocked_until : [],
+      },
+      this.checkfilter.applyfillters = [],
+      this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+      this.clickCheckboxFilters();
+    },
+        
+    clickFilters(value,type, key) {
+      if (!Array.isArray(this.checkfilter.columns)) {
+        this.checkfilter.columns = [];
+      }
+      if (!this.checkfilter.columns.includes(value)) {
+          this.checkfilter.columns.push(value);
+      }
+      this.checkfilter.types.push(type);
+      this.checkfilter.showcolumn = key;
+      this.getFiltarOfExtranalFilter();
+    },
+    
+    clickCheckboxFilters(value) {
+          if (!Array.isArray(this.applyfillters)) {
+            this.applyfillters = [];
+          }
+          if (value !== null && value !== undefined && !this.applyfillters.includes(value)) {
+            this.applyfillters.push(value);
+          }
+          this.getFiltarOfExtranalFilter();
+    },
+    
+    removeSearch(value, key, type) {
+          if (!Array.isArray(this.applyfillters)) {
+            this.applyfillters = [];
+          }
+          const index = this.applyfillters.indexOf(value);
+          if (index > -1) {
+            this.applyfillters.splice(index, 1);
+            if (this.checkfilter.emptyValues.hasOwnProperty(key)) {
+              this.checkfilter.emptyValues[key] = [];
+            }
+    
+            if (this.checkfilter.notemptyValues.hasOwnProperty(key)) {
+              this.checkfilter.notemptyValues[key] = [];
+            }
+    
+            if (type == 'select') {
+              if (this.checkfilter.selectedValues.hasOwnProperty(key)) {
+                this.checkfilter.selectedValues[key] = [];
+              }
+            } else {
+              if (this.checkfilter.searchValues.hasOwnProperty(key)) {
+                this.checkfilter.searchValues[key] = [];
+              }
+            }
+          }
+          this.getFiltarOfExtranalFilter();
+    },
+    
+    getFiltarOfExtranalFilter(perPage = 10,) {
+          axios
+            .post(
+              this.globalVariables.apiUrl + "admin/manage/blockedip-search-get-data-all-filter",
+              this.checkfilter,
+              {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+              }
+            )
+            .then((res) => {
+              const { data, current_page, last_page,recordsTotal } = res.data;
+              this.currentPage = current_page;
+              this.lastPage = last_page;
+              this.recordsTotal = recordsTotal;
+              this.startPage = (current_page - 1) * perPage + 1;
+              this.endPage = Math.min(current_page * perPage, recordsTotal);
+    
+              // if ($.fn.DataTable.isDataTable("#offer_datatables")) {
+              //   $("#offer_datatables").DataTable().destroy();
+              // }
+    
+              if ($.fn.DataTable.isDataTable("#blockedip_datatables")) {
+                const table = $("#blockedip_datatables").DataTable();
+                table.clear();
+                table.rows.add(res.data.blockedips ?? []);
+                table.draw();
+              } else {
+                var table = $('#blockedip_datatables').DataTable({
+          data: res.data.blockedips,
+          columns: [
+            // { data: 'id' },
+            { data: 'id' },
+            { data: 'id' },
+            {
+              data: 'updated_at',
+              render: function (data, type, row) {
+                if (data) {
+                  const date = new Date(data);
+                  const day = String(date.getDate()).padStart(2, '0'); 
+                  const month = date.toLocaleString('en-US', { month: 'long' }); 
+                  const year = date.getFullYear();
+                  
+                  let hours = date.getHours();
+                  const minutes = String(date.getMinutes()).padStart(2, '0');
+                  const ampm = hours >= 12 ? 'PM' : 'AM';
+                  
+                  hours = hours % 12;
+                  hours = hours ? hours : 12;
+                  
+                  return '<span title="'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'">'+`${day} ${month} ${year} ${String(hours).padStart(2, '0')}:${minutes} ${ampm}`+'</span>';
+                } else {
+                  return '';
+                }
+              }
+            },
+            { 
+              data: 'user_country',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'user_address',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'user_name',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            { 
+              data: 'attempts',
+              render: function(data, type, row) {
+                return data ? '<span title="'+data+'">'+data+'</span>' : '------';
+              }
+            },
+            {
+              data: "user_agent",
+              render: function (data, type, row) {
+                if (data != null) {
+                  return '<span title="'+data+'">'+ data.slice(0, 20)+'</span>';
+                }
+                return "--------";
+              },
+            },
+            {
+                data: "action",
+                render: function (data, type, row) {
+                  if(row.blocked_until != null){
+                    return '<span title="Block" class="badge bg-danger">Block</span>'
+                  }else{
+                    return '<span title="Unblock" class="badge bg-success">Unblock</span>'
+                  }
+                }
+              },
+            {
+              data: "ip_address",
+              render: function (data, type, row) {
+                if (data != null) {
+                  return data.slice(0, 20);
+                }
+                return "--------";
+              },
+            },
+            {
+                data: "action",
+                render: function (data, type, row) {
+                    return (
+                    '<div class="blocked_action text-end"><button title="Unblock" type="button" id="delete_btn"  data-id='+row.id +' class="bg-transparent border-0 text-danger"><i class="fa-solid fa-unlock-keyhole" id="delete_btn" data-id='+row.id +'></i></button></div>'
+                  );
+                }
+              },
+          ],
+          initComplete: () => { 
+            $('#blockedip_datatables').wrap('<div class="commonDataTablesClass"></div>');
+            const table = $("#blockedip_datatables").DataTable();
+              const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+              dropdownItems.forEach((item) => {
+                const columnAttr = item.getAttribute("data-column"); 
+                if (columnAttr === "all") {
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    table.columns().visible(true);
+                    dropdownItems.forEach((el) => {
+                      if (el.getAttribute("data-column") !== "all") {
+                        el.classList.add("active");
+                      }
+                    });
+                  });
+                } else {
+                  const columnIndex = parseInt(columnAttr);
+                  const column = table.column(columnIndex);
+                  if (column.visible()) {
+                    item.classList.add("active");
+                  }
+
+                  item.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    const currentVisible = column.visible();
+                    column.visible(!currentVisible);
+
+                    if (!currentVisible) {
+                      item.classList.add("active");
+                    } else {
+                      item.classList.remove("active");
+                    }
+                  });
+                }
+              });
+              $('.select-colunm-position').on('click', function (e) {
+                e.stopPropagation();
+              });
+
+              $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                e.stopPropagation();
+              });
+            this.attachEventListeners();
+            this.attachEventListenersOfButton();
+            this.attachEventListenersBlulkAction();
+            this.attachEventListenersBlulkActionSubmit();
+          },
+          createdRow: function (row, data, dataIndex) {
+              $('td:eq(1)', row).html(dataIndex + 1);
+          },
+          columnDefs: [
+            {
+              targets: 0,
+              orderable: false,
+              checkboxes: {
+                selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+              },
+              render: function (data, type, row) {
+                return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+              },
+              searchable: false
+            },
+            { targets: 3, orderable: false, className: 'dt-center' }
+          ],
+          order: [[1, 'desc']],
+          dom: '<"row mx-2"' +
+            '<"col-md-4 px-0"f>' + 
+            '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
+            '<"col-md-3 d-none"p>>' +
+            't' + 
+            '<"row mx-2"' +
+            '<"col-md-5"i>' + 
+            '<"col-md-7"p>>', 
+          displayLength: 10, 
+          lengthMenu: [10, 20, 50, 100, 200], 
+          language: {
+            sLengthMenu: '_MENU_',
+            search: '', 
+            searchPlaceholder: 'Search Offer',
+            paginate: { 
+              previous: '<i class="fa-solid fa-chevron-left"></i>',
+              next: '<i class="fa-solid fa-chevron-right"></i>'
+            }
+          },
+          buttons: [
+          {
+              text: `
+                <div id="bulk-action-wrapper">
+                  <select id="bulk-action-select" class="form-select form-select-sm">
+                    <option value=""> ✓ Bulk Actions</option>
+                    <option value="delete">Bulk Delete</option>
+                  </select>
+                </div>
+              `,
+              className: "me-2 p-0 btn-primary d-none",
+              attr: { id: "bulk-action-container" },
+            },
+            {
+              extend: 'collection',
+              className: 'btn btn-label-primary dropdown-toggle me-3',
+              text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+              buttons: [
+                {
+                  extend: 'print',
+                  text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'csv',
+                  text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'excel',
+                  text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'pdf',
+                  text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                },
+                {
+                  extend: 'copy',
+                  text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                  className: 'dropdown-item',
+                  exportOptions: { columns: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+                }
+              ]
+            },
+              {
+              className: "btn btn-primary me-2",
+              text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Blocked Date & Time</a></li><li><a class="dropdown-item" href="#" data-column="3">Country</a></li><li><a class="dropdown-item" href="#" data-column="4">Location</a></li><li><a class="dropdown-item" href="#" data-column="5">Attempted Username(s)</a></li><li><a class="dropdown-item" href="#" data-column="6">Number of Attempts</a></li><li><a class="dropdown-item" href="#" data-column="7">User Agent / Device</a></li><li><a class="dropdown-item" href="#" data-column="8">Status</a></li><li><a class="dropdown-item" href="#" data-column="9">Ip Address</a></li><li><a class="dropdown-item" href="#" data-column="10">Action</a></li></div></ul></div>',
+            },
+            {
+                text:
+                  '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                className: "btn btn-primary",
+                attr: { id: "all_filters"},
+              },
+          ],
+        });
+              };
+              this.getLoader = false;
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => {
+              // this.getSkeletonLoader = false;
+              this.getLoader = false;
+    });
+    },
+
+    attachEventListenersBlulkAction() {
       $('#blockedip_datatables').on('change', '.row-checkbox', (event) => {
         const id = parseInt(event.target.dataset.id);
         if (event.target.checked) {
@@ -440,51 +1095,51 @@
       });
     },
 
-      attachEventListeners() {
-        $("#blockedip_datatables").on("click", ".blocked_action", (event) => {
-          const target = $(event.target);
-          const dataId = target.data("id");
-          const dataClass = target.attr("id");
-          if(dataClass === 'delete_btn'){
-            this.delteTranUser(dataId);
-          }
-        });
-      },
+    attachEventListeners() {
+      $("#blockedip_datatables").on("click", ".blocked_action", (event) => {
+        const target = $(event.target);
+        const dataId = target.data("id");
+        const dataClass = target.attr("id");
+        if(dataClass === 'delete_btn'){
+          this.delteTranUser(dataId);
+        }
+      });
+    },
 
-       // User Delete
-       delteTranUser(id) {
-        Swal.fire({
-          text: "Are you sure delete",
-          icon: "info",
-          showCancelButton: true,
-          confirmButtonText: "Yes",
-          cancelButtonText: "Cancel",
-        }).then((result) => {
-          if (result.value) {
-            this.getLoader = true;
-            axios
-              .get(this.globalVariables.apiUrl+`admin/manage/user/blockedip/delete/${id}`, {
-                headers: {
-                  Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-              })
-              .then((res) => {
-                if(res.data.status == 'success'){
-                  toastr.success(res.data.message);
-                  this.getUserBlockedIp();
-                }else{
-                  toastr.error(res.data.message);
-                }
-              })
-              .catch((e) => {
-                return e;
-              })
-              .finally(() => {
-                this.getLoader = false;
-              });
-          }
-        });
-      },
+      // User Delete
+    delteTranUser(id) {
+      Swal.fire({
+        text: "Are you sure delete",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.value) {
+          this.getLoader = true;
+          axios
+            .get(this.globalVariables.apiUrl+`admin/manage/user/blockedip/delete/${id}`, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token"),
+              },
+            })
+            .then((res) => {
+              if(res.data.status == 'success'){
+                toastr.success(res.data.message);
+                this.getUserBlockedIp();
+              }else{
+                toastr.error(res.data.message);
+              }
+            })
+            .catch((e) => {
+              return e;
+            })
+            .finally(() => {
+              this.getLoader = false;
+            });
+        }
+      });
+    },
     },
   };
   </script>
