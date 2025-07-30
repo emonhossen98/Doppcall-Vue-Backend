@@ -479,6 +479,7 @@ export default {
     formatDates(date) {
       return moment(date).format('D MMMM YYYY');
     },
+    
     attachEventListenersBlulkAction() {
       $('#blog_categiories_datatables').on('change', '.row-checkbox', (event) => {
         const id = parseInt(event.target.dataset.id);
