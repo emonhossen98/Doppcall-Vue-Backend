@@ -34,6 +34,159 @@
                         <tbody>
                         </tbody>
                     </table>
+                      <div id="externalFilters" v-if="showHiddenExternalFilter">
+                <div>
+                  <div class="row">
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
+                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
+                      <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
+                    </div>
+                  </div>
+                  <div class="row px-3" id="externalFiltersWrapper">
+                    <div class="col-md-6 border-right">
+                      <ul class="px-0 mt-3" id="offer-extra-filter">
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Name' ? 'check-active' : ''"
+                            @click="clickFilters('name', 'search', 'Name')">Name 
+                          </a>
+                          <template v-if="applyfillters.includes('Name')">
+                            <span @click="removeSearch('Name','name','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                           <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Slug' ? 'check-active' : ''"
+                            @click="clickFilters('slug', 'search', 'Slug')">Slug 
+                          </a>
+                          <template v-if="applyfillters.includes('Slug')">
+                            <span @click="removeSearch('Slug','slug','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                            @click="clickFilters('status', 'select', 'Status')">Status  <i class="fa-solid fa-caret-down"></i> 
+                          </a>
+                          <template v-if="applyfillters.includes('Status')">
+                            <span @click="removeSearch('Status','status','select')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                        <li class="position-relative">
+                          <a :class="checkfilter.showcolumn == 'Created At' ? 'check-active' : ''"
+                            @click="clickFilters('created_at', 'search', 'Created At')">Created At 
+                          </a>
+                          <template v-if="applyfillters.includes('Created At')">
+                            <span @click="removeSearch('Created At','created_at','search')" id="remove-to-search-list">x</span>
+                          </template>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6 ps-4">
+                      <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+                        <p class="mt-3 mb-1 font-class">{{ checkfilter.showcolumn ?? '' }}</p>
+                        <template v-if="checkfilter.showcolumn == 'Name' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['name']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['name']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+
+                           <template v-if="checkfilter.showcolumn == 'Slug' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['slug']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['slug']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['status']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')"> 
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['created_at']"
+                              type="checkbox" value="1" id="isemptyvalue">
+                            <label class="form-check-label" for="isemptyvalue">
+                              is Empty
+                            </label>
+                          </div>
+                          <div class="form-check mb-2">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                            <label class="form-check-label" for="isnotemptyvalue">
+                              is not Empty
+                            </label>
+                          </div>
+                        </template>
+                        <div>
+                          <p>Have value</p>
+                          <div>
+                            <template v-if="checkfilter.showcolumn == 'Name' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['name']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+                            <template v-if="checkfilter.showcolumn == 'Slug' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['slug']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+
+                            <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                              <div class="form-check mb-2">
+                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="0" id="dynamicidstatus0">
+                                <label class="form-check-label" for="dynamicidstatus0">
+                                  Pending
+                                </label>
+                              </div>
+                              <div class="form-check mb-2">
+                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="1" id="dynamicidstatus1">
+                                <label class="form-check-label" for="dynamicidstatus1">
+                                  Publish
+                                </label>
+                              </div>
+                              </template>
+                            <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
+                              <label for="filtertext">Contains</label>
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['created_at']"
+                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
                     <div class="row justify-content-between align-items-center">
                       <div class="col-md-3">
                         Showing {{ startPage }} to {{ endPage }} of {{ recordsTotal }} entries
@@ -435,6 +588,16 @@ export default {
     },
     formatDates(date) {
       return moment(date).format('D MMMM YYYY');
+    },
+
+        attachEventListenersOfButton() {
+      $("#ticket_datatables_wrapper ").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if (dataClass == 'all_filters') {
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+        }
+      });
     },
 
     attachEventListenersBlulkAction() {
