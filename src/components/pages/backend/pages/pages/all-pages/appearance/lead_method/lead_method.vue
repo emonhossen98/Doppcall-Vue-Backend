@@ -471,8 +471,8 @@ export default {
 
     
         externalfilterreset() {
-      this.checkfilter.columns = ['to'],
-        this.checkfilter.showcolumn = "To",
+      this.checkfilter.columns = ['title'],
+        this.checkfilter.showcolumn = "Title",
         this.checkfilter.types = ['search'],
         this.checkfilter.emptyValues = {
          title : [],
