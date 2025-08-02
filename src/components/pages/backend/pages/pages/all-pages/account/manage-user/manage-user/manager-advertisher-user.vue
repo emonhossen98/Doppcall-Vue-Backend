@@ -34,6 +34,288 @@
                               <tbody>
                               </tbody>
                           </table>
+                           <div id="externalFilters" v-if="showHiddenExternalFilter">
+                  <div>
+                    <div class="row">
+                      <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
+                        <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span
+                              class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template>
+                        </h5>
+                        <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
+                      </div>
+                    </div>
+                    <div class="row px-3" id="externalFiltersWrapper">
+                      <div class="col-md-6 border-right">
+                        <ul class="px-0 mt-3" id="offer-extra-filter">
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Company Name' ? 'check-active' : ''"
+                              @click="clickFilters('company_name', 'search', 'Company Name')">Company Name
+                            </a>
+                            <template v-if="applyfillters.includes('Company Name')">
+                              <span @click="removeSearch('Company Name', 'company_name', 'search')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'First Name' ? 'check-active' : ''"
+                              @click="clickFilters('first_name', 'search', 'First Name')">First Name
+                            </a>
+                            <template v-if="applyfillters.includes('First Name')">
+                              <span @click="removeSearch('First Name', 'first_name', 'search')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Last Name' ? 'check-active' : ''"
+                              @click="clickFilters('last_name', 'search', 'Last Name')">Last Name
+                            </a>
+                            <template v-if="applyfillters.includes('Last Name')">
+                              <span @click="removeSearch('Last Name', 'last_name', 'search')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+
+                               <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Email' ? 'check-active' : ''"
+                              @click="clickFilters('email', 'search', 'Email')">Email
+                            </a>
+                            <template v-if="applyfillters.includes('Email')">
+                              <span @click="removeSearch('Email', 'email', 'search')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+
+                                   <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Phone Number' ? 'check-active' : ''"
+                              @click="clickFilters('phone_number', 'search', 'Phone Number')">Phone Number
+                            </a>
+                            <template v-if="applyfillters.includes('Phone Number')">
+                              <span @click="removeSearch('Phone Number', 'phone_number', 'search')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+
+                          <li class="position-relative">
+                            <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
+                              @click="clickFilters('status', 'select', 'Status')">Status <i
+                                class="fa-solid fa-caret-down"></i>
+                            </a>
+                            <template v-if="applyfillters.includes('Status')">
+                              <span @click="removeSearch('Status', 'status', 'select')"
+                                id="remove-to-search-list">x</span>
+                            </template>
+                          </li>
+                        
+                        </ul>
+                      </div>
+                      <div class="col-md-6 ps-4">
+                        <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
+                          <p class="mt-3 mb-1 font-class">{{ checkfilter.showcolumn ?? '' }}</p>
+                          <template v-if="checkfilter.showcolumn == 'Company Name' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['company_name']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['company_name']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+
+                               <template v-if="checkfilter.showcolumn == 'First Name ' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['first_name']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['first_name']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+
+                          <template v-if="checkfilter.showcolumn == 'Last Name ' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['last_name']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['last_name']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+
+                          
+                          <template v-if="checkfilter.showcolumn == 'Email' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['email']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['email']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+
+                                <template v-if="checkfilter.showcolumn == 'Phone Number' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['phone_number']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['phone_number']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+
+
+                          <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['status']" type="checkbox" value="1" id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <template
+                            v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.emptyValues['created_at']" type="checkbox" value="1"
+                                id="isemptyvalue">
+                              <label class="form-check-label" for="isemptyvalue">
+                                is Empty
+                              </label>
+                            </div>
+                            <div class="form-check mb-2">
+                              <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0"
+                                id="isnotemptyvalue">
+                              <label class="form-check-label" for="isnotemptyvalue">
+                                is not Empty
+                              </label>
+                            </div>
+                          </template>
+                          <div>
+                            <p>Have value</p>
+                            <div>
+                              <template v-if="checkfilter.showcolumn == 'Company Name' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['company_name']" class="form-control mb-2" id="filtertext"
+                                  placeholder="Search here..">
+                              </template>
+
+                                  <template v-if="checkfilter.showcolumn == 'First Name' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['first_name']" class="form-control mb-2" id="filtertext"
+                                  placeholder="Search here..">
+                              </template>
+
+                                  <template v-if="checkfilter.showcolumn == 'Last Name' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['last_name']" class="form-control mb-2" id="filtertext"
+                                  placeholder="Search here..">
+                              </template>
+
+                               <template v-if="checkfilter.showcolumn == 'Email' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['email']" class="form-control mb-2" id="filtertext"
+                                  placeholder="Search here..">
+                              </template>
+
+                               <template v-if="checkfilter.showcolumn == 'Phone Number' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['phone_number']" class="form-control mb-2" id="filtertext"
+                                  placeholder="Search here..">
+                              </template>
+
+                              <template
+                                v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                    v-model="checkfilter.selectedValues['status']" class="form-check-input"
+                                    type="checkbox" value="0" id="dynamicidstatus0">
+                                  <label class="form-check-label" for="dynamicidstatus0">
+                                    Pending
+                                  </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                    v-model="checkfilter.selectedValues['status']" class="form-check-input"
+                                    type="checkbox" value="1" id="dynamicidstatus1">
+                                  <label class="form-check-label" for="dynamicidstatus1">
+                                    Approved
+                                  </label>
+                                </div>
+                              </template>
+                              <template
+                                v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
+                                <label for="filtertext">Contains</label>
+                                <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.searchValues['created_at']" class="form-control mb-2"
+                                  id="filtertext" placeholder="Search here..">
+                              </template>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                       </div>
                   </div>
               </div>
@@ -117,6 +399,42 @@
           mailAction: "",
         },
         modalDisplay: "none",
+         showHiddenExternalFilter: false,
+      checkfilter: {
+        columns: ['company_name'],
+        showcolumn: "Company Name",
+        types: ['search'],
+        emptyValues: {
+          company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          status: [],
+          created_at: [],
+        },
+        notemptyValues: {
+        company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          status: [],
+          created_at: [],
+        },
+        searchValues: {
+         company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          created_at: [],
+        },
+        selectedValues: {
+          status: [],
+        },
+      },
+      applyfillters: [],
       };
     },
     async mounted() { 
@@ -304,9 +622,15 @@
                     ]
                   },
                   {
-                  className: "btn btn-primary",
+                  className: "btn btn-primary me-2",
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Company Name</a></li><li><a class="dropdown-item" href="#" data-column="2">First Name</a></li><li><a class="dropdown-item" href="#" data-column="3">Last Name</a></li><li><a class="dropdown-item" href="#" data-column="4">Email</a></li><li><a class="dropdown-item" href="#" data-column="5">Phone Number</a></li><li><a class="dropdown-item" href="#" data-column="6">Status</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
+                {
+                text:
+                  '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                className: "btn btn-primary",
+                attr: { id: "all_filters" },
+              },
                 ],
               });
               this.getLoader = false;
@@ -318,6 +642,106 @@
             this.getLoader = false;
           });
       },
+
+        externalfilterreset() {
+      this.checkfilter.columns = ['company_name'],
+        this.checkfilter.showcolumn = "Company Name",
+        this.checkfilter.types = ['search'],
+        this.checkfilter.emptyValues = {
+        company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          status: [],
+          created_at: [],
+        },
+        this.checkfilter.notemptyValues = {
+          company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          status: [],
+          created_at: [],
+        },
+        this.checkfilter.searchValues = {
+           company_name: [],
+          first_name: [],
+          last_name: [],
+          email: [],
+          phone_number: [],
+          created_at: [],
+        },
+        this.checkfilter.selectedValues = {
+          status: [],
+        },
+        this.checkfilter.applyfillters = [],
+        this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+      this.clickCheckboxFilters();
+    },
+
+    clickFilters(value, type, key) {
+      if (!Array.isArray(this.checkfilter.columns)) {
+        this.checkfilter.columns = [];
+      }
+      if (!this.checkfilter.columns.includes(value)) {
+        this.checkfilter.columns.push(value);
+      }
+      this.checkfilter.types.push(type);
+      this.checkfilter.showcolumn = key;
+      this.getFiltarOfExtranalFilter();
+    },
+
+    clickCheckboxFilters(value) {
+      if (!Array.isArray(this.applyfillters)) {
+        this.applyfillters = [];
+      }
+      if (value !== null && value !== undefined && !this.applyfillters.includes(value)) {
+        this.applyfillters.push(value);
+      }
+      this.getFiltarOfExtranalFilter();
+    },
+
+    removeSearch(value, key, type) {
+      if (!Array.isArray(this.applyfillters)) {
+        this.applyfillters = [];
+      }
+      const index = this.applyfillters.indexOf(value);
+      if (index > -1) {
+        this.applyfillters.splice(index, 1);
+        if (this.checkfilter.emptyValues.hasOwnProperty(key)) {
+          this.checkfilter.emptyValues[key] = [];
+        }
+
+        if (this.checkfilter.notemptyValues.hasOwnProperty(key)) {
+          this.checkfilter.notemptyValues[key] = [];
+        }
+
+        if (type == 'select') {
+          if (this.checkfilter.selectedValues.hasOwnProperty(key)) {
+            this.checkfilter.selectedValues[key] = [];
+          }
+        } else {
+          if (this.checkfilter.searchValues.hasOwnProperty(key)) {
+            this.checkfilter.searchValues[key] = [];
+          }
+        }
+      }
+      this.getFiltarOfExtranalFilter();
+    },
+
+
+    attachEventListenersOfButton() {
+      $("#publishers_tables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if (dataClass == 'all_filters') {
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+        }
+      });
+    },
+
   
       attachEventListeners() {
       $("#publishers_tables").on("click", ".dropdown-item", (event) => {
@@ -417,15 +841,15 @@
       });
     },
 
-    attachEventListenersOfButton() {
-      $("#offer_datatables_wrapper").on("click", "button", (event) => {
-        const target = $(event.target);
-        const dataClass = target.attr("id");
-        if (dataClass === "create") {
-          this.$router.push("/admin-offers/create");
-        }
-      });
-    },
+    // attachEventListenersOfButton() {
+    //   $("#offer_datatables_wrapper").on("click", "button", (event) => {
+    //     const target = $(event.target);
+    //     const dataClass = target.attr("id");
+    //     if (dataClass === "create") {
+    //       this.$router.push("/admin-offers/create");
+    //     }
+    //   });
+    // },
     },
   };
   </script>
