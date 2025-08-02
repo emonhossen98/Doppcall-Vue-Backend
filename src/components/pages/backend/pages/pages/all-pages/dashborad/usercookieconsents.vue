@@ -188,7 +188,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                </div>
                 <div class="row justify-content-between align-items-center px-3 pb-3">
                   <div class="col-md-3">
                     Showing {{ startPage }} to {{ endPage }} of {{ recordsTotal }} entries
@@ -262,32 +262,32 @@
         endPage : 0,
         searchInputValue : "",
         showHiddenExternalFilter: false,
-      checkfilter: {
-      columns: ['domain'],
-      showcolumn: "Domain",
-      types: ['search'],
-      emptyValues: {
-        ip_address : [],
-        country : [],
-        domain : [],
-        allow_date : [],
+        checkfilter: {
+        columns: ['domain'],
+        showcolumn: "Domain",
+        types: ['search'],
+        emptyValues: {
+          ip_address : [],
+          country : [],
+          domain : [],
+          allow_date : [],
+        },
+        notemptyValues: {
+          ip_address : [],
+          country : [],
+          domain : [],
+          allow_date : [],
+        },
+        searchValues: {
+          ip_address : [],
+          country : [],
+          domain : [],
+          allow_date : [],
+        },
+        selectedValues: {
+        },
       },
-      notemptyValues: {
-        ip_address : [],
-        country : [],
-        domain : [],
-        allow_date : [],
-      },
-      searchValues: {
-        ip_address : [],
-        country : [],
-        domain : [],
-        allow_date : [],
-      },
-      selectedValues: {
-      },
-    },
-    applyfillters: [],
+      applyfillters: [],
       };
     },
     async mounted() { 
@@ -349,7 +349,7 @@
               $('#cookie_consents_tables').DataTable().destroy();
             }
             var formateDate = this.formatDates;
-        var table = $('#cookie_consents_tables').DataTable({
+          var table = $('#cookie_consents_tables').DataTable({
             data:data,
             columns: [
               // { data: 'id' },
