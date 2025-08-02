@@ -33,11 +33,13 @@
                 <tbody>
                 </tbody>
               </table>
-                <div id="externalFilters" v-if="showHiddenExternalFilter">
+              <div id="externalFilters" v-if="showHiddenExternalFilter">
                 <div>
                   <div class="row">
                     <div class="d-flex justify-content-between align-items-center border-bottom py-3 px-4">
-                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template></h5>
+                      <h5 class="mb-0">Apply Filter <template v-if="applyfillters.length > 0"><span
+                            class="badge bg-dark text-white">{{ applyfillters.length ?? 0 }}</span></template>
+                      </h5>
                       <a class="clearallexternalfilter" @click="externalfilterreset()">Clear All</a>
                     </div>
                   </div>
@@ -45,35 +47,38 @@
                     <div class="col-md-6 border-right">
                       <ul class="px-0 mt-3" id="offer-extra-filter">
                         <li class="position-relative">
-                          <a :class="checkfilter.showcolumn == 'Menu Name' ? 'check-active' : ''"
-                            @click="clickFilters('menu_name', 'search', 'Menu Name')">Menu Name 
+                          <a :class="checkfilter.showcolumn == 'Name' ? 'check-active' : ''"
+                            @click="clickFilters('name', 'search', 'Name')">Name
                           </a>
-                          <template v-if="applyfillters.includes('Menu Name')">
-                            <span @click="removeSearch('Menu Name','menu_name','search')" id="remove-to-search-list">x</span>
+                          <template v-if="applyfillters.includes('Name')">
+                            <span @click="removeSearch('Name', 'name', 'search')"
+                              id="remove-to-search-list">x</span>
                           </template>
                         </li>
-                           <li class="position-relative">
+                        <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'URL' ? 'check-active' : ''"
-                            @click="clickFilters('url', 'search', 'URL')">URL 
+                            @click="clickFilters('url', 'search', 'URL')">URL
                           </a>
                           <template v-if="applyfillters.includes('URL')">
-                            <span @click="removeSearch('URL','url','search')" id="remove-to-search-list">x</span>
+                            <span @click="removeSearch('URL', 'url', 'search')"
+                              id="remove-to-search-list">x</span>
                           </template>
                         </li>
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Status' ? 'check-active' : ''"
-                            @click="clickFilters('status', 'select', 'Status')">Status  <i class="fa-solid fa-caret-down"></i> 
+                            @click="clickFilters('status', 'select', 'Status')">Status <i class="fa-solid fa-caret-down"></i>
                           </a>
                           <template v-if="applyfillters.includes('Status')">
-                            <span @click="removeSearch('Status','status','select')" id="remove-to-search-list">x</span>
+                            <span @click="removeSearch('Status', 'status', 'select')" id="remove-to-search-list">x</span>
                           </template>
                         </li>
                         <li class="position-relative">
                           <a :class="checkfilter.showcolumn == 'Created At' ? 'check-active' : ''"
-                            @click="clickFilters('created_at', 'search', 'Created At')">Created At 
+                            @click="clickFilters('created_at', 'search', 'Created At')">Created At
                           </a>
                           <template v-if="applyfillters.includes('Created At')">
-                            <span @click="removeSearch('Created At','created_at','search')" id="remove-to-search-list">x</span>
+                            <span @click="removeSearch('Created At', 'created_at', 'search')"
+                              id="remove-to-search-list">x</span>
                           </template>
                         </li>
                       </ul>
@@ -81,66 +86,72 @@
                     <div class="col-md-6 ps-4">
                       <div v-if="checkfilter.showcolumn != null && checkfilter.showcolumn != ''">
                         <p class="mt-3 mb-1 font-class">{{ checkfilter.showcolumn ?? '' }}</p>
-                        <template v-if="checkfilter.showcolumn == 'Menu Name' && checkfilter.types.includes('search')"> 
+                        <template v-if="checkfilter.showcolumn == 'Name' && checkfilter.types.includes('search')">
                           <div class="form-check mb-2">
-                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['menu_name']"
-                              type="checkbox" value="1" id="isemptyvalue">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.emptyValues['name']" type="checkbox" value="1"
+                              id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
                           <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
-                              v-model="checkfilter.notemptyValues['menu_name']" type="checkbox" value="0" id="isnotemptyvalue">
+                              v-model="checkfilter.notemptyValues['name']" type="checkbox" value="0"
+                              id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
                               is not Empty
                             </label>
                           </div>
                         </template>
-
-                           <template v-if="checkfilter.showcolumn == 'URL' && checkfilter.types.includes('search')"> 
+                        <template v-if="checkfilter.showcolumn == 'URL' && checkfilter.types.includes('search')">
                           <div class="form-check mb-2">
-                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['url']"
-                              type="checkbox" value="1" id="isemptyvalue">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.emptyValues['url']" type="checkbox" value="1"
+                              id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
                           <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
-                              v-model="checkfilter.notemptyValues['url']" type="checkbox" value="0" id="isnotemptyvalue">
+                              v-model="checkfilter.notemptyValues['url']" type="checkbox" value="0"
+                              id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
                               is not Empty
                             </label>
                           </div>
                         </template>
-                        <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')"> 
+                        <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
+                        <div class="form-check mb-2">
+                          <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                            v-model="checkfilter.emptyValues['status']" type="checkbox" value="1" id="isemptyvalue">
+                          <label class="form-check-label" for="isemptyvalue">
+                            is Empty
+                          </label>
+                        </div>
+                        <div class="form-check mb-2">
+                          <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                            v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0"
+                            id="isnotemptyvalue">
+                          <label class="form-check-label" for="isnotemptyvalue">
+                            is not Empty
+                          </label>
+                        </div>
+                      </template>
+                        <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
                           <div class="form-check mb-2">
-                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['status']"
-                              type="checkbox" value="1" id="isemptyvalue">
+                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                              v-model="checkfilter.emptyValues['created_at']" type="checkbox" value="1"
+                              id="isemptyvalue">
                             <label class="form-check-label" for="isemptyvalue">
                               is Empty
                             </label>
                           </div>
                           <div class="form-check mb-2">
                             <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
-                              v-model="checkfilter.notemptyValues['status']" type="checkbox" value="0" id="isnotemptyvalue">
-                            <label class="form-check-label" for="isnotemptyvalue">
-                              is not Empty
-                            </label>
-                          </div>
-                        </template>
-                        <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')"> 
-                          <div class="form-check mb-2">
-                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.emptyValues['created_at']"
-                              type="checkbox" value="1" id="isemptyvalue">
-                            <label class="form-check-label" for="isemptyvalue">
-                              is Empty
-                            </label>
-                          </div>
-                          <div class="form-check mb-2">
-                            <input class="form-check-input" @change="clickCheckboxFilters(checkfilter.showcolumn)"
-                              v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0" id="isnotemptyvalue">
+                              v-model="checkfilter.notemptyValues['created_at']" type="checkbox" value="0"
+                              id="isnotemptyvalue">
                             <label class="form-check-label" for="isnotemptyvalue">
                               is not Empty
                             </label>
@@ -149,35 +160,41 @@
                         <div>
                           <p>Have value</p>
                           <div>
-                            <template v-if="checkfilter.showcolumn == 'Menu Name' && checkfilter.types.includes('search')">
+                            <template v-if="checkfilter.showcolumn == 'Name' && checkfilter.types.includes('search')">
                               <label for="filtertext">Contains</label>
-                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['menu_name']"
-                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.searchValues['name']" class="form-control mb-2"
+                                id="filtertext" placeholder="Search here..">
                             </template>
                             <template v-if="checkfilter.showcolumn == 'URL' && checkfilter.types.includes('search')">
                               <label for="filtertext">Contains</label>
-                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['url']"
-                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.searchValues['url']" class="form-control mb-2"
+                                id="filtertext" placeholder="Search here..">
                             </template>
-
                             <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
                               <div class="form-check mb-2">
-                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="0" id="dynamicidstatus0">
-                                <label class="form-check-label" for="dynamicidstatus0">
-                                  Pending
-                                </label>
-                              </div>
-                              <div class="form-check mb-2">
-                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="1" id="dynamicidstatus1">
+                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.selectedValues['status']" class="form-check-input"
+                                  type="checkbox" value="1" id="dynamicidstatus1">
                                 <label class="form-check-label" for="dynamicidstatus1">
                                   Publish
                                 </label>
                               </div>
-                              </template>
+                              <div class="form-check mb-2">
+                                <input @change="clickCheckboxFilters(checkfilter.showcolumn)"
+                                  v-model="checkfilter.selectedValues['status']" class="form-check-input"
+                                  type="checkbox" value="0" id="dynamicidstatus0">
+                                <label class="form-check-label" for="dynamicidstatus0">
+                                  Pending
+                                </label>
+                              </div>
+                            </template>
                             <template v-if="checkfilter.showcolumn == 'Created At' && checkfilter.types.includes('search')">
                               <label for="filtertext">Contains</label>
-                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.searchValues['created_at']"
-                                class="form-control mb-2" id="filtertext" placeholder="Search here..">
+                              <input type="text" @keyup="clickCheckboxFilters(checkfilter.showcolumn)"
+                                v-model="checkfilter.searchValues['created_at']" class="form-control mb-2"
+                                id="filtertext" placeholder="Search here..">
                             </template>
                           </div>
                         </div>
@@ -186,7 +203,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="row justify-content-between align-items-center">
                 <div class="col-md-3">
                   Showing {{ startPage }} to {{ endPage }} of {{ recordsTotal }} entries
@@ -267,34 +283,33 @@ export default {
         selectedIds: [],
         status : "",
       },
-
-        showHiddenExternalFilter: false,
-            checkfilter: {
-              columns: ['menu_name'],
-              showcolumn: "Menu Name",
-              types : ['search'],
-              emptyValues : {
-                menu_name : [],
-                url:[],
-                status : [],
-                created_at : [],
-              },
-              notemptyValues : {
-                  menu_name : [],
-                url:[],
-                status : [],
-                created_at : [],
-              },
-              searchValues : {
-                 menu_name : [],
-                url:[],
-                created_at : [],
-              },
-              selectedValues: {
-                status : [],
-              },
-            },
-            applyfillters : [],
+      showHiddenExternalFilter: false,
+      checkfilter: {
+      columns: ['name'],
+      showcolumn: "Name",
+      types: ['search'],
+      emptyValues: {
+        name : [], 
+        url  : [],
+        status : [],
+        created_at : [],
+      },
+      notemptyValues: {
+        name : [], 
+        url  : [],
+        status : [],
+        created_at : [],
+      },
+      searchValues: {
+        name : [], 
+        url  : [],
+        created_at : [],
+      },
+      selectedValues: {
+        status : [],
+      },
+    },
+    applyfillters: [],
     };
   },
   async mounted() { 
@@ -563,13 +578,12 @@ export default {
                   className: "btn btn-primary me-2",
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Menu Name</a></li><li><a class="dropdown-item" href="#" data-column="3">URL</a></li><li><a class="dropdown-item" href="#" data-column="4">Ordering</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
                 },
-                
-                 {
-                  text:
-                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                  className: "btn btn-primary",
-                  attr: { id: "all_filters"},
-                },
+                {
+              text:
+                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+              className: "btn btn-primary",
+              attr: { id: "all_filters"},
+            },
               ],
             });
             this.getLoader = false;
@@ -582,36 +596,36 @@ export default {
         });
     },
 
-       externalfilterreset(){
-          this.checkfilter.columns = ['menu_name'],
-          this.checkfilter.showcolumn = "Menu Name",
-          this.checkfilter.types = ['search'],
-          this.checkfilter.emptyValues = {
-                menu_name : [],
-                url:[],
-              status : [],
-              created_at : [],
-          },
-          this.checkfilter.notemptyValues = {
-               menu_name : [],
-                url:[],
-              status : [],
-              created_at : [],
-          },
-          this.checkfilter.searchValues = {
-                menu_name : [],
-                url:[],
-              created_at : [],
-          },
-          this.checkfilter.selectedValues = {
-              status : [],
-          },
-          this.checkfilter.applyfillters = [],
-          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
-          this.clickCheckboxFilters();
-        },
-              
-        clickFilters(value,type, key) {
+     externalfilterreset(){
+      this.checkfilter.columns = ['name'],
+      this.checkfilter.showcolumn = "Name",
+      this.checkfilter.types = ['search'],
+      this.checkfilter.emptyValues = {
+        name : [], 
+        url  : [],
+        status : [],
+        created_at : [],
+      },
+      this.checkfilter.notemptyValues = {
+        name : [], 
+        url  : [],
+        status : [],
+        created_at : [],
+      },
+      this.checkfilter.searchValues = {
+        name : [], 
+        url  : [],
+        created_at : [],
+      },
+      this.checkfilter.selectedValues = {
+        status : [],
+      },
+      this.checkfilter.applyfillters = [],
+      this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+      this.clickCheckboxFilters();
+    },
+        
+    clickFilters(value,type, key) {
           if (!Array.isArray(this.checkfilter.columns)) {
             this.checkfilter.columns = [];
           }
@@ -621,9 +635,9 @@ export default {
           this.checkfilter.types.push(type);
           this.checkfilter.showcolumn = key;
           this.getFiltarOfExtranalFilter();
-        },
-          
-        clickCheckboxFilters(value) {
+    },
+    
+    clickCheckboxFilters(value) {
           if (!Array.isArray(this.applyfillters)) {
             this.applyfillters = [];
           }
@@ -631,9 +645,9 @@ export default {
             this.applyfillters.push(value);
           }
           this.getFiltarOfExtranalFilter();
-        },
-          
-        removeSearch(value, key, type) {
+    },
+    
+    removeSearch(value, key, type) {
           if (!Array.isArray(this.applyfillters)) {
             this.applyfillters = [];
           }
@@ -659,18 +673,254 @@ export default {
             }
           }
           this.getFiltarOfExtranalFilter();
-        },
+    },
         
-         attachEventListenersOfButton() {
-          $("#menus_tables_wrapper").on("click", "button", (event) => {
-            const target = $(event.target);
-            const dataClass = target.attr("id");
-            if(dataClass == 'all_filters'){
-              this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
-            } 
-          });
-        },
+    getFiltarOfExtranalFilter(perPage = 10,) {
+          axios
+            .post(
+              this.globalVariables.apiUrl + "admin/menus-search-get-data-all-filter",
+              this.checkfilter,
+              {
+                headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+              }
+            )
+            .then((res) => {
+              const { data, current_page, last_page,recordsTotal } = res.data;
+              this.currentPage = current_page;
+              this.lastPage = last_page;
+              this.recordsTotal = recordsTotal;
+              this.startPage = (current_page - 1) * perPage + 1;
+              this.endPage = Math.min(current_page * perPage, recordsTotal);
     
+              // if ($.fn.DataTable.isDataTable("#offer_datatables")) {
+              //   $("#offer_datatables").DataTable().destroy();
+              // }
+    
+              if ($.fn.DataTable.isDataTable("#menus_tables")) {
+                const table = $("#menus_tables").DataTable();
+                table.clear();
+                table.rows.add(data ?? []);
+                table.draw();
+              } else {
+               var table = $('#menus_tables').DataTable({
+              data: data,
+              columns: [
+                // { data: 'id' },
+                { data: 'id' },
+                { data: 'id' },
+                { data: 'name',
+                  render: function (data, type, row) {
+                if (row?.name != null) {
+                  return '<span title="'+row?.name+'">'+row?.name+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'url',
+                  render: function (data, type, row) {
+                if (row?.url != null) {
+                  return '<span title="'+row?.url+'">'+row?.url+'</span>';
+                }
+                return '----------';
+              },
+                 },
+                { data: 'ordering' },
+                { data: 'convart_status' },
+                { data: 'convart_created_at' },
+                {
+                  data: null, // Specify null for custom rendering
+                  title: 'Actions',
+                  searchable: false,
+                  orderable: false,
+                  render: function (data, type, full, meta) {
+                    return '<div class="menus_action d-flex align-items-center"><a title="Edit" data-vue-route href="/admin-menus-edit/'+full.id+'" class="bg-transparent border-0 text-primary me-2"><i class="far fa-edit fa-sm"></i></a><button type="button" id="delete-btn" title="Delete" data-id='+full.id +' class="bg-transparent border-0 text-danger"><i class="far fa-trash-alt fa-sm" id="delete-btn" data-id='+full.id +'></i></button></div>';
+                  }
+                }
+              ],
+              initComplete: () => { 
+                $('#menus_tables').wrap('<div class="commonDataTablesClass"></div>');
+                const table = $("#menus_tables").DataTable();
+                const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                dropdownItems.forEach((item) => {
+                  const columnAttr = item.getAttribute("data-column"); 
+                  if (columnAttr === "all") {
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+                      table.columns().visible(true);
+                      dropdownItems.forEach((el) => {
+                        if (el.getAttribute("data-column") !== "all") {
+                          el.classList.add("active");
+                        }
+                      });
+                    });
+                  } else {
+                    const columnIndex = parseInt(columnAttr);
+                    const column = table.column(columnIndex);
+                    if (column.visible()) {
+                      item.classList.add("active");
+                    }
+
+                    item.addEventListener("click", function (e) {
+                      e.preventDefault();
+
+                      const currentVisible = column.visible();
+                      column.visible(!currentVisible);
+
+                      if (!currentVisible) {
+                        item.classList.add("active");
+                      } else {
+                        item.classList.remove("active");
+                      }
+                    });
+                  }
+                });
+                $('.select-colunm-position').on('click', function (e) {
+                  e.stopPropagation();
+                });
+
+                $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                  e.stopPropagation();
+                });
+                this.attachEventListeners();
+                this.attachEventListenersOfButton();
+
+                this.attachEventListenersForMenu();
+                this.attachEventListenersForSearch();
+
+                this.attachEventListenersBlulkAction();
+                this.attachEventListenersBlulkActionSubmit();
+
+                const searchInput = $("#menus_tables_filter input");
+                searchInput.val(this.searchInputValue);
+                if(this.searchInputValue != ''){
+                    searchInput.focus();
+                }
+
+                searchInput.off().on("keyup", (e) => {
+                  const searchTerm = e.target.value;
+                  this.searchInputValue = searchTerm;
+                  this.getMenusData(1, perPage, searchTerm);
+                });
+              },
+              createdRow: function (row, data, dataIndex) {
+                const perPage = 10; 
+                const rowNumber = (dataIndex + 1) + (page - 1) * perPage;
+                $('td:eq(1)', row).html(rowNumber);
+              },
+              columnDefs: [
+                {
+                  targets: 0,
+                  orderable: false,
+                  checkboxes: {
+                    selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
+                  },
+                  render: function (data, type, row) {
+                    return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                  },
+                  searchable: false
+                },
+              ],
+              order: [[1, 'desc']],
+              dom: '<"row mx-2"' +
+                '<"col-md-4 px-0"f>' + 
+                '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
+                '<"col-md-3 d-none"p>>' +
+                't' + 
+                '<"row mx-2"' +
+                '<"col-md-5 d-none"i>' + 
+                '<"col-md-7 d-none"p>>', 
+              displayLength: perPage, 
+              lengthMenu: [10, 20, 50, 100, 200], 
+              language: {
+                sLengthMenu: '_MENU_',
+                search: '', 
+                searchPlaceholder: 'Search Menu',
+                paginate: { 
+                  previous: '<i class="fa-solid fa-chevron-left"></i>',
+                  next: '<i class="fa-solid fa-chevron-right"></i>'
+                }
+              },
+              buttons: [
+                {
+                  text: `
+                    <div id="bulk-action-wrapper">
+                      <select id="bulk-action-select" class="form-select form-select-sm">
+                        <option value=""> ✓ Bulk Actions</option>
+                        <option value="delete">Bulk Delete</option>
+                        <option value="0">Bulk Pending</option>
+                        <option value="1">Bulk Publish</option>
+                      </select>
+                    </div>
+                  `,
+                  className: "me-2 p-0 btn-primary d-none",
+                  attr: { id: "bulk-action-container" },
+                },
+                {
+                  extend: 'collection',
+                  className: 'btn btn-label-primary dropdown-toggle me-3',
+                  text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+                  buttons: [
+                    {
+                      extend: 'print',
+                      text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                      className: 'dropdown-item',
+                      exportOptions: { columns: [2, 3, 4, 5, 6] }
+                    },
+                    {
+                      extend: 'csv',
+                      text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                      className: 'dropdown-item',
+                      exportOptions: { columns: [2, 3, 4, 5, 6] }
+                    },
+                    {
+                      extend: 'excel',
+                      text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                      className: 'dropdown-item',
+                      exportOptions: { columns: [2, 3, 4, 5, 6] }
+                    },
+                    {
+                      extend: 'pdf',
+                      text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                      className: 'dropdown-item',
+                      exportOptions: { columns: [2, 3, 4, 5, 6] }
+                    },
+                    {
+                      extend: 'copy',
+                      text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                      className: 'dropdown-item',
+                      exportOptions: { columns: [2, 3, 4, 5, 6] }
+                    }
+                  ]
+                },
+                {
+                  text: '<span id="create"><i class="ti ti-plus me-1 ti-xs"></i>Create</span>',
+                  className: 'create-new btn btn-primary me-2',
+                  attr: { id: 'create' },
+                },
+                {
+                  className: "btn btn-primary me-2",
+                  text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Menu Name</a></li><li><a class="dropdown-item" href="#" data-column="3">URL</a></li><li><a class="dropdown-item" href="#" data-column="4">Ordering</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Created At</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
+                },
+                {
+              text:
+                '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+              className: "btn btn-primary",
+              attr: { id: "all_filters"},
+            },
+              ],
+            });
+              };
+              this.getLoader = false;
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => {
+              // this.getSkeletonLoader = false;
+              this.getLoader = false;
+    });
+    },
 
     attachEventListenersBlulkAction() {
       $('#menus_tables').on('change', '.row-checkbox', (event) => {
@@ -827,15 +1077,17 @@ export default {
       });
     },
 
-    // attachEventListenersOfButton(){
-    //   $("#menus_tables_wrapper").on("click", "button", (event) => {
-    //     const target = $(event.target);
-    //     const dataClass = target.attr("id");
-    //     if (dataClass === "create") {
-    //       this.$router.push("/admin-menus-create");
-    //     } 
-    //   });
-    // },
+    attachEventListenersOfButton(){
+      $("#menus_tables_wrapper").on("click", "button", (event) => {
+        const target = $(event.target);
+        const dataClass = target.attr("id");
+        if (dataClass === "create") {
+          this.$router.push("/admin-menus-create");
+        }else if(dataClass == 'all_filters'){
+          this.showHiddenExternalFilter = !this.showHiddenExternalFilter;
+        } 
+      });
+    },
 
     attachEventListenersForMenu() {
       $("#menus_tables_wrapper [name='menus_tables_length']").on("change", (event) => {

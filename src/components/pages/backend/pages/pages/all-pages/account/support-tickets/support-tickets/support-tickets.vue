@@ -710,7 +710,7 @@ export default {
                 )
                 .then((res) => {
                   toastr.success(res.data.message);
-                  this.getSupportTicketsData();
+                  this.getSupportTicketsData(); 
                 })
                 .catch((e) => {
                   return e;

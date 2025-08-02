@@ -597,7 +597,7 @@
                                   class="form-control mb-2" id="filtertext" placeholder="Search here..">
                               </template>
                               <template v-if="checkfilter.showcolumn == 'Role' && checkfilter.types.includes('select')">
-                              <template v-if="roles?.roles?.length > 0">
+                                <template v-if="roles?.roles?.length > 0">
                                   <template v-for="(role,index) in roles?.roles" :key="index">
                                     <div class="form-check mb-2">
                                       <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['role_id']" class="form-check-input" type="checkbox" :value="role.id" :id="'dynamicid'+role.id">
