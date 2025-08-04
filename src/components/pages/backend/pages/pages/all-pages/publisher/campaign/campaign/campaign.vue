@@ -242,31 +242,31 @@
                             </template>
                             <template v-if="checkfilter.showcolumn == 'Status' && checkfilter.types.includes('select')">
                               <div class="form-check mb-2">
-                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['account_access']" class="form-check-input" type="checkbox" value="0" id="dynamicidstatus0">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="0" id="dynamicidstatus0">
                                   <label class="form-check-label" for="dynamicidstatus0">
                                     Pending
                                   </label>
                                 </div>
                                 <div class="form-check mb-2">
-                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['account_access']" class="form-check-input" type="checkbox" value="1" id="dynamicidstatus1">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="1" id="dynamicidstatus1">
                                   <label class="form-check-label" for="dynamicidstatus1">
                                     Approved
                                   </label>
                                 </div>
                                 <div class="form-check mb-2">
-                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['account_access']" class="form-check-input" type="checkbox" value="2" id="dynamicidstatus2">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="2" id="dynamicidstatus2">
                                   <label class="form-check-label" for="dynamicidstatus2">
                                     Paused
                                   </label>
                                 </div>
                                 <div class="form-check mb-2">
-                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['account_access']" class="form-check-input" type="checkbox" value="3" id="dynamicidstatus3">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="3" id="dynamicidstatus3">
                                   <label class="form-check-label" for="dynamicidstatus3">
                                     Rejected
                                   </label>
                                 </div>
                                 <div class="form-check mb-2">
-                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['account_access']" class="form-check-input" type="checkbox" value="4" id="dynamicidstatus4">
+                                  <input @change="clickCheckboxFilters(checkfilter.showcolumn)" v-model="checkfilter.selectedValues['status']" class="form-check-input" type="checkbox" value="4" id="dynamicidstatus4">
                                   <label class="form-check-label" for="dynamicidstatus4">
                                     Resume
                                   </label>
@@ -399,7 +399,6 @@ export default {
           if ($.fn.DataTable.isDataTable("#campaign_datatables")) {
             $('#campaign_datatables').DataTable().destroy();
           }
-          console.log(res.data);
         var table = $('#campaign_datatables').DataTable({
           data: res.data.campaignDatas,
           columns: [
@@ -713,140 +712,199 @@ export default {
               //   $("#offer_datatables").DataTable().destroy();
               // }
     
-              if ($.fn.DataTable.isDataTable("#publisher_offers_datatables")) {
-                const table = $("#publisher_offers_datatables").DataTable();
+              if ($.fn.DataTable.isDataTable("#campaign_datatables")) {
+                const table = $("#campaign_datatables").DataTable();
                 table.clear();
-                table.rows.add(res.data.getDatas ?? []);
+                table.rows.add(res.data.campaignDatas ?? []);
                 table.draw();
               } else {
-                var formateDate = this.formatDates;
-                var table = $('#publisher_offers_datatables').DataTable({
-                  data: res.data.getDatas,
-                  columns: [
-                    // { data: 'id' },
-                    { data: 'id' },
-                    { data: 'convart_flag_image' },
-                    { data: 'name' },
-                    {
-                      data: "category",
-                      render: function (data, type, row) {
-                        if (row?.category?.name != null) {
-                          return row?.category?.name 
-                        }
-                        return '----------';
-                      },
+              var table = $('#campaign_datatables').DataTable({
+                data: res.data.campaignDatas,
+                columns: [
+                  // { data: 'id' },
+                  { data: 'id' },
+                  { data: 'id' },
+                  {
+                    data: "name",
+                    render: function (data, type, row) {
+                      if (row.name != null) {
+                        return row.name.length > 20 
+                          ? row.name.slice(0, 20) + '...'  
+                          : row.name; 
+                      }
+                      return '----------';
                     },
-                    { data: 'offer_type_name' },
-                    { data: 'pay_out' },
-                    { data: 'convart_status' },
-                    { data: "created_at",
-                      render: function (data, type, row) {
-                        if (row?.created_at != null && row?.created_at != "") {
-                          return formateDate(row?.created_at);
-                        }
-                        return '----------';
-                      },
+                  },
+                  { data: 'convert_flag_icon' },
+                  {
+                    data: "phone_number",
+                    render: function (data, type, row) {
+                      if (row.phone_number != null) {
+                        return row.phone_number; 
+                      }
+                      return '----------';
                     },
-                    {
-                      data: "updated_at",
-                      render: function (data, type, row) {
-                        return (
-                          '<div class="publisher_apply_action d-flex align-items-center"><button type="button" class="py-1 px-2 btn-md btn-primary border-0 rounded-1 me-2" id="apply" data-id=' +
-                          row.id +
-                          ">Apply</button></div>"
-                        );
-                      },
+                  },
+                  {
+                    data: "trafic_source",
+                    render: function (data, type, row) {
+                      if (row.trafic_source != null) {
+                        return row.trafic_source; 
+                      }
+                      return '----------';
                     },
-                    {
-                      data: "updated_at",
-                      render: function (data, type, row) {
-                        return (
-                          '<div class="publisher_details_action d-flex align-items-center"><a data-vue-route href="/publisher-create-view/'+row.id+'" title="View Details" class="btn-md btn-secondary border-0 rounded-1 me-2 py-1 px-2">View Details</a></div>'
-                        );
-                      },
-                    },
-                  ],
-                  initComplete: () => {
-                    $('#publisher_offers_datatables').wrap('<div class="commonDataTablesClass"></div>');
-                    const table = $("#publisher_offers_datatables").DataTable();
-                    const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+                  },
+                  { data: 'convert_status' },
+                  { data: 'approve_or_reject_date' },
+                  { data: 'convert_action' },
+                ],
+                initComplete: () => {
+                  $('#campaign_datatables').wrap('<div class="commonDataTablesClass"></div>'); 
+                  const table = $("#campaign_datatables").DataTable();
+                      const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
 
-                    dropdownItems.forEach((item) => {
-                      const columnAttr = item.getAttribute("data-column"); 
-                      if (columnAttr === "all") {
-                        item.addEventListener("click", function (e) {
-                          e.preventDefault();
-                          table.columns().visible(true);
-                          dropdownItems.forEach((el) => {
-                            if (el.getAttribute("data-column") !== "all") {
-                              el.classList.add("active");
+                      dropdownItems.forEach((item) => {
+                        const columnAttr = item.getAttribute("data-column"); 
+                        if (columnAttr === "all") {
+                          item.addEventListener("click", function (e) {
+                            e.preventDefault();
+                            table.columns().visible(true);
+                            dropdownItems.forEach((el) => {
+                              if (el.getAttribute("data-column") !== "all") {
+                                el.classList.add("active");
+                              }
+                            });
+                          });
+                        } else {
+                          const columnIndex = parseInt(columnAttr);
+                          const column = table.column(columnIndex);
+                          if (column.visible()) {
+                            item.classList.add("active");
+                          }
+
+                          item.addEventListener("click", function (e) {
+                            e.preventDefault();
+
+                            const currentVisible = column.visible();
+                            column.visible(!currentVisible);
+
+                            if (!currentVisible) {
+                              item.classList.add("active");
+                            } else {
+                              item.classList.remove("active");
                             }
                           });
-                        });
-                      } else {
-                        const columnIndex = parseInt(columnAttr);
-                        const column = table.column(columnIndex);
-                        if (column.visible()) {
-                          item.classList.add("active");
                         }
+                      });
+                      $('.select-colunm-position').on('click', function (e) {
+                        e.stopPropagation();
+                      });
 
-                        item.addEventListener("click", function (e) {
-                          e.preventDefault();
-
-                          const currentVisible = column.visible();
-                          column.visible(!currentVisible);
-
-                          if (!currentVisible) {
-                            item.classList.add("active");
-                          } else {
-                            item.classList.remove("active");
-                          }
-                        });
-                      }
-                    });
-
-                    this.attachEventListenersOfButton();
-                    $('.select-colunm-position').on('click', function (e) {
-                      e.stopPropagation();
-                    });
-
-                    $('.select-colunm-position .dropdown-item').on('click', function (e) {
-                      e.stopPropagation();
-                    });
-                    this.attachEventListeners();
-                  },
-                  order: [[6, 'asc']],
-                  dom: '<"row mx-2"' +
-                    '<"col-md-4 ps-0"f>' + 
-                    '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
-                    '<"col-md-3 d-none"p>>' +
-                    't' + 
-                    '<"row mx-2"' +
-                    '<"col-md-5"i>' + 
-                    '<"col-md-7"p>>', 
-                  displayLength: 10, 
-                  lengthMenu: [10, 20, 50, 100, 200], 
-                  language: {
-                    sLengthMenu: '_MENU_',
-                    search: '', 
-                    searchPlaceholder: 'Search Offer',
-                    paginate: { 
-                      previous: '<i class="fa-solid fa-chevron-left"></i>',
-                      next: '<i class="fa-solid fa-chevron-right"></i>'
-                    }
-                  },
-                  buttons: [
-                    {
-                      className: "btn btn-primary me-2",
-                      text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">ID</a></li><li><a class="dropdown-item" href="#" data-column="1">Primary Country</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Offer Type</a></li><li><a class="dropdown-item" href="#" data-column="4">Payout</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Apply</a></li><li><a class="dropdown-item" href="#" data-column="7">View</a></li></div></ul></div>',
+                      $('.select-colunm-position .dropdown-item').on('click', function (e) {
+                        e.stopPropagation();
+                      });
+                  this.attachEventListenersOfButton();
+                  this.attachEventListeners();
+                  this.attachEventListenersBlulkAction();
+                  this.attachEventListenersBlulkActionSubmit();
+                },
+                createdRow: function (row, data, dataIndex) {
+                  $("td:eq(0)", row).html(dataIndex + 1);
+                },
+                columnDefs: [
+                  {
+                    targets: 0,
+                    orderable: false,
+                    checkboxes: {
+                      selectAllRender: '<input type="checkbox" class="form-check-input ms-1">',
                     },
+                    render: function (data, type, row) {
+                      return `<input type="checkbox" class="dt-checkboxes form-check-input ms-1 row-checkbox" data-id="${row.id}">`;
+                    },
+                    searchable: false
+                  },
+                ],
+                order: [[2, 'desc']],
+                dom: '<"row mx-2"' +
+                  '<"col-md-4"f>' + 
+                  '<"col-md-8 dopp_tb d-flex justify-content-end align-items-center"l<"button-wrapper"B>>' + 
+                  '<"col-md-3 d-none"p>>' +
+                  't' + 
+                  '<"row mx-2"' +
+                  '<"col-md-5"i>' + 
+                  '<"col-md-7"p>>', 
+                displayLength: 10, 
+                lengthMenu: [10, 20, 50, 100, 200], 
+                language: {
+                  sLengthMenu: '_MENU_',
+                  search: '', 
+                  searchPlaceholder: 'Search Campaign',
+                  paginate: { 
+                    previous: '<i class="fa-solid fa-chevron-left"></i>',
+                    next: '<i class="fa-solid fa-chevron-right"></i>'
+                  }
+                },
+                buttons: [
+                  {
+                    text: `
+                      <div id="bulk-action-wrapper">
+                        <select id="bulk-action-select" class="form-select form-select-sm">
+                          <option value=""> ✓ Bulk Actions</option>
+                          <option value="delete">Bulk Delete</option>
+                        </select>
+                      </div>
+                    `,
+                    className: "me-2 p-0 btn-primary d-none",
+                    attr: { id: "bulk-action-container" },
+                  },
+                  {
+                    extend: 'collection',
+                    className: 'btn btn-label-primary dropdown-toggle me-3',
+                    text: '<i class="ti ti-screen-share me-1 ti-xs"></i>Export',
+                    buttons: [
                       {
-                      text:
-                        '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                      className: "btn btn-primary",
-                      attr: { id: "all_filters"},
-                    },
-                  ],
+                        extend: 'print',
+                        text: '<i class="ti ti-printer me-1 ti-xs text-primary"></i>Print',
+                        className: 'dropdown-item',
+                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                      },
+                      {
+                        extend: 'csv',
+                        text: '<i class="ti ti-file me-1 ti-xs text-danger"></i>Csv',
+                        className: 'dropdown-item',
+                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                      },
+                      {
+                        extend: 'excel',
+                        text: '<i class="ti ti-file-spreadsheet me-1 ti-xs text-success"></i>Excel',
+                        className: 'dropdown-item',
+                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                      },
+                      {
+                        extend: 'pdf',
+                        text: '<i class="ti ti-file-description me-1 ti-xs text-info"></i>Pdf',
+                        className: 'dropdown-item',
+                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                      },
+                      {
+                        extend: 'copy',
+                        text: '<i class="ti ti-copy me-1 ti-xs text-warning"></i>Copy',
+                        className: 'dropdown-item',
+                        exportOptions: { columns: [2, 3, 4, 5, 6] }
+                      }
+                    ]
+                  },
+                  {
+                    className: "btn btn-primary  me-2",
+                    text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">Offer</a></li><li><a class="dropdown-item" href="#" data-column="3">Campaign</a></li><li><a class="dropdown-item" href="#" data-column="4">Number</a></li><li><a class="dropdown-item" href="#" data-column="5">Status</a></li><li><a class="dropdown-item" href="#" data-column="6">Approve date</a></li><li><a class="dropdown-item" href="#" data-column="7">Action</a></li></div></ul></div>',
+                  },
+                  {
+                    text:
+                      '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                    className: "btn btn-primary",
+                    attr: { id: "all_filters"},
+                  },
+                ],
               });
               };
               this.getLoader = false;

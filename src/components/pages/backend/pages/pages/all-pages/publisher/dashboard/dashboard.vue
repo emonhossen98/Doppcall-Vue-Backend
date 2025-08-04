@@ -370,7 +370,7 @@
                       <th>Offer Name</th>
                       <th>Country</th>
                       <th>Featured</th>
-                      <th>Created At</th>
+                      <th>Created At</th> 
                     </tr>
                   </thead>
                   <tbody></tbody>

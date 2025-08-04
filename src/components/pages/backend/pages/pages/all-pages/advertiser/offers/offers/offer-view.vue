@@ -24,71 +24,81 @@
                                         <tbody>
                                         <template v-if="offer.country">
                                             <tr>
-                                                <th style="width: 25%"><strong>Country and region</strong></th>
-                                                <td v-html="offer.country"></td>
+                                                <th style="width: 33%"><strong>Country and region</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" v-html="offer.country"></td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.offer_type">
                                             <tr>
-                                                <th style="width: 25%"><strong>Offer's type</strong></th>
-                                                <td>{{ offer.offer_type }}</td>
+                                                <th style="width: 33%"><strong>Offer's type</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.offer_type }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.pay_out">
                                             <tr>
-                                                <th style="width: 25%"><strong>Payout</strong></th>
-                                                <td>{{ offer.pay_out }}</td>
+                                                <th style="width: 33%"><strong>Payout</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.pay_out }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.marchent_allow">
                                             <tr>
-                                                <th style="width: 25%"><strong>Merchant is allowed to refuse calls</strong></th>
-                                                <td>{{ offer.marchent_allow }}</td>
+                                                <th style="width: 33%"><strong>Merchant is allowed to refuse calls</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.marchent_allow }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.call_limit">
                                            <tr>
-                                                <th style="width: 25%"><strong>Call's Limits</strong></th>
-                                                <td v-html="offer.call_limit"></td>
+                                                <th style="width: 33%"><strong>Call's Limits</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end"  v-html="offer.call_limit"></td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.materials_moderation">
                                             <tr>
-                                                <th style="width: 25%"><strong>Materials moderation</strong></th>
-                                                <td>{{ offer.materials_moderation }}</td>
+                                                <th style="width: 33%"><strong>Materials moderation</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.materials_moderation }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.tools">
                                             <tr>
-                                                <th style="width: 25%"><strong>Tools</strong></th>
-                                                <td v-html="offer.tools"></td>
+                                                <th style="width: 33%"><strong>Tools</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end"  v-html="offer.tools"></td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.created_at">
                                             <tr>
-                                                <th style="width: 25%">Created Date</th>
-                                                <td>{{ offer.convart_created_at }}</td>
+                                                <th style="width: 33%">Created Date</th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.convart_created_at }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.hold_period">
                                             <tr>
-                                                <th style="width: 25%"><strong>Hold Period</strong></th>
-                                                <td>{{ offer.hold_period }}</td>
+                                                <th style="width: 33%"><strong>Hold Period</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.hold_period }}</td>
                                             </tr>
                                         </template>
 
                                         <template v-if="offer.appeal_period">
                                             <tr>
-                                                <th style="width: 25%"><strong>Appeal Period</strong></th>
-                                                <td>{{ offer.appeal_period }}</td>
+                                                <th style="width: 33%"><strong>Appeal Period</strong></th>
+                                                <td style="width: 33%" class="text-center">:</td>
+                                                <td style="width: 34%" class="text-end" >{{ offer.appeal_period }}</td>
                                             </tr>
                                         </template>
                                         </tbody>
