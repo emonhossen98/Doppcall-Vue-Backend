@@ -20,7 +20,7 @@
                         <thead>
                             <tr>
                                 <!-- <th></th> -->
-                                <th></th>
+                                <th></th> 
                                 <th>SL</th>
                                 <th>File</th>
                                 <th>URL</th>
@@ -452,11 +452,13 @@ export default {
                   text: '<div class="dropdown me-3"><span class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-columns me-1"></i> Select Column</span><ul class="dropdown-menu select-colunm-position" aria-labelledby="dropdownMenuButton2"><div class="display-prefarnce-class">Display Preferences</div><div class="commonDataTablesClassScrollbar"><li><a class="dropdown-item" href="#" data-column="0">Bulk Action</a></li><li><a class="dropdown-item" href="#" data-column="1">Sl</a></li><li><a class="dropdown-item" href="#" data-column="2">File</a></li><li><a class="dropdown-item" href="#" data-column="3">Image</a></li><li><a class="dropdown-item" href="#" data-column="4">Title</a></li><li><a class="dropdown-item" href="#" data-column="5">Created At</a></li><li><a class="dropdown-item" href="#" data-column="6">Action</a></li></div></ul></div>',
                 },
                 {
-                text:
-                  '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
-                className: "btn btn-primary",
-                attr: { id: "all_filters"},
-              },
+                  text:
+                    '<span id="all_filters" class="all_filters"><i class="fa-solid fa-magnifying-glass me-1"></i>All Filters</span>',
+                  className: "btn btn-primary",
+                  attr: { id: "all_filters"},
+                },
+
+
               ],
             });
 
@@ -473,6 +475,7 @@ export default {
     formatDates(date) {
       return moment(date).format('D MMMM YYYY');
     },
+    
     attachEventListenersBlulkAction() {
       $('#media_tables').on('change', '.row-checkbox', (event) => {
         const id = parseInt(event.target.dataset.id);
